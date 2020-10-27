@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "PaymentApp"
+    }
+  },
+  "defaultProject": "PaymentApp",
+  "cli": {
+    "analytics": "d4cf371e-b229-40e0-bc5b-74884a7511f2"
+  }
 }

@@ -1,0 +1,23 @@
+<div class="col-md-10 mx-auto  mt-5 mb-5">
+    <mat-card style="display: flex;" class="shadow">
+        <div class="col-md-4">
+            <img class="card-img-top" src="assets\Images\download.png" alt="">
+        </div>
+        <div class="col-md-6">
+            <div class="card-body">
+                <h4 class="card-title">
+                  <b>{{ProductData.name}}</b>
+                </h4>
+                <h5>{{ProductData.price}}</h5>
+                <p class="card-text">{{ProductData.description}}</p>
+            </div>
+
+            <div style="display: flex;">
+                <button class="mr-3" mat-raised-button color="primary"><mat-icon>add</mat-icon>Cart</button>
+                <button mat-raised-button color="warn">Buy Now</button>
+            </div>
+      
+        </div>
+    </mat-card>
+
+</div>

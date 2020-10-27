@@ -1,0 +1,31 @@
+<div  class="bg">
+    <div class="col-md-5 mx-auto">
+        <form [formGroup]="LoginForm" (submit)="Login()" autocomplete="off"> 
+            <mat-card>
+                <mat-toolbar style="background-color: indigo;color: ivory;">
+                    <span class="fill-remaining"></span>
+                    <span>Log In</span>
+                    <span class="fill-remaining"></span>
+                </mat-toolbar>
+                <p style="color: red;" *ngIf="incorrect">Username and password are incorrect</p>
+                <mat-form-field class="col-md-12">
+                    <input matInput type="text" placeholder="Email/Phone" formControlName="EmailorPhone">
+                    <mat-icon matSuffix>account_circle</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="col-md-12">
+                    <input matInput placeholder="Password" type="password" formControlName="Password">
+                    <mat-icon matSuffix>vpn_key</mat-icon>
+                </mat-form-field>
+                <div>
+                    <button mat-raised-button class="col-md-12" color=primary type="submit" [disabled]="LoginForm.invalid">Log In</button>
+                    <p class="mt-3">don't have account?<button (click)="Register()">Register</button> </p>
+                    <a class="btn" style="color: royalblue;" (click)="Forgot()">Forgot Password</a>
+                </div>
+            </mat-card>
+    
+        </form>
+        
+    </div>
+
+</div>
+  

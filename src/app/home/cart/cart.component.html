@@ -1,0 +1,57 @@
+<div  *ngIf="showComponent">
+    <mat-toolbar class="mt-4 col-md-10 mx-auto">
+        <span class="fill-remaining"></span>
+        <span>Cart Items</span>
+        <span class="fill-remaining"></span>
+    </mat-toolbar>
+    <div class="col-md-8 mx-auto" *ngFor="let product of cartItems; let i= index" >
+        <mat-card  class="mb-1 mt-1">
+            <div style="display: flex;">
+    
+                <div class="col-md-3">
+                    <img class="card-img-top" src="assets\Images\download.png" alt="">
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td><strong>{{product.name}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Price</strong></td>
+                            <td><strong>{{product.price}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Description</strong></td>
+                            <td><strong>{{product.description}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Price</strong></td>
+                            <td><strong>{{product.price*product.quantity}}</strong></td>
+                        </tr>
+                    </table>
+                  
+                   <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
+                    <strong>Qty:-<b>{{product.quantity}}</b></strong>
+                   <button class="btn-sm btn btn-outline-success" (click)="Add(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
+                    <div class="float-right">
+                        <button class="btn-sm btn-outline-danger" (click)="delete(product.cartId)"><mat-icon>delete</mat-icon></button>
+                    </div>
+                </div>
+              
+            </div>
+           
+        </mat-card>
+    
+    </div>
+    <!-- <div class="col-md-8 mx-auto" *ngIf="empty">
+        <strong>Cart Is Empty</strong>
+    </div> -->
+    <div class="col-md-8 mx-auto mb-5 mt-2 " >
+        <strong class="col-md-4 float-right">Total:<b style="color: red;">{{total | currency : "INR"}}</b></strong><br>
+        <strong class="col-md-4 float-right">GST Tax:2%</strong><br>
+        <strong class="col-md-4 float-right">Amount Payable:<b style="color: red;">{{total+(total*2/100)| currency:"INR"}}</b></strong>
+        <button class="col-md-6" mat-raised-button color="primary"  (click)="PlaceOrder()">Place Order</button>
+    </div>
+
+</div>

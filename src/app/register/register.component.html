@@ -1,0 +1,62 @@
+<div class="col-md-5 mx-auto mb-4 ">
+    <mat-card>
+        <form [formGroup]="UserForm" autocomplete="off">
+       
+            <mat-toolbar style="background-color: indigo;color: ivory;">
+                <span class="fill-remaining"></span>
+                <span >Register</span>
+                <!-- <span *ngIf="service.UserForm.value.UserId=0">Regist Profile</span> -->
+                <span class="fill-remaining"></span>
+            </mat-toolbar>
+            <input type="hidden" formControlName="UserId">
+            <mat-form-field class="col-md-12">
+                <input matInput placeholder="FirstName" formControlName="FirstName">
+                <mat-error>field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+                <input matInput placeholder="LastName" formControlName="LastName">
+                <mat-error>field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+                <input matInput placeholder="Email" formControlName="Email">
+                <!-- <div *ngIf="f.Email.errors.required">Email is required</div>
+                <div *ngIf="f.Email.errors.email">Email must be a valid email address</div> -->
+                
+                    <!-- <mat-error *ngIf="f.Email.errors.required">field is required.</mat-error>
+        
+               
+                    <mat-error *ngIf="f.Email.errors.email" >Email pattern is not correct</mat-error>
+             
+               -->
+               
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+                <input matInput placeholder="Phone" formControlName="Phone">
+                <mat-error>max 10 digits</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+                <input matInput placeholder="Address" formControlName="Address">
+            </mat-form-field>
+            <mat-form-field class="col-md-12" apperance="fill">
+                <mat-label>Select City</mat-label>
+                <mat-select [(value)]="selected" formControlName="CityId">
+                  <mat-option>None</mat-option>
+                 <mat-option *ngFor="let city of cities" value={{city.cityId}} >{{city.cityName}}</mat-option>
+                </mat-select>
+               
+            </mat-form-field>
+            <mat-form-field class="col-md-12" *ngIf="UserForm.controls['UserId'].value==0">
+                <input matInput type="password" placeholder="Password" formControlName="Password">
+                <mat-error>field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-12" *ngIf="UserForm.controls['UserId'].value==0">
+                <input matInput type="password" placeholder="Confirm Password" formControlName="ConfirmPassword">
+                <div *ngIf="f.ConfirmPassword.hasError(checkPasswords)">Password not match</div>
+                <mat-error>Password not match</mat-error>
+            </mat-form-field>
+            <button class="col-md-12" mat-raised-button color="primary" (click)="Register()" >Submit</button>
+         
+        </form>
+        
+    </mat-card>
+</div>

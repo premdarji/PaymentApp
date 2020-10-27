@@ -1,0 +1,22 @@
+[
+    {
+        "cityId": 1,
+        "cityName": "Ahmedabad"
+   
+    },
+    {
+        "cityId": 2,
+        "cityName": "Vadodara"
+
+    },
+    {
+        "cityId": 3,
+        "cityName": "Surat"
+  
+    },
+    {
+        "cityId": 4,
+        "cityName": "Anand"
+     
+    }
+]

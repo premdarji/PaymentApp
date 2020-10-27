@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.fill-remaining{
+    flex: 1 1 auto;
+}
+snack-bar-container.success{
+    background-color: green;
+    color: ivory;
+}
+
+snack-bar-container.delete{
+    background-color: red;
+    color: ivory;
+}
+
+/* .bg{
+    background-image: url("assets\\Images\\wrist-watches.jpg");
+    background-size:cover ;
+    background-repeat: no-repeat;
+    height: 100%;
+} */

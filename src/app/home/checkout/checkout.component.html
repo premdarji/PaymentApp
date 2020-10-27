@@ -1,0 +1,103 @@
+
+<mat-vertical-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]>
+        <mat-card style="display: flex;" class="shadow col-md-6 mb-4"  *ngFor="let product of cartItems;let i=index">
+            <div class="col-md-4">
+                <img class="card-img-top" src="assets\Images\download.png" alt="">
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                    <h4 class="card-title">
+                      <b>{{product.name}}</b>
+                    </h4>
+                    <h5>{{product.price}}</h5>
+                    <p class="card-text">{{product.description}}</p>
+                    
+                   <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
+                   <strong>Qty:-<b>{{product.quantity}}</b></strong>
+                  <button class="btn-sm btn btn-outline-success" (click)="Add(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
+                </div>
+            </div>
+        </mat-card>
+
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+    
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Fill out your address</ng-template>
+        <div class="col-md-6">
+            <mat-form-field class="col-md-12">
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="Add" placeholder="Ex. A/17 ,Yogi park ,anand vv nagar road"
+                       required>
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+            <mat-label>City</mat-label>
+                  <input matInput formControlName="City"  placeholder="Ex. Vidhyanagar"
+                         required>
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+                  <mat-label>Dist</mat-label>
+                  <input matInput formControlName="Dist"  placeholder="Ex. Anand"
+                         required>
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+                  <mat-label>Pin</mat-label>
+                  <input matInput formControlName="Pin" placeholder="Ex. 388120"
+                         required>
+            </mat-form-field>
+        </div>
+       
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+          <button mat-raised-button [matMenuTriggerFor]="menu">Select Address</button>
+          <mat-menu #menu="matMenu">
+               
+            <butto mat-menu-item >Address 1</butto>
+             <button mat-menu-item >Address 2</button>
+            <button mat-menu-item>Address 3</button>
+            <button mat-menu-item >Address 4</button>
+        </mat-menu>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Payment Details</ng-template>
+            <div>
+                <mat-form-field class="col-md-6">
+                    <mat-label>Offers</mat-label>
+                <mat-select>
+                    <mat-option value="offer.id" (click)="discount(offer.availabe,i)" [disabled]="offer.availabe==0" *ngFor="let offer of offers;let i =index">{{offer.offer}}</mat-option>
+                </mat-select>
+                </mat-form-field><br>
+                
+                <b>Price:{{total}}</b><br>
+                <div *ngIf="offerapplied" style="color: blue;">
+                    <b>Dicount:{{Discount}}</b><br>
+                    <b>Amount Payable:{{final}}</b><br>
+                
+                </div>
+                <button mat-button matStepperPrevious >Back</button>
+                <button mat-button matStepperNext  (click)="payWithRazor()">Next</button>
+        
+            </div>
+        </form>
+
+    </mat-step>
+      
+
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+ 
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button style="background-color: green;" (click)="OrderDetail()">Confirm</button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>

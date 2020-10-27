@@ -1,0 +1,39 @@
+<div class="col-md-10 mx-auto">
+
+    <mat-toolbar class="mt-5 mb-3">
+        <span class="fill-remaining"></span>
+        <span>My Orders</span>
+        <span class="fill-remaining"></span>
+    </mat-toolbar>
+    <mat-card *ngFor="let product of Products" class="shadow mb-4 mt-4" > 
+     <div  style="display: flex;">
+        <div class="col-md-6">
+            <table class="table table-hover">
+                <tr>
+                    <td><strong>Name</strong></td>
+                    <td><strong>{{product.name}}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Price</strong></td>
+                    <td><strong>{{product.price}}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Quantity</strong></td>
+                    <td><strong>{{product.quantity}}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Amount</strong></td>
+                    <td><strong>{{product.amount}}</strong></td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="col-md-4">
+            <img src="assets\Images\download.png">
+        </div>
+    
+
+     </div>
+        
+    </mat-card>
+</div>
