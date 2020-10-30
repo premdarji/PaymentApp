@@ -68,6 +68,7 @@ export class BuyComponent implements OnInit {
   CountTotal(){
 
     this.total=Number(this.qty)*this.ProductData.price;
+    this.final=this.total
     for(var item of this.offers){
       if(item.availabe==0){
         this.Discount=this.total*20/100;
@@ -105,7 +106,7 @@ export class BuyComponent implements OnInit {
   payWithRazor(val) {
     const options: any = {
       key: 'rzp_test_L4Raaco7n2tzbD',
-      amount: this.total*100, // amount should be in paise format to display Rs 1255 without decimal point
+      amount: this.final*100, // amount should be in paise format to display Rs 1255 without decimal point
       currency: 'INR',
       name: 'Shopping Demo', // company name or product name
       description: '',  // product description

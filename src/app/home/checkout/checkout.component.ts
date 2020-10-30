@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ConfirmComponent, ConfirmDialogModel } from 'src/app/confirm/confirm.component';
+import { NotificationService } from 'src/app/shared/notification.service';
 import { OrderService } from 'src/app/shared/order.service';
 import { ProductService } from 'src/app/shared/product.service';
 import { WindowrefService } from 'src/app/shared/windowref.service';
@@ -19,7 +21,10 @@ export class CheckoutComponent implements OnInit {
     public dialog: MatDialog,
     public _formBuilder: FormBuilder,
     private winRef:WindowrefService,
-    private order:OrderService){}
+    private order:OrderService,
+    private notification:NotificationService,
+    private zone:NgZone,
+    private router:Router){}
 
 
     cartItems:any;
@@ -194,8 +199,14 @@ export class CheckoutComponent implements OnInit {
           console.log(Detail);
           this.order.PostDetailOrder(Detail).subscribe(res=>{})
           this.productservice.RemoveFormCart(element.cartId).subscribe(res=>{})
+          
+      
         });
         this.home.GetCount();
+        this.zone.run(()=>{
+          this.router.navigate(['/home/order']);
+        })
+      
       })
       
     
@@ -205,6 +216,7 @@ export class CheckoutComponent implements OnInit {
     options.modal.ondismiss = (() => {
       // handle the case when user closes the form while transaction is in progress
       console.log('Transaction cancelled.');
+      this.notification.Delete("Complete payment for order");
     });
     const rzp = new this.winRef.nativeWindow.Razorpay(options);
     rzp.open();

@@ -4,7 +4,7 @@
     <mat-step [stepControl]>
         <mat-card style="display: flex;" class="shadow col-md-6">
             <div class="col-md-4">
-                <img class="card-img-top" src="assets\Images\download.png" alt="">
+                <img class="card-img-top" src="{{ProductData.imageUrl}}" alt="">
             </div>
             <div class="col-md-6">
                 <div class="card-body">
@@ -93,7 +93,7 @@
     </mat-step>
       
 
-    <mat-step>
+    <!-- <mat-step>
       <ng-template matStepLabel>Done</ng-template>
  
       <div>
@@ -101,5 +101,5 @@
         <button mat-button (click)="stepper.reset()">Reset</button>
         <button mat-button style="background-color: green;" (click)="OrderDetail()">Confirm</button>
       </div>
-    </mat-step>
+    </mat-step> -->
   </mat-vertical-stepper>

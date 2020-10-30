@@ -45,7 +45,7 @@
       </div>
       <!-- /.col-lg-3 -->
 
-      <div class="col-lg-9">
+      <div class="col-lg-9 " >
 
         <div id="carouselExampleIndicators" class="carousel slide my-4 col-md-12" data-ride="carousel">
           <ol class="carousel-indicators">
@@ -78,10 +78,13 @@
 
        
 
-        <div class="row" style="display: flex; justify-content:stretch;" >
+        <div class="row  ml-5" style="display: flex; justify-content:stretch;">
 
           <mat-card class="col-md-3 mb-5 mr-2" *ngFor="let product of Products| filter:filter |orderBy: key : reverse   ;let i = index " >
-            <img class="card-img-top" src="assets\Images\download.png" alt="">
+            <div style="height: 200px;">
+              <img class="card-img-top" src="{{product.imageUrl}}" alt="" style="height: 100%;">
+            </div>
+   
             <div class="card-body">
               <h4 class="card-title">
                 <b class="btn">{{product.name}}</b>
