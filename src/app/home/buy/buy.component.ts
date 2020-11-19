@@ -49,6 +49,7 @@ export class BuyComponent implements OnInit {
   final=0;
   Quantity=0;
   offerapplied=false;
+  checking =false;
 
   offers=[
     {id:1,offer:"Instant 20% discount",availabe:1},
