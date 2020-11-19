@@ -2,9 +2,17 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators ,ReactiveFormsModule} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/shared/product.service';
-import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { WindowrefService } from 'src/app/shared/windowref.service';
 import { OrderService } from 'src/app/shared/order.service';
+import { NotificationService } from 'src/app/shared/notification.service';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+import { Store,select } from '@ngrx/store';
+
+
+import * as fromActions from "../../Common/Actions/Product.actions";
+import * as selector from "../../Common/index";
+
 
 @Component({
   selector: 'app-buy',
@@ -23,7 +31,10 @@ export class BuyComponent implements OnInit {
     public _formBuilder: FormBuilder,
     private winRef:WindowrefService,
     private order:OrderService,
-    private zone:NgZone) { }
+    private zone:NgZone,
+    private notification:NotificationService,
+    private store:Store<ProductState>
+    ) { }
 
   ProductId: any; //Getting Product id from URL
   ProductData: any; //Getting Product details
@@ -58,10 +69,20 @@ export class BuyComponent implements OnInit {
   }
 
   GetProductById(id){
-    this.sevice.GetProductById(id).subscribe(res=>{
+    // this.sevice.GetProductById(id).subscribe(res=>{
 
-      this.ProductData=res;
+    //   this.ProductData=res;
+    //   console.log(this.ProductData)
+    // })
+    this.store.dispatch(new fromActions.GetProductById(id));
+
+    this.store.pipe(select(selector.GetProductById)).subscribe((result: any) => {
+      if (result) {
+      this.ProductData = result;
+      console.log(this.ProductData)
+      }
     })
+
   }
 
 
@@ -76,6 +97,15 @@ export class BuyComponent implements OnInit {
       }
     }
   
+  }
+
+
+  checkstock(){
+    if(this.ProductData.quantity<Number(this.qty)){
+      this.notification.Delete("Not enogh in stock")
+      this.qty=this.ProductData.quantity
+      //this.stepper.previous();
+    }
   }
 
   discount(availabe,index){

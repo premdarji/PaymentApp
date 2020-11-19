@@ -3,7 +3,7 @@
     <mat-step [stepControl]>
         <mat-card style="display: flex;" class="shadow col-md-6 mb-4"  *ngFor="let product of cartItems;let i=index">
             <div class="col-md-4">
-                <img class="card-img-top" src="assets\Images\download.png" alt="">
+                <img class="card-img-top" src="{{product.imageUrl}}" alt="">
             </div>
             <div class="col-md-6">
                 <div class="card-body">
@@ -13,9 +13,16 @@
                     <h5>{{product.price}}</h5>
                     <p class="card-text">{{product.description}}</p>
                     
-                   <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
-                   <strong>Qty:-<b>{{product.quantity}}</b></strong>
-                  <button class="btn-sm btn btn-outline-success" (click)="Add(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
+                    <div *ngIf="product.stock>0">
+                      <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
+                  <strong>Qty:-<b>{{product.quantity}}</b></strong>
+                 <button class="btn-sm btn btn-outline-success" (click)="Add(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
+                  
+                  </div>
+                  <div *ngIf="product.stock==0">
+                      currently out of stock
+                      <button mat-raised-button color="warn">Notify Me</button>
+                  </div>
                 </div>
             </div>
         </mat-card>
@@ -57,7 +64,7 @@
           <button mat-raised-button [matMenuTriggerFor]="menu">Select Address</button>
           <mat-menu #menu="matMenu">
                
-            <butto mat-menu-item >Address 1</butto>
+            <button mat-menu-item >Address 1</button>
              <button mat-menu-item >Address 2</button>
             <button mat-menu-item>Address 3</button>
             <button mat-menu-item >Address 4</button>

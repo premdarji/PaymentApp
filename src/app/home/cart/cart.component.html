@@ -1,4 +1,4 @@
-<div  *ngIf="showComponent">
+<div  *ngIf="showComponent" class="cart">
     <mat-toolbar class="mt-4 col-md-10 mx-auto">
         <span class="fill-remaining"></span>
         <span>Cart Items</span>
@@ -9,7 +9,7 @@
             <div style="display: flex;">
     
                 <div class="col-md-3">
-                    <img class="card-img-top" src="assets\Images\download.png" alt="">
+                    <img class="card-img-top" src="{{product.imageUrl}}" alt="">
                 </div>
                 <div class="col-md-7">
                     <table class="table table-bordered">
@@ -31,12 +31,20 @@
                         </tr>
                     </table>
                   
-                   <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
+                    <div *ngIf="product.stock>0">
+                        <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
                     <strong>Qty:-<b>{{product.quantity}}</b></strong>
                    <button class="btn-sm btn btn-outline-success" (click)="Add(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
+                    
+                    </div>
+                    <div *ngIf="product.stock==0">
+                        currently out of stock
+                        <button mat-raised-button color="warn" matTooltip="we give a mail " matTooltipClass="example-tooltip-red">Notify Me</button>
+                    </div>
                     <div class="float-right">
                         <button class="btn-sm btn-outline-danger" (click)="delete(product.cartId)"><mat-icon>delete</mat-icon></button>
                     </div>
+                   
                 </div>
               
             </div>
@@ -51,7 +59,13 @@
         <strong class="col-md-4 float-right">Total:<b style="color: red;">{{total | currency : "INR"}}</b></strong><br>
         <strong class="col-md-4 float-right">GST Tax:2%</strong><br>
         <strong class="col-md-4 float-right">Amount Payable:<b style="color: red;">{{total+(total*2/100)| currency:"INR"}}</b></strong>
-        <button class="col-md-6" mat-raised-button color="primary"  (click)="PlaceOrder()">Place Order</button>
+        <button class="col-md-6" mat-raised-button color="primary"  (click)="PlaceOrder()" >Place Order</button>
     </div>
 
+</div>
+
+<div *ngIf="!showComponent">
+    <div class="alert alert-danger col-md-8 mx-auto h-200 mt-10 " role="alert" style="margin-top: 10%; padding-top: 5%; padding-bottom: 5%;">
+        Cart is empty ! please add items in your cart
+    </div>
 </div>

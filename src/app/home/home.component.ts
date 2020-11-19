@@ -6,6 +6,7 @@ import { RegisterComponent } from '../register/register.component';
 import { ProductService } from '../shared/product.service';
 // import { RegisterComponent } from '../register/register.component';
 import { UserService } from '../shared/User';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ export class HomeComponent  implements OnInit  {
   constructor(private dialog:MatDialog,
     private router:Router,
     private service:UserService,
-    private product:ProductService
+    private product:ProductService,
+   // private dashboard:DashboardComponent
     ) { }
 
     count:any;
@@ -52,7 +54,7 @@ export class HomeComponent  implements OnInit  {
   GetCount(){
     this.product.GetCount().subscribe(res=>{
       this.count=res;
-      console.log(this.count);
+   
     })
   }
 
@@ -60,4 +62,12 @@ export class HomeComponent  implements OnInit  {
     this.router.navigate(['/home/order'])
   }
 
+  // LHSort(){
+  //   let key="price";
+  //   this.dashboard.sortLH(key);
+  // }
+  // HLSort(){
+  //   let key="price";
+  //   this.dashboard.sortHL(key);
+  // }
 }

@@ -27,7 +27,7 @@ export class CheckoutComponent implements OnInit {
     private router:Router){}
 
 
-    cartItems:any;
+    cartItems:any[]=[];
 
     temp:any;
     showComponent=false;
@@ -60,9 +60,17 @@ export class CheckoutComponent implements OnInit {
    GetCartItems(){
      this.productservice.GetCartItems().subscribe(res=>{
        
-        this.cartItems=res;
+        this.temp=res;
         this.showComponent = true;
         console.log(this.cartItems)
+        this.temp.forEach(element => {
+         if(element.stock>0){
+           if(element.quantity>element.stock){
+             element.quantity=element.stock;
+           }
+           this.cartItems.push(element)
+         }
+        });
         this.CartTotal();
         
       })
@@ -107,13 +115,19 @@ export class CheckoutComponent implements OnInit {
 
    Add(id,index){
   
-        this.productservice.UpdateCart(id,this.cartItems[index].quantity+1).subscribe(res=>{
+      if(this.cartItems[index].stock>this.cartItems[index].quantity){
+          this.productservice.UpdateCart(id,this.cartItems[index].quantity+1).subscribe(res=>{
             this.cartItems[index].quantity=this.cartItems[index].quantity+1;
             this.total += this.cartItems[index].price;
             this.final=this.total;
             console.log(res);
         })
-     }
+      }
+      else{
+        this.notification.Delete("Out of Stock")
+      }
+      
+    }
  
    CartTotal(){
      this.total=0;

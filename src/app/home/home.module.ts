@@ -20,7 +20,13 @@ import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MyorderComponent } from './myorder/myorder.component'
+import { MyorderComponent } from './myorder/myorder.component';
+
+
+// import { StoreModule } from "@ngrx/store";
+// import * as fromProduct from "../Common/Reducer/Product.reducer";
+// import { EffectsModule } from '@ngrx/effects';
+// import { ProductEffects } from '../Common/Effects/Products.effects';
 
 
 
@@ -33,6 +39,7 @@ import { MyorderComponent } from './myorder/myorder.component'
   CartComponent,
   CheckoutComponent,
   MyorderComponent,
+ 
 ],
   imports: [
     CommonModule,
@@ -46,7 +53,12 @@ import { MyorderComponent } from './myorder/myorder.component'
     Ng2OrderModule,
     NgxPaginationModule,
 
-    ScrollingModule
+    ScrollingModule,
+
+ 
+    // StoreModule.forFeature('myproduct', fromProduct.reducer),
+   
+    // EffectsModule.forFeature([ProductEffects])
     
   ],
   providers:[RegisterComponent]

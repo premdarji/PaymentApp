@@ -22,3 +22,18 @@ snack-bar-container.delete{
     padding-top: 10%;
     padding-bottom: 10%;
 } */
+
+.footer{
+
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  
+    color: white;
+    text-align: center;
+}
+
+.cart{
+    min-height: 100%;
+}

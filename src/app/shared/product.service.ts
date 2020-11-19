@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Observable } from 'rxjs';
+import { Product } from '../models/Product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +14,12 @@ export class ProductService {
   constructor(private http:HttpClient) { }
 
  
-  GetAll(number,size){
+  GetAll(number,size):Observable<Product[]>{
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
   
-    return this.http.get(this.APIURL+"/Product/GetAll/"+userid+'/'+number+"/"+size);
+    return this.http.get<Product[]>(this.APIURL+"/Product/GetAll/"+userid+'/'+number+"/"+size);
   }
 
   GetProductsByCategory(id){

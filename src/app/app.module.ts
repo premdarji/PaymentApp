@@ -24,6 +24,15 @@ import { ConfirmComponent } from './confirm/confirm.component';
 import { ScrollingModule } from '@angular/cdk/scrolling'
 
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { ProductEffects } from './Common/Effects/Products.effects';
+import * as fromProduct from 'src/app/Common/Reducer/Product.reducer';
+import * as indexproduct from 'src/app/Common/index';
+import * as actions from 'src/app/Common/Actions/Product.actions';
+import { AppEffects, reducers ,metaReducers} from './Common/Store/app-state';
+
+
 
 
 @NgModule({
@@ -49,7 +58,22 @@ import { ScrollingModule } from '@angular/cdk/scrolling'
     ReactiveFormsModule,
     HttpClientModule,
     JwtModule,
-    ScrollingModule
+    ScrollingModule,
+    StoreModule.forRoot(reducers, { metaReducers ,
+      runtimeChecks: { 
+        strictStateImmutability: false, 
+        strictActionImmutability: false,
+    } }),
+    StoreModule.forFeature(fromProduct.productsFeatureKey,fromProduct.reducer),
+    EffectsModule.forRoot([ProductEffects]),
+
+
+    // StoreModule.forRoot({}), 
+    //  //StoreModule.forFeature( ),
+    //  StoreModule.forFeature('myproduct', fromProduct.reducer),
+    //  EffectsModule.forRoot([]),
+    //  EffectsModule.forFeature([ProductEffects]),
+
   
   ],
 

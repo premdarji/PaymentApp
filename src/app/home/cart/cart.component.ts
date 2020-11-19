@@ -1,12 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Store,select } from '@ngrx/store';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
 
 import { ConfirmComponent, ConfirmDialogModel } from 'src/app/confirm/confirm.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 
 import { ProductService } from 'src/app/shared/product.service';
 import { HomeComponent } from '../home.component';
+
+
+import * as fromActions from "../../Common/Actions/Product.actions";
+import * as selector from "../../Common/index";
 
 @Component({
   selector: 'app-cart',
@@ -20,7 +26,8 @@ export class CartComponent implements OnInit {
     public dialog: MatDialog,
     private home:HomeComponent,
     private router:Router,
-    private notification:NotificationService 
+    private notification:NotificationService ,
+    private store:Store<ProductState>
     ) { }
 
   cartItems:any;
@@ -30,20 +37,41 @@ export class CartComponent implements OnInit {
   total:number=0;
   ids=[];
   empty=true;
-  
+  buy:boolean;
+  counter:number=0;
  
   ngOnInit(): void {
-   this.GetCartItems();
+  //this.GetCartItems();
+   
    this.home.GetCount();
+    this.store.dispatch(new fromActions.GetCartList());
+    this.loadcart();
+  }
+
+  loadcart(){
+    this.store.pipe(select(selector.GetCartItems)).subscribe((result: any) => {
+      if (result) {
+        this.cartItems=result;
+        if(this.cartItems.length>0){
+          this.showComponent=true;
+        }
+     
+       console.log(this.cartItems);
+       console.log(this.showComponent)
+       this.CartTotal();
+      }
+    })
   }
 
   GetCartItems(){
     this.service.GetCartItems().subscribe(res=>{
       
       this.cartItems=res;
-     this.showComponent = true;
-     if(this.cartItems!=null){
-       this.empty=false;
+     
+     if(this.cartItems.length>0){
+       
+       this.showComponent = true;
+       console.log(this.showComponent)
      }
       console.log(this.cartItems)
       this.CartTotal();
@@ -54,10 +82,13 @@ export class CartComponent implements OnInit {
   Remove(id,index){
 
     if(this.cartItems[index].quantity>1){
-      this.productservice.UpdateCart(id,this.cartItems[index].quantity-1).subscribe(res=>{
-        this.cartItems[index].quantity=this.cartItems[index].quantity-1;
-        this.total -= this.cartItems[index].price;
-      })
+      // this.productservice.UpdateCart(id,this.cartItems[index].quantity-1).subscribe(res=>{
+      //   this.cartItems[index].quantity=this.cartItems[index].quantity-1;
+      //   this.total -= this.cartItems[index].price;
+      // })
+      this.cartItems[index].quantity=this.cartItems[index].quantity-1;
+      this.total-=this.cartItems[index].price;
+      this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));
      
     }
     else{
@@ -73,15 +104,19 @@ export class CartComponent implements OnInit {
         
              console.log(dialogResult)
              if(dialogResult==true){
-               this.productservice.RemoveFormCart(this.cartItems[index].cartId).subscribe(res=>{
-                debugger;
-                this.total -= this.cartItems[index].price;
-                this.home.GetCount();
-                 console.log(res);
-                this.GetCartItems();
-                this.notification.Delete("Item is removed from cart");
-                  
-               })
+              //  this.productservice.RemoveFormCart(this.cartItems[index].cartId).subscribe(res=>{
+              //   debugger;
+              //   this.total -= this.cartItems[index].price;
+              //   this.home.GetCount();
+              //    console.log(res);
+              //   this.GetCartItems();
+              //   this.notification.Delete("Item is removed from cart"); 
+               //})
+               this.total-=this.cartItems[index].price;
+               this.home.GetCount();
+               this.store.dispatch(new fromActions.RemoveFromCart(id));
+               this.loadcart();
+               this.notification.Delete("Item is removed from cart"); 
              }
          });
     }
@@ -89,19 +124,31 @@ export class CartComponent implements OnInit {
   }
   Add(id,index){
 
-    this.productservice.UpdateCart(id,this.cartItems[index].quantity+1).subscribe(res=>{
+    if(this.cartItems[index].stock>this.cartItems[index].quantity){
+      // this.productservice.UpdateCart(id,this.cartItems[index].quantity+1).subscribe(res=>{
+      //   this.cartItems[index].quantity=this.cartItems[index].quantity+1;
+      //   this.total += this.cartItems[index].price;
+      //   console.log(res);
+      // })
       this.cartItems[index].quantity=this.cartItems[index].quantity+1;
-      this.total += this.cartItems[index].price;
-      console.log(res);
-    })
+      this.total+=this.cartItems[index].price;
+      this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));
+    }
+    else{
+      this.notification.Delete("out of stock")
+    }
+
+   
 
   }
 
   CartTotal(){
     this.total=0;
     this.cartItems.forEach(element => {
+  
       this.total += (element.quantity*element.price)
     });
+
     console.log(this.total);
   }
 
@@ -117,10 +164,14 @@ export class CartComponent implements OnInit {
 
 
   delete(id){
-    this.productservice.RemoveFormCart(id).subscribe(res=>{
-      this.GetCartItems();
-      this.home.GetCount();
-      this.notification.Delete("Item removed form cart");
-    })
+    // this.productservice.RemoveFormCart(id).subscribe(res=>{
+    //   this.GetCartItems();
+    //   this.home.GetCount();
+    //   this.notification.Delete("Item removed form cart");
+    // })
+    this.store.dispatch(new fromActions.RemoveFromCart(id));
+    this.loadcart();
+    this.home.GetCount();
+    this.notification.Delete("Item removed form cart");
   }
 }
