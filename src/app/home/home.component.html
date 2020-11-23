@@ -1,58 +1,4 @@
 
- <!-- Navigation -->
- <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" routerLink="/home">Shopping Demo</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" routerLink="/home">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/home/cart"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
-          </li>
-        
-          <li class="nav-item ml-3" >
-      
-            <button mat-button  style="color:black; background-color: white; font-weight: bolder;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
-              <mat-menu #menu="matMenu">
-               
-                  <button mat-menu-item (click)="ChangePassword()"><strong>Change Password</strong></button>
-                   <button mat-menu-item (click)="UpdateProfile()"><strong>Update Profile</strong></button>
-                  <button mat-menu-item (click)="Orders()"><strong>MyOrder</strong></button>
-                  <button mat-menu-item (click)="Logout()"><strong>Logout</strong></button>
-              </mat-menu>
-
-              <mat-menu #menu2="matMenu">
-                <button mat-menu-item (click)="ChangePassword()">Change Password</button>
-                <button mat-menu-item (click)="UpdateProfile()">Update Profile</button>
-              </mat-menu>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav> -->
-
-  <!-- page content -->
-  <!-- <router-outlet></router-outlet>
-  
-  <div style="margin-bottom: 0%; margin-block-end: 0%;" class="footer">
-    <footer class="py-2 bg-dark" >
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Shopping 2020</p>
-      </div> -->
-      <!-- /.container -->
-    <!-- </footer>
-
-  </div> -->
- <!-- Footer -->
-
-
  <mat-drawer-container class="example-container" hasBackdrop="true">
    
   <mat-drawer #drawer mode="side">
@@ -86,72 +32,24 @@
    
       
  
-  
-
-    <!-- <mat-menu #category="matMenu" position="['right', 'top']" class="myClass">
-        <button mat-menu-item (click)="ChangePassword()"><strong>Furniture</strong></button>
-         <button mat-menu-item (click)="UpdateProfile()"><strong>Clothing</strong></button>
-        <button mat-menu-item (click)="Orders()"><strong>Footwear</strong></button>
-        <button mat-menu-item (click)="Logout()"><strong>Mobiles</strong></button>
-    </mat-menu>
-
- -->
-
- 
-    
   </mat-drawer>
-  
   
   <mat-drawer-content>
 
-<!-- 
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" routerLink="/home">Shopping Demo</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" routerLink="/home">Home
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/home/cart"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
-            </li>
-          
-            <li class="nav-item ml-3" >
-        
-              <button mat-button  style="color:black; background-color: white; font-weight: bolder;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
-                <mat-menu #menu="matMenu">
-                 
-                    <button mat-menu-item (click)="ChangePassword()"><strong>Change Password</strong></button>
-                     <button mat-menu-item (click)="UpdateProfile()"><strong>Update Profile</strong></button>
-                    <button mat-menu-item (click)="Orders()"><strong>MyOrder</strong></button>
-                    <button mat-menu-item (click)="Logout()"><strong>Logout</strong></button>
-                </mat-menu>
-  
-                <mat-menu #menu2="matMenu">
-                  <button mat-menu-item (click)="ChangePassword()">Change Password</button>
-                  <button mat-menu-item (click)="UpdateProfile()">Update Profile</button>
-                </mat-menu>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav> -->
 
-    <mat-toolbar>
+    <mat-toolbar [ngClass]="{'class1':selectedclass==12,'class2':selectedclass==22}">
       <span (click)="drawer.toggle()"><mat-icon>menu</mat-icon></span>
-      <span>Shopping App</span>
+      <div [ngSwitch]="selectedclass">
+        <span *ngSwitchCase="'12'">My Order</span>
+        <span *ngSwitchCase="'22'">Delivery App</span>
+      </div>
+    
       <span class="fill-remaining"></span>
-      <a class="nav-link" routerLink="/home">Home
+      <a class="nav-link" [ngClass]="{'class1':selectedclass==12}" routerLink="/home">Home
         <span class="sr-only">(current)</span>
       </a>
-      <a class="nav-link " routerLink="/home/cart"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
+      <a class="nav-link "  [ngClass]="{'class1':selectedclass==12}" routerLink="/home/cart"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
       <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 1%;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
       <mat-menu #menu="matMenu">
        
@@ -159,6 +57,9 @@
            <button mat-menu-item (click)="UpdateProfile()"><strong>Update Profile</strong></button>
           <button mat-menu-item (click)="Orders()"><strong>MyOrder</strong></button>
           <button mat-menu-item (click)="Logout()"><strong>Logout</strong></button>
+          <!-- <button mat-menu-item (click)="style1()"><strong>style 1</strong></button>
+          <button mat-menu-item (click)="style2()"><strong>style 2</strong></button> -->
+       
       </mat-menu>
 
       <mat-menu #menu2="matMenu">
@@ -167,31 +68,17 @@
       </mat-menu>
     </mat-toolbar>
 
-    <!-- <mat-form-field>
-      <mat-label>Sidenav mode</mat-label>
-      <mat-select #mode value="side">
-        <mat-option value="side">Side</mat-option>
-        <mat-option value="over">Over</mat-option>
-        <mat-option value="push">Push</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Has backdrop</mat-label>
-      <mat-select #hasBackdrop>
-        <mat-option>Unset</mat-option>
-        <mat-option [value]="true">True</mat-option>
-        <mat-option [value]="false">False</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button mat-raised-button (click)="drawer.toggle()">Toggle drawer</button> -->
-  
     <router-outlet></router-outlet>
 
 
-    <div style="margin-bottom: 0%; margin-block-end: 0%;" class="footer">
-      <footer class="py-2 bg-dark" >
+    <div style="margin-bottom: 0%; margin-block-end: 0%;" class="footer" >
+      <footer class="py-2 " [ngClass]="{'class1':true}">
         <div class="container">
-          <p class="m-0 text-center text-white">Copyright &copy; Shopping 2020</p>
+          <div [ngSwitch]="selectedclass">
+            <p class="m-0 text-center text-white" *ngSwitchCase="'12'">Copyright &copy; My Order 2020</p>
+            <p class="m-0 text-center text-white" *ngSwitchCase="'22'">Copyright &copy; Delivery App 2020</p>
+          </div>
+         
         </div>
         <!-- /.container -->
       </footer>

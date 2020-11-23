@@ -79,4 +79,11 @@ export class UserService {
     
   }
 
+  GetID(){
+    const helper = new JwtHelperService();
+    const decodedToken = helper.decodeToken(localStorage.getItem("token"));
+    let id=decodedToken["UserID"];
+    return id;
+  }
+
 }

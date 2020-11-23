@@ -37,3 +37,17 @@ snack-bar-container.delete{
 .cart{
     min-height: 100%;
 }
+
+.class1{
+    background-color: gray;
+    color: whitesmoke;
+}
+
+.class2{
+    background-color: yellow;
+}
+
+.class3{
+    background-color:dodgerblue ;
+    /* color: floralwhite; */
+}

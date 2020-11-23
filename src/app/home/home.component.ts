@@ -24,9 +24,12 @@ export class HomeComponent  implements OnInit  {
     ) { }
 
     count:any;
+    selectedclass=1;
 
   ngOnInit(): void {
     this.GetCount();
+      this.selectedclass=this.service.GetID()
+      console.log(this.selectedclass)
   }
   user:any;
 
@@ -70,4 +73,14 @@ export class HomeComponent  implements OnInit  {
   //   let key="price";
   //   this.dashboard.sortHL(key);
   // }
+
+
+  style1(){
+    this.selectedclass=1;
+  }
+
+  style2(){
+    this.selectedclass=2;
+  }
+
 }
