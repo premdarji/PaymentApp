@@ -19,12 +19,25 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+        
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
+            "extractCss": true,
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+            {
+              "input": "src/clienta.css",
+              "bundleName": "clienta",
+              "inject": false
+            },
+            {
+              "input": "src/clientb.css",
+              "bundleName": "clientb",
+              "inject": false
+            }
+              
             ],
             "scripts": []
           },

@@ -59,6 +59,7 @@ export class CartComponent implements OnInit {
        console.log(this.cartItems);
        console.log(this.showComponent)
        this.CartTotal();
+       this.home.GetCount();
       }
     })
   }
@@ -171,7 +172,8 @@ export class CartComponent implements OnInit {
     // })
     this.store.dispatch(new fromActions.RemoveFromCart(id));
     this.loadcart();
-    this.home.GetCount();
+ 
     this.notification.Delete("Item removed form cart");
+   
   }
 }

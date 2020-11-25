@@ -37,8 +37,10 @@ UpdateCart="[Update] Cart",
 RemoveFromCart="[Cart] Remove",
 
 GetOrderList="[OrderList] Get",
-GetOrderListSuccess="[OrderListSuccess] GetSuccess"
+GetOrderListSuccess="[OrderListSuccess] GetSuccess",
 
+GetCartCount="[CartCount] Get",
+GetCartCountSuccess="[CartCount] GetSuccess"
 
 }
 
@@ -130,7 +132,14 @@ export class GetOrderListSuccess implements Action{
     constructor(public orders:any[]){};
 }
 
+export class GetCartCount implements Action{
+    readonly type=ProductActionTypes.GetCartCount;
+}
 
+export class GetCartCountSuccess implements Action{
+    readonly type=ProductActionTypes.GetCartCountSuccess;
+    constructor(public count:any){};
+}
 
 export type ProductActions=
 GetProductList|
@@ -148,7 +157,8 @@ GetProductByIdSuccess|
 UpdateCart|
 GetOrderList|
 GetOrderListSuccess|
-
+GetCartCount|
+GetCartCountSuccess|
 GetState;
     
 

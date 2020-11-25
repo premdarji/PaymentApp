@@ -12,6 +12,7 @@ import { HomeComponent } from '../home.component';
 import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
 import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+import { debug } from 'console';
 
 
 
@@ -120,8 +121,10 @@ export class DashboardComponent implements OnInit {
     //  }
      
     // })
+
     this.store.dispatch(new fromActions.AddToCart(data));
     this.home.GetCount();
+    //this.store.dispatch(new fromActions.GetCartCount());
    
   }
 

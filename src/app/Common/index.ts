@@ -3,6 +3,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromProduct from '../Common/Reducer/Product.reducer';
 import * as ProductActions from '../Common/Actions/Product.actions';
 import * as fromRoot from '../Common/Store/app-state';
+import { state } from '@angular/animations';
 
 
 // Extends the app state to include the navigation feature.
@@ -43,6 +44,11 @@ export const CheckLimit=createSelector(
 export const OrderList =createSelector(
   getProductFeatureState,
   (state:fromProduct.ProductState)=>state.orderList
+)
+
+export const CartCount=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.cartCount
 )
 export const reducer=fromProduct.reducer;
 export const actions=ProductActions;

@@ -38,7 +38,7 @@
 
 
 
-    <mat-toolbar [ngClass]="{'class1':selectedclass==12,'class2':selectedclass==22}">
+    <mat-toolbar class="headerclass">
       <span (click)="drawer.toggle()"><mat-icon>menu</mat-icon></span>
       <div [ngSwitch]="selectedclass">
         <span *ngSwitchCase="'12'">My Order</span>
@@ -46,10 +46,10 @@
       </div>
     
       <span class="fill-remaining"></span>
-      <a class="nav-link" [ngClass]="{'class1':selectedclass==12}" routerLink="/home">Home
+      <a class="nav-link headerclass "  routerLink="/home">Home
         <span class="sr-only">(current)</span>
       </a>
-      <a class="nav-link "  [ngClass]="{'class1':selectedclass==12}" routerLink="/home/cart"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
+      <a class="nav-link headerclass" style="cursor: pointer;"    (click)="Cart()"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
       <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 1%;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
       <mat-menu #menu="matMenu">
        

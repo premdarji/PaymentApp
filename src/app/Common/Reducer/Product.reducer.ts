@@ -16,6 +16,7 @@ export interface ProductState{
     product:Product,
     limitreached:boolean,
     orderList:any[],
+    cartCount:number
 
 }
 
@@ -25,7 +26,8 @@ export const initialState :ProductState={
     cartItems:[],
     product:null,
     limitreached:false,
-    orderList:[]
+    orderList:[],
+    cartCount:0
 
 }
 
@@ -86,6 +88,11 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
         case ProductActionTypes.GetOrderListSuccess:
             return {...state,orderList:action.orders};
 
+        case ProductActionTypes.GetCartCount:
+            return {...state};    
+
+        case ProductActionTypes.GetCartCountSuccess:
+            return { ...state,cartCount:action.count};    
         case ProductActionTypes.GetState:
             return{...state};
 
