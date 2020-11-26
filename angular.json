@@ -26,7 +26,7 @@
             ],
             "extractCss": true,
             "styles": [
-              "src/styles.css",
+           
             {
               "input": "src/clienta.css",
               "bundleName": "clienta",
@@ -36,7 +36,9 @@
               "input": "src/clientb.css",
               "bundleName": "clientb",
               "inject": false
-            }
+            },
+            "src/styles.css"
+         
               
             ],
             "scripts": []
