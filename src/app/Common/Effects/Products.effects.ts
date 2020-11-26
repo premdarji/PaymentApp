@@ -32,145 +32,145 @@ export class ProductEffects {
         
       ) {}
 
-    // GetProductList$=createEffect(()=>
-    //   this.actions$.pipe(
+    GetProductList$=createEffect(()=>
+      this.actions$.pipe(
    
-    //     ofType(fromProductActions.ProductActionTypes.GetProductList),
+        ofType(fromProductActions.ProductActionTypes.GetProductList),
       
-    //     mergeMap(action=>
-    //       this.productService.GetAll(action.pageNumber,action.pageSize).pipe(
-    //           map((product:Product[])=>{
-    //            // debugger;
-    //               if(product["message"]=="nodata"){
-    //                 this.notification.Delete("No More Products")
-    //                return new  fromProductActions.GetProductListFailure();
-    //               }
-    //               else{
-    //                 return new fromProductActions.GetProductListSuccess(product);
-    //               }
-    //           }),
-    //           catchError(()=>of(new fromProductActions.GetProductListFailure())),
-    //       ),
-    //     ),
-    //   )
-    // );
+        mergeMap(action=>
+          this.productService.GetAll(action.pageNumber,action.pageSize).pipe(
+              map((product:Product[])=>{
+               // debugger;
+                  if(product["message"]=="nodata"){
+                    this.notification.Delete("No More Products")
+                   return new  fromProductActions.GetProductListFailure();
+                  }
+                  else{
+                    return new fromProductActions.GetProductListSuccess(product);
+                  }
+              }),
+              catchError(()=>of(new fromProductActions.GetProductListFailure())),
+          ),
+        ),
+      )
+    );
 
 
-    // GetCartList$=createEffect(()=>
-    //   this.actions$.pipe(
+    GetCartList$=createEffect(()=>
+      this.actions$.pipe(
   
-    //     ofType(fromProductActions.ProductActionTypes.GetCartList),
+        ofType(fromProductActions.ProductActionTypes.GetCartList),
       
-    //     mergeMap(action=>
-    //       this.productService.GetCartItems().pipe(
-    //           map((CartItems:any[])=>{
+        mergeMap(action=>
+          this.productService.GetCartItems().pipe(
+              map((CartItems:any[])=>{
               
-    //             console.log(CartItems)
-    //               return new fromProductActions.GetCartListSuccess(CartItems);
-    //           }),
-    //           catchError(()=>of(new fromProductActions.GetCartListFailure())),
-    //       ),
-    //     ),
-    //   )
-    // );
+                console.log(CartItems)
+                  return new fromProductActions.GetCartListSuccess(CartItems);
+              }),
+              catchError(()=>of(new fromProductActions.GetCartListFailure())),
+          ),
+        ),
+      )
+    );
 
 
-    // AddtoWishlist$=createEffect(()=>
-    //   this.actions$.pipe(
-    //     ofType(fromProductActions.ProductActionTypes.AddToWishlist),
-    //     switchMap((action)=>
-    //       this.wishlistservice.AddToWishlist(action.productId).pipe(
-    //           map((result)=>{
+    AddtoWishlist$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.AddToWishlist),
+        switchMap((action)=>
+          this.wishlistservice.AddToWishlist(action.productId).pipe(
+              map((result)=>{
               
-    //             console.log(result);
-    //               return new fromProductActions.GetState();
-    //           }),
-    //       ),
-    //     ),
-    //   )
-    // );
+                console.log(result);
+                  return new fromProductActions.GetState();
+              }),
+          ),
+        ),
+      )
+    );
 
 
-    // RemoveFromWishlist$=createEffect(()=>
-    //   this.actions$.pipe(
-    //     ofType(fromProductActions.ProductActionTypes.RemoveFromWishlist),
-    //     switchMap((action)=>
-    //       this.wishlistservice.RemoveFromWishlist(action.productId).pipe(
-    //           map((result)=>{
+    RemoveFromWishlist$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.RemoveFromWishlist),
+        switchMap((action)=>
+          this.wishlistservice.RemoveFromWishlist(action.productId).pipe(
+              map((result)=>{
               
-    //             console.log(result);
-    //               return new fromProductActions.GetState();
-    //           }),
-    //       ),
-    //     ),
-    //   )
-    // );
+                console.log(result);
+                  return new fromProductActions.GetState();
+              }),
+          ),
+        ),
+      )
+    );
 
-    // AddToCart$=createEffect(()=>
-    //   this.actions$.pipe(
-    //     ofType(fromProductActions.ProductActionTypes.AddToCart),
-    //     switchMap((action)=>
-    //       this.productService.AddtoCart(action.productId).pipe(
-    //           map((result)=>{
-    //             if(result["message"]=="exist"){
-    //               this.notification.Delete("Product already added")
-    //             }
-    //             else{
-    //               this.notification.update("Product Added to cart");
-    //             }
-    //             console.log(result);
-    //             return new fromProductActions.GetState();
-    //           }),
-    //       ),
-    //     ),
-    //   )
-    // );
+    AddToCart$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.AddToCart),
+        switchMap((action)=>
+          this.productService.AddtoCart(action.productId).pipe(
+              map((result)=>{
+                if(result["message"]=="exist"){
+                  this.notification.Delete("Product already added")
+                }
+                else{
+                  this.notification.update("Product Added to cart");
+                }
+                console.log(result);
+                return new fromProductActions.GetState();
+              }),
+          ),
+        ),
+      )
+    );
 
 
-    // GetProductById$=createEffect(()=>
-    //   this.actions$.pipe(
-    //     ofType(fromProductActions.ProductActionTypes.GetProductById),
-    //     switchMap((action)=>
-    //       this.productService.GetProductById(action.productId).pipe(
-    //           map((result:Product)=>{
+    GetProductById$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetProductById),
+        switchMap((action)=>
+          this.productService.GetProductById(action.productId).pipe(
+              map((result:Product)=>{
               
-    //             console.log(result);
-    //             return new fromProductActions.GetProductByIdSuccess(result);
-    //           }),
-    //       ),
-    //     ),
-    //   )
-    // );
+                console.log(result);
+                return new fromProductActions.GetProductByIdSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
 
-    // UpdateCart$=createEffect(()=>
-    //   this.actions$.pipe(
-    //     ofType(fromProductActions.ProductActionTypes.UpdateCart),
-    //     switchMap((action)=>
-    //       this.productService.UpdateCart(action.cartId,action.qty).pipe(
-    //           map((result)=>{
+    UpdateCart$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.UpdateCart),
+        switchMap((action)=>
+          this.productService.UpdateCart(action.cartId,action.qty).pipe(
+              map((result)=>{
               
-    //             console.log(result);
-    //             return new fromProductActions.GetState();
-    //           }),
-    //       ),
-    //     ),
-    //   )
-    // );
+                console.log(result);
+                return new fromProductActions.GetState();
+              }),
+          ),
+        ),
+      )
+    );
 
-    // RemoveFromCart$=createEffect(()=>
-    //   this.actions$.pipe(
-    //     ofType(fromProductActions.ProductActionTypes.RemoveFromCart),
-    //     switchMap((action)=>
-    //       this.productService.RemoveFormCart(action.cartId).pipe(
-    //           map((result)=>{
+    RemoveFromCart$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.RemoveFromCart),
+        switchMap((action)=>
+          this.productService.RemoveFormCart(action.cartId).pipe(
+              map((result)=>{
               
-    //             console.log(result);
-    //             return new fromProductActions.GetCartList();
-    //           }),
-    //       ),
-    //     ),
-    //   )
-    // );
+                console.log(result);
+                return new fromProductActions.GetCartList();
+              }),
+          ),
+        ),
+      )
+    );
 
     GetOrderList$=createEffect(()=>
       this.actions$.pipe(

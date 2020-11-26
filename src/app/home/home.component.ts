@@ -14,6 +14,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import * as fromActions from "../Common/Actions/Product.actions";
 import * as selector from "../Common/index";
 
+import {DOCUMENT} from '@angular/common';
 
 
 @Component({
@@ -30,16 +31,40 @@ export class HomeComponent  implements OnInit  {
     private product:ProductService,
    private notification:NotificationService,
    private store: Store<ProductState>,
+   @Inject(DOCUMENT) private document:Document
 
     ) { }
 
     count:any;
     selectedclass=1;
+    id:number;
 
   ngOnInit(): void {
     this.GetCount();
       this.selectedclass=this.service.GetID()
       console.log(this.selectedclass)
+
+
+      
+    this.id=this.service.GetID();
+    console.log("id is:"+this.id);
+    const headel=this.document.getElementsByTagName('head')[0];
+
+    const newlink=this.document.createElement('link');
+    newlink.rel="stylesheet";
+    if(this.id==12){
+      newlink.href="clienta.css";
+      console.log("in if")
+    }
+    else{
+      newlink.href="clientb.css";
+      console.log("in else")
+    }
+    
+    newlink.type="text/css";
+
+    headel.appendChild(newlink);
+
 
     
   }
