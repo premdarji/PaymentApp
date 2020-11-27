@@ -41,8 +41,8 @@
     <mat-toolbar class="headerclass">
       <span (click)="drawer.toggle()"><mat-icon>menu</mat-icon></span>
       <div [ngSwitch]="selectedclass">
-        <span *ngSwitchCase="'12'">My Order</span>
-        <span *ngSwitchCase="'22'">Delivery App</span>
+        <span *ngSwitchCase="'1'">My Order</span>
+        <span *ngSwitchCase="'2'">Delivery App</span>
       </div>
     
       <span class="fill-remaining"></span>
@@ -75,8 +75,8 @@
       <footer class="py-2 " [ngClass]="{'class1':true}">
         <div class="container">
           <div [ngSwitch]="selectedclass">
-            <p class="m-0 text-center text-white" *ngSwitchCase="'12'">Copyright &copy; My Order 2020</p>
-            <p class="m-0 text-center text-white" *ngSwitchCase="'22'">Copyright &copy; Delivery App 2020</p>
+            <p class="m-0 text-center text-white" *ngSwitchCase="'1'">Copyright &copy; My Order 2020</p>
+            <p class="m-0 text-center text-white" *ngSwitchCase="'2'">Copyright &copy; Delivery App 2020</p>
           </div>
          
         </div>

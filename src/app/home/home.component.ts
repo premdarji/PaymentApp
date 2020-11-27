@@ -49,13 +49,14 @@ export class HomeComponent  implements OnInit  {
 
     var link=this.document.getElementById('theme');
 
-    if(this.id==12){
+    if(this.id==1){
      
       link.setAttribute('href','clienta.css');
     }
     else{
       
       link.setAttribute('href','clientb.css')
+      
     }
 
 

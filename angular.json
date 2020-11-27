@@ -37,7 +37,13 @@
               "bundleName": "clientb",
               "inject": false
             },
-            "src/styles.css"
+            {
+              "input": "src/styles.css",
+              "bundleName": "styles",
+              "inject": false
+            }
+            
+    
          
               
             ],
