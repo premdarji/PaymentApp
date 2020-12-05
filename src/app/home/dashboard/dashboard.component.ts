@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
     //this.RefreshProducts(); 
     this.loadProduct();
     this.GetProducts();
- 
+    console.log(this.lang.temp)
   }
 
 

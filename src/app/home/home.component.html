@@ -41,8 +41,8 @@
     <mat-toolbar class="headerclass">
       <span (click)="drawer.toggle()"><mat-icon>menu</mat-icon></span>
       <div [ngSwitch]="selectedclass">
-        <span *ngSwitchCase="'1'">{{commondata.common.name}}</span>
-        <span *ngSwitchCase="'2'">{{commondata.common.name2}}</span>
+        <span *ngSwitchCase="'1'">{{commondata.Name}}</span>
+        <span *ngSwitchCase="'2'">{{commondata.OpName}}</span>
       </div>
     
     
@@ -59,17 +59,17 @@
                 </mat-select>
                
       </mat-form-field>
-      <a class="nav-link headerclass "  routerLink="/home"><p>{{commondata.common.Home}}</p>
+      <a class="nav-link headerclass "  routerLink="/home"><p>{{commondata.Home}}</p>
         <span class="sr-only"></span>
       </a>
       <a class="nav-link headerclass" style="cursor: pointer;"    (click)="Cart()"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
       <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 1%;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
       <mat-menu #menu="matMenu">
        
-          <button mat-menu-item (click)="ChangePassword()"><strong>{{commondata.common.ChangePassword}}</strong></button>
-           <button mat-menu-item (click)="UpdateProfile()"><strong>{{commondata.common.UpdateProfile}}</strong></button>
-          <button mat-menu-item (click)="Orders()"><strong>{{commondata.common.MyOrder}}</strong></button>
-          <button mat-menu-item (click)="Logout()"><strong>{{commondata.common.LogOut}}</strong></button>
+          <button mat-menu-item (click)="ChangePassword()"><strong>{{commondata.ChangePassword}}</strong></button>
+           <button mat-menu-item (click)="UpdateProfile()"><strong>{{commondata.UpdateProfile}}</strong></button>
+          <button mat-menu-item (click)="Orders()"><strong>{{commondata.MyOrder}}</strong></button>
+          <button mat-menu-item (click)="Logout()"><strong>{{commondata.LogOut}}</strong></button>
           <!-- <button mat-menu-item (click)="style1()"><strong>style 1</strong></button>
           <button mat-menu-item (click)="style2()"><strong>style 2</strong></button> -->
        

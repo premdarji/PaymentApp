@@ -15,32 +15,22 @@ export class LanguageService {
 
   GetData(data:any){
 
-    var CommonFields:any[]=[];
-    this.http.get(this.APIURL+"/Common").subscribe(res=>{
-     this.temp=res;
-      CommonFields.push(...this.temp);
-      console.log(res[0]["parameter"])
-      console.log(CommonFields) 
-      console.log(CommonFields.length)
-      var i=0;
   
-      console.log(CommonFields[30]["value"])
-
-      if(CommonFields["Parameter"]=="Profile"){
-        console.log("yes")
-      }
-    })
+ 
 
 
     
 
    
     if(data=="en"){
-      return this.http.get("assets/en.json")
-      
+      //return this.http.get("assets/en.json")
+      return this.http.get(this.APIURL+"/Common/"+1);
+    }
+    else{
+      return this.http.get(this.APIURL+"/Common/"+2);
     }
 
-    return this.http.get("assets/fr.json");
+    //return this.http.get("assets/fr.json");
     
   }
 }
