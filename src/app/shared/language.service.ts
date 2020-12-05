@@ -15,12 +15,6 @@ export class LanguageService {
 
   GetData(data:any){
 
-  
- 
-
-
-    
-
    
     if(data=="en"){
       //return this.http.get("assets/en.json")

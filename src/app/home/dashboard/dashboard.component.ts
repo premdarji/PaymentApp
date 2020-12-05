@@ -45,14 +45,22 @@ export class DashboardComponent implements OnInit {
   PageNumber=1;
   PageSize=6;
   categoryselected:boolean=false;
-
+  commondata:any;
   
 
   ngOnInit(): void {
     //this.RefreshProducts(); 
     this.loadProduct();
     this.GetProducts();
-    console.log(this.lang.temp)
+
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
+
+    
   }
 
 

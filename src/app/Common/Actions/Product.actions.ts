@@ -40,7 +40,11 @@ GetOrderList="[OrderList] Get",
 GetOrderListSuccess="[OrderListSuccess] GetSuccess",
 
 GetCartCount="[CartCount] Get",
-GetCartCountSuccess="[CartCount] GetSuccess"
+GetCartCountSuccess="[CartCount] GetSuccess",
+
+
+GetCommonFields="[GetCommon] Get",
+GetCommonFieldsSuccess="[GetCommon] GetSuccess"
 
 }
 
@@ -141,6 +145,17 @@ export class GetCartCountSuccess implements Action{
     constructor(public count:any){};
 }
 
+
+export class GetCommonFields implements Action{
+    readonly type=ProductActionTypes.GetCommonFields;
+    constructor(public data:string){};
+}
+
+export class GetCommonFieldsSuccess implements Action{
+    readonly type=ProductActionTypes.GetCommonFieldsSuccess;
+    constructor(public CommonFields:any){};
+}
+
 export type ProductActions=
 GetProductList|
 GetProductListSuccess|
@@ -159,6 +174,8 @@ GetOrderList|
 GetOrderListSuccess|
 GetCartCount|
 GetCartCountSuccess|
+GetCommonFields|
+GetCommonFieldsSuccess|
 GetState;
     
 

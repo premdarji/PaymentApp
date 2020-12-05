@@ -5,6 +5,12 @@ import { NotificationService } from '../shared/notification.service';
 import { UserService } from '../shared/User';
 
 
+import { Store,select } from '@ngrx/store';
+import { ProductState } from '../Common/Reducer/Product.reducer';
+import * as fromActions from "../Common/Actions/Product.actions";
+import * as selector from "../Common/index";
+
+
 
 @Component({
   selector: 'app-register',
@@ -15,7 +21,9 @@ export class RegisterComponent implements OnInit {
 
   constructor(public service:UserService,
     private notification:NotificationService,
-    private router:Router) { }
+    private router:Router,
+    private store: Store<ProductState>
+    ) { }
 
   cities:any;
   selected="1";
@@ -39,9 +47,20 @@ export class RegisterComponent implements OnInit {
     }
   );
 
-
+  commondata:any;
 
   ngOnInit(): void {
+
+
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
+
+
+
     this.service.GetAllCity().subscribe(res=>{
       this.cities=res;
     })

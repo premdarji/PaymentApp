@@ -45,14 +45,24 @@ export class HomeComponent  implements OnInit  {
 
   ngOnInit(): void {
 
+
+    this.store.dispatch(new fromActions.GetCommonFields("en"));
   
-    this.language.GetData("en").subscribe(res=>{
-      this.commondata=res;
+
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
       console.log(this.commondata)
+      }
     })
 
+    // this.language.GetData("en").subscribe(res=>{
+    //   this.commondata=res;
+    // })
+
     this.GetCount();
-      this.selectedclass=this.service.GetID()
+    
+    this.selectedclass=this.service.GetID()
  
 
       
@@ -155,8 +165,16 @@ export class HomeComponent  implements OnInit  {
   }
 
   Language(data){
-    this.language.GetData(data).subscribe(res=>{
-      this.commondata=res;
-    })
+
+    if(data=="en"){
+      this.store.dispatch(new fromActions.GetCommonFields("en"));
+    }
+    else{
+      this.store.dispatch(new fromActions.GetCommonFields("fr"));
+    }
+   
+    // this.language.GetData(data).subscribe(res=>{
+    //   this.commondata=res;
+    // })
   }
 }

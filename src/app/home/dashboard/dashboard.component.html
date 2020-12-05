@@ -46,17 +46,17 @@
 
         <div class="col-md-9 mx-auto mt-5 ">
           <mat-form-field class="col-md-8">
-            <input matInput placeholder="Search"  autocomplete="off" [(ngModel)]="filter">
+            <input matInput placeholder="{{commondata.search}}"  autocomplete="off" [(ngModel)]="filter">
             <button matSuffix class="btn btn-outliner" (click)="Clear()" aria-expanded="false"><mat-icon>clear</mat-icon></button>
           </mat-form-field>
           <div class="col-md-3 float-right">
 
-            <button mat-raised-button [matMenuTriggerFor]="sort" class="mr-3">Sort By </button>
+            <button mat-raised-button [matMenuTriggerFor]="sort" class="mr-3">{{commondata.Sortby}} </button>
             <mat-menu #sort="matMenu">
               <button mat-menu-item  (click)="sortLH('price')"><strong>Price -Low to High</strong></button>
               <button mat-menu-item (click)="sortHL('price')"><strong>Price -High to Low</strong></button>
             </mat-menu>
-            <button mat-raised-button [matMenuTriggerFor]="category">Category</button>
+            <button mat-raised-button [matMenuTriggerFor]="category">{{commondata.Category}}</button>
             <mat-menu #category="matMenu">
               <button mat-menu-item (click)="NoCategory()"><strong>All</strong></button>
               <button mat-menu-item  (click)="GetProductsByCategory(6)"><strong>Mobiles</strong></button>
@@ -90,8 +90,8 @@
          
             
             <div style="display: flex;justify-content: space-between;" >
-              <button mat-raised-button color="primary" (click)="AddtoCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon>Cart</button>
-              <button mat-raised-button color="warn" (click)="BuyNow(product.productId)" *ngIf="product.quantity>0">Buy Now</button>
+              <button mat-raised-button color="primary" (click)="AddtoCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon>{{commondata.Cart}}</button>
+              <button mat-raised-button color="warn" (click)="BuyNow(product.productId)" *ngIf="product.quantity>0">{{commondata.Buy}}</button>
             
                 <img src="assets\Images\images.png" width="30%" height="35px" *ngIf="product.quantity==0">
               

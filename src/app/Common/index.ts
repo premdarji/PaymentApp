@@ -50,5 +50,11 @@ export const CartCount=createSelector(
   getProductFeatureState,
   (state:fromProduct.ProductState)=>state.cartCount
 )
+
+export const CommonData=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.CommonFields
+)
+
 export const reducer=fromProduct.reducer;
 export const actions=ProductActions;

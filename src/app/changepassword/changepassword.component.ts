@@ -5,6 +5,12 @@ import { NotificationService } from '../shared/notification.service';
 import { UserService } from '../shared/User';
 
 
+
+import { Store ,select} from '@ngrx/store';
+import { ProductState } from '../Common/Reducer/Product.reducer';
+import * as fromActions from "../Common/Actions/Product.actions";
+import * as selector from "../Common/index";
+
 @Component({
   selector: 'app-changepassword',
   templateUrl: './changepassword.component.html',
@@ -14,7 +20,8 @@ export class ChangepasswordComponent implements OnInit {
 
   constructor(public service:UserService,
     private dialogref:MatDialogRef<ChangepasswordComponent>,
-    private notification:NotificationService) { }
+    private notification:NotificationService,
+    private store: Store<ProductState>) { }
 
 
     
@@ -28,7 +35,16 @@ export class ChangepasswordComponent implements OnInit {
     }
   );
 
+  commondata:any;
+
   ngOnInit(): void {
+
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
 
   }
 

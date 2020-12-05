@@ -16,7 +16,8 @@ export interface ProductState{
     product:Product,
     limitreached:boolean,
     orderList:any[],
-    cartCount:number
+    cartCount:number,
+    CommonFields:any;
 
 }
 
@@ -27,13 +28,14 @@ export const initialState :ProductState={
     product:null,
     limitreached:false,
     orderList:[],
-    cartCount:0
+    cartCount:0,
+    CommonFields:null
 
 }
 
 
 export function reducer(state = initialState, action:ProductActions ): ProductState {
- //debugger;
+ debugger;
     switch (action.type) {
   
         case ProductActionTypes.GetProductList:
@@ -95,6 +97,13 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
             return { ...state,cartCount:action.count};    
         case ProductActionTypes.GetState:
             return{...state};
+
+
+        case ProductActionTypes.GetCommonFields:
+            return {...state};
+
+        case ProductActionTypes.GetCommonFieldsSuccess:
+            return {...state,CommonFields:action.CommonFields};
 
         default:
             return {...state};

@@ -39,10 +39,19 @@ export class CartComponent implements OnInit {
   empty=true;
   buy:boolean;
   counter:number=0;
- 
+  commondata:any;
   ngOnInit(): void {
   //this.GetCartItems();
-   
+  
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
+
+
+
    this.home.GetCount();
     this.store.dispatch(new fromActions.GetCartList());
     this.loadcart();

@@ -18,9 +18,9 @@
         </mat-card>
     
 
-        <ng-template matStepLabel>Fill out Quantity</ng-template>
+        <ng-template matStepLabel>{{commondata.FillQuantity}}</ng-template>
         <mat-form-field>
-          <mat-label>Quantity</mat-label>
+          <mat-label>{{commondata.Qunatity}}</mat-label>
           <mat-select [(value)]="qty">
             <mat-option value="1">1</mat-option>
             <mat-option value="2">2</mat-option>
@@ -29,63 +29,63 @@
        
         </mat-form-field>
         <div>
-          <button mat-button matStepperNext (click)="checkstock()">Next</button>
+          <button mat-button matStepperNext (click)="checkstock()">{{commondata.Next}}</button>
         </div>
   
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Fill out your address</ng-template>
+        <ng-template matStepLabel>{{commondata.FillAddress}}</ng-template>
         <div class="col-md-6">
             <mat-form-field class="col-md-12">
-                <mat-label>Address</mat-label>
+                <mat-label>{{commondata.Address}}</mat-label>
                 <input matInput formControlName="Add" placeholder="Ex. 1 Main St, New York, NY"
                        required>
             </mat-form-field>
             <mat-form-field class="col-md-12">
-            <mat-label>City</mat-label>
+            <mat-label>{{commondata.City}}</mat-label>
                   <input matInput formControlName="City"  placeholder="Ex. 1 Main St, New York, NY"
                          required>
             </mat-form-field>
             <mat-form-field class="col-md-12">
-                  <mat-label>Dist</mat-label>
+                  <mat-label>{{commondata.Dist}}</mat-label>
                   <input matInput  formControlName="Dist" placeholder="Ex. 1 Main St, New York, NY"
                          required>
             </mat-form-field>
             <mat-form-field class="col-md-12">
-                  <mat-label>Pin</mat-label>
+                  <mat-label>{{commondata.Pin}}</mat-label>
                   <input matInput formControlName="Pin" placeholder="Ex. 1 Main St, New York, NY"
                          required>
             </mat-form-field>
         </div>
        
         <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext (click)="CountTotal()">Next</button>
-          <button mat-raised-button>Select Address</button>
+          <button mat-button matStepperPrevious>{{commondata.Back}}</button>
+          <button mat-button matStepperNext (click)="CountTotal()">{{commondata.Next}}</button>
+          <!-- <button mat-raised-button>Select Address</button> -->
         </div>
       </form>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
     
-        <ng-template matStepLabel>Payment Details</ng-template>
+        <ng-template matStepLabel>{{commondata.Paymentdetail}}</ng-template>
         <div>
           <mat-form-field class="col-md-6">
-            <mat-label>Offers</mat-label>
+            <mat-label>{{commondata.Offer}}</mat-label>
           <mat-select>
             <mat-option value="offer.id" (click)="discount(offer.availabe,i)" [disabled]="offer.availabe==0" *ngFor="let offer of offers;let i =index">{{offer.offer}}</mat-option>
           </mat-select>
          </mat-form-field><br>
 
-          <b>Price:{{total}}</b><br>
+          <b>{{commondata.Price}}:{{total}}</b><br>
           <div *ngIf="offerapplied" style="color: blue;">
             <b>Dicount:{{Discount}}</b><br>
             <b>Amount Payable:{{final}}</b><br>
            
           </div>
         
-            <button mat-button matStepperPrevious >Back</button>
-            <button mat-button matStepperNext (click)="payWithRazor(3)">Next</button>
+            <button mat-button matStepperPrevious >{{commondata.Back}}</button>
+            <button mat-button matStepperNext (click)="payWithRazor(3)">{{commondata.Next}}</button>
        
           </div>
    

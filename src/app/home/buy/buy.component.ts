@@ -50,13 +50,23 @@ export class BuyComponent implements OnInit {
   Quantity=0;
   offerapplied=false;
   checking =false;
-
+  commondata:any;
   offers=[
     {id:1,offer:"Instant 20% discount",availabe:1},
     {id:2,offer:"10% discount on SBI cards upto 500rs",availabe:1}
   ]
 
   ngOnInit(): void {
+
+
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
+
+
     this. ProductId = this.actRoute.snapshot.params['id'];
    
     this.GetProductById(this.ProductId);
