@@ -1,0 +1,28 @@
+{
+    "common":{
+        "name":"My Delivery App",
+        "name2":"Delivery App",
+        "Profile":"Profile",
+        "ChangePassword":"Change Password",
+        "LogOut":"LogOut",
+        "Home":"Home",
+        "Cart":"Cart",
+        "Buy":"Buy",
+        "UpdateProfile":"Update Profile",
+        "MyOrder":"MyOrder",
+        "FillQuantity":"Fill out Quantity",
+        "Qunatity":"Quantity",
+        "FillAddress":"Fill out Address",
+        "Address":"Address",
+        "City":"City",
+        "Dist":"Dist",
+        "Pin":"Pin",
+        "search":"Search",
+        "Sortby":"Sort By",
+        "Category":"Category",
+        "CurrentPassword":"Current Password",
+        "NewPassword":"New Password",
+        "ConfirmPassword":"Confirm Password"
+
+    }
+}

@@ -13,6 +13,7 @@ import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
 import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
 import { debug } from 'console';
+import { LanguageService } from 'src/app/shared/language.service';
 
 
 
@@ -29,7 +30,8 @@ export class DashboardComponent implements OnInit {
     private router:Router,
     private wishlistservice:WishlistService,
     private home:HomeComponent,
-    private store: Store<ProductState>
+    private store: Store<ProductState>,
+    private lang:LanguageService
   ) { }
   //private store: Store<AppState>
 
@@ -43,12 +45,14 @@ export class DashboardComponent implements OnInit {
   PageNumber=1;
   PageSize=6;
   categoryselected:boolean=false;
+
   
 
   ngOnInit(): void {
     //this.RefreshProducts(); 
     this.loadProduct();
-    this.GetProducts()
+    this.GetProducts();
+ 
   }
 
 

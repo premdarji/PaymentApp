@@ -1,0 +1,29 @@
+{
+    "common":{
+        "name":"Mon application de livraison",
+        "name2":"Application de livraison",
+        "Profile":"Profil",
+        "ChangePassword":"Changer le mot de passe",
+        "LogOut":"Se déconnecter",
+        "Home":"Accueil",
+        "Cart":"Chariot",
+        "Buy":"Acheter",
+        "UpdateProfile":"Mettre à jour le profil",
+        "MyOrder":"Ma commande",
+        "FillQuantity":"Remplissez la quantité",
+        "Qunatity":"Quantité",
+        "FillAddress":"Remplissez l'adresse",
+        "Address":"Adresse",
+        "City":"Ville",
+        "Dist":"Dist",
+        "Pin":"Épingle",
+        "search":"Chercher",
+        "Sortby":"Trier par",
+        "Category":"Catégorie",
+        "CurrentPassword":"Mot de passe actuel",
+        "NewPassword":"nouveau mot de passe",
+        "ConfirmPassword":"Confirmez le mot de passe"
+        
+
+    }
+}

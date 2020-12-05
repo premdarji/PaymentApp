@@ -15,6 +15,7 @@ import * as fromActions from "../Common/Actions/Product.actions";
 import * as selector from "../Common/index";
 
 import {DOCUMENT} from '@angular/common';
+import { LanguageService } from '../shared/language.service';
 
 
 @Component({
@@ -31,15 +32,25 @@ export class HomeComponent  implements OnInit  {
     private product:ProductService,
    private notification:NotificationService,
    private store: Store<ProductState>,
-   @Inject(DOCUMENT) private document:Document
+   @Inject(DOCUMENT) private document:Document,
+   private language:LanguageService
 
     ) { }
 
     count:any;
     selectedclass=1;
     id:number;
+    commondata:any;
+    SelectedLang="1";
 
   ngOnInit(): void {
+
+  
+    this.language.GetData("en").subscribe(res=>{
+      this.commondata=res;
+      console.log(this.commondata)
+    })
+
     this.GetCount();
       this.selectedclass=this.service.GetID()
  
@@ -141,5 +152,11 @@ export class HomeComponent  implements OnInit  {
     else{
       this.router.navigate(['home/cart']);
     }
+  }
+
+  Language(data){
+    this.language.GetData(data).subscribe(res=>{
+      this.commondata=res;
+    })
   }
 }
