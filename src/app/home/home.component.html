@@ -88,8 +88,8 @@
       <footer class="py-2 " [ngClass]="{'class1':true}">
         <div class="container">
           <div [ngSwitch]="selectedclass">
-            <p class="m-0 text-center text-white" *ngSwitchCase="'1'">Copyright &copy; {{commondata.Name}} 2020</p>
-            <p class="m-0 text-center text-white" *ngSwitchCase="'2'">Copyright &copy; {{commondata.OpName}} 2020</p>
+            <p class="m-0 text-center text-white" *ngSwitchCase="'1'">{{commondata.Copyright}} &copy; {{commondata.Name}} 2020</p>
+            <p class="m-0 text-center text-white" *ngSwitchCase="'2'">{{commondata.Copyright}} &copy; {{commondata.OpName}} 2020</p>
           </div>
          
         </div>

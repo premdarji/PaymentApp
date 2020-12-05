@@ -9,6 +9,12 @@ import { ProductService } from 'src/app/shared/product.service';
 import { WindowrefService } from 'src/app/shared/windowref.service';
 import { HomeComponent } from '../home.component';
 
+
+import { Store ,select} from '@ngrx/store';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+import * as fromActions from "../../Common/Actions/Product.actions";
+import * as selector from "../../Common/index";
+
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
@@ -24,7 +30,9 @@ export class CheckoutComponent implements OnInit {
     private order:OrderService,
     private notification:NotificationService,
     private zone:NgZone,
-    private router:Router){}
+    private router:Router,
+    private store: Store<ProductState>
+    ){}
 
 
     cartItems:any[]=[];
@@ -43,9 +51,19 @@ export class CheckoutComponent implements OnInit {
       {id:1,offer:"Instant 10% discount",availabe:1},
       {id:2,offer:"10% discount on SBI cards upto 500rs",availabe:1}
     ]
-  
+    commondata:any;
 
   ngOnInit(): void {
+
+
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
+
+
     this.GetCartItems();
     this.home.GetCount();
 

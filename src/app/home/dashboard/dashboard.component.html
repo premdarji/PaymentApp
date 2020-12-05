@@ -58,12 +58,12 @@
             </mat-menu>
             <button mat-raised-button [matMenuTriggerFor]="category">{{commondata.Category}}</button>
             <mat-menu #category="matMenu">
-              <button mat-menu-item (click)="NoCategory()"><strong>All</strong></button>
-              <button mat-menu-item  (click)="GetProductsByCategory(6)"><strong>Mobiles</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(2)"><strong>Laptops</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(4)"><strong>Clothing</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(5)"><strong>Footwear</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(3)"><strong>Furniture</strong></button>
+              <button mat-menu-item (click)="NoCategory()"><strong>{{commondata.All}}</strong></button>
+              <button mat-menu-item  (click)="GetProductsByCategory(6)"><strong>{{commondata.Mobile}}</strong></button>
+              <button mat-menu-item (click)="GetProductsByCategory(2)"><strong>{{commondata.Laptops}}</strong></button>
+              <button mat-menu-item (click)="GetProductsByCategory(4)"><strong>{{commondata.Clothing}}</strong></button>
+              <button mat-menu-item (click)="GetProductsByCategory(5)"><strong>{{commondata.Footwear}}</strong></button>
+              <button mat-menu-item (click)="GetProductsByCategory(3)"><strong>{{commondata.Furniture}}</strong></button>
             </mat-menu>
           </div>
         </div>
