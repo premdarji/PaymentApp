@@ -16,7 +16,10 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 
 import{MatListModule} from "@angular/material/list";
 import {MatTooltipModule} from '@angular/material/tooltip';
-
+import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatGridListModule} from '@angular/material/grid-list';
 
  
 
@@ -38,7 +41,11 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatBadgeModule,
     MatSidenavModule,
     MatListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatGridListModule
     
   ],
   exports:[
@@ -57,7 +64,11 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatBadgeModule,
     MatSidenavModule,
     MatListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatGridListModule
 
   ]
 })

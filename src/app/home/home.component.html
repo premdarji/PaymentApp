@@ -43,6 +43,7 @@
       <div [ngSwitch]="selectedclass">
         <span *ngSwitchCase="'1'">{{commondata.Name}}</span>
         <span *ngSwitchCase="'2'">{{commondata.OpName}}</span>
+        <span *ngSwitchDefault="">{{commondata.Name}}</span>
       </div>
     
     
@@ -90,6 +91,7 @@
           <div [ngSwitch]="selectedclass">
             <p class="m-0 text-center text-white" *ngSwitchCase="'1'">{{commondata.Copyright}} &copy; {{commondata.Name}} 2020</p>
             <p class="m-0 text-center text-white" *ngSwitchCase="'2'">{{commondata.Copyright}} &copy; {{commondata.OpName}} 2020</p>
+            <p class="m-0 text-center text-white" *ngSwitchDefault="">{{commondata.Copyright}} &copy; {{commondata.OpName}} 2020</p>
           </div>
          
         </div>

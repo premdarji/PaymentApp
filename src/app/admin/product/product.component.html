@@ -1,0 +1,62 @@
+
+  <mat-toolbar>
+      <span class="fill-remaining"></span>
+      <span>{{productService.ProductForm.get("ProductId").value > 0 ? "Edit Product":"Register Product"}}</span>
+      <span class="fill-remaining"></span>
+  </mat-toolbar> 
+  <br>
+<form [formGroup]="productService.ProductForm" autocomplete="off">
+
+        <mat-grid-list cols="2" rowHeight="2:1">
+                <mat-grid-tile>
+                    <div class="controles-container">
+                            <input type="hidden" formControlName="ProductId">
+                            <mat-form-field>
+                                <input matInput placeholder="Product Name" formControlName="Name">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="Price" formControlName="Price">
+                            </mat-form-field>
+                    
+                            <mat-form-field>
+                                <input matInput placeholder="Quantity" formControlName="Quantity">
+                            </mat-form-field>
+                    </div>
+                    
+                
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <div class="controles-container">
+                            <mat-form-field >
+                                    <mat-label>Select Category</mat-label>
+                                <mat-select [(value)]="selected" formControlName="CategoryId">
+                                  
+                                        <mat-option *ngFor="let cat of category" value="{{cat.categoryId}}">{{cat.name}}</mat-option>
+                                      
+                                </mat-select>
+                            </mat-form-field>
+                    
+                            <mat-form-field>
+                                <input matInput placeholder="Description" formControlName="Description">
+                            </mat-form-field>
+                    
+                       
+                                <input  type="file" placeholder="file" (change)="Onfileselected($event)" formControlName="ImageUrl">
+                        
+                            <div>
+                                    <button mat-raised-button color="primary"  type="submit" (click)="Submit()">Save</button>
+                                    <button mat-raised-button color="warn" (click)="clear()">Cancel</button>
+                                                
+                            </div>
+                        
+                    </div>
+                    
+                   
+                </mat-grid-tile>
+             
+        </mat-grid-list>
+        
+        
+
+</form>
+

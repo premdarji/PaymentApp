@@ -14,7 +14,9 @@ const routes: Routes = [
   {path:'home',loadChildren:()=>import(`../app/home/home.module`).then(m=>m.HomeModule),canActivate:[AuthenticationGuard]},
   {path:'login',component:LoginComponent},
   {path:'register',component:RegisterComponent},
-  {path:"forgot",component:ForgotpasswordComponent}
+  {path:"forgot",component:ForgotpasswordComponent},
+  {path:"admin",loadChildren:()=>import(`../app/admin/admin.module`).then(m=>m.AdminModule)}
+  
 ];
 
 @NgModule({

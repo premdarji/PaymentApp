@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
     private router:Router) { }
 
   incorrect:boolean=false;
+  selected="1";
 
   LoginForm:FormGroup=new FormGroup({
     EmailorPhone:new FormControl('',Validators.required),
@@ -37,22 +38,48 @@ export class LoginComponent implements OnInit {
 
 
   Login(){
-    this.service.Login(this.LoginForm.value).subscribe(res=>{
-     let token=res;
-     if(token["value"]!=null)
-     {
-      localStorage.setItem("token",token["value"]);
-      this.router.navigate(['/home']);
-      this.LoginForm.reset();
-      this.InitializeForm();
-     }
-     else{
-      console.log(res);
-      this.incorrect=true;
+    var val=String(this.selected)
+    console.log(val)
 
-     }
-     
-    })
+    if(val=="1"){
+      this.service.Login(this.LoginForm.value).subscribe(res=>{
+        let token=res;
+        if(token["value"]!=null)
+        {
+         localStorage.setItem("token",token["value"]);
+         this.router.navigate(['/home']);
+         this.LoginForm.reset();
+         this.InitializeForm();
+        }
+        else{
+         console.log(res);
+         this.incorrect=true;
+   
+        }
+        
+       })
+
+    }
+    else{
+
+      this.service.AdminLogin(this.LoginForm.value).subscribe(res=>{
+        let token=res;
+        if(token["value"]!=null)
+        {
+         localStorage.setItem("token",token["value"]);
+         this.router.navigate(['/admin']);
+         this.LoginForm.reset();
+         this.InitializeForm();
+        }
+        else{
+         console.log(res);
+         this.incorrect=true;
+   
+        }
+        
+       })
+    }
+    
   }
 
   Forgot(){

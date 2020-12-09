@@ -52,7 +52,6 @@ export class HomeComponent  implements OnInit  {
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
-      console.log(this.commondata)
       }
     })
 

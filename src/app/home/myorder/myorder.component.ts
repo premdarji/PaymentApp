@@ -24,9 +24,19 @@ export class MyorderComponent implements OnInit {
     private home:HomeComponent,
     private store:Store<ProductState>) { }
 
+  commondata:any;
+
   Products:any;
 
   ngOnInit(): void {
+
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
+
    this.GetOrders();
     
 

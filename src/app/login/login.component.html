@@ -1,5 +1,5 @@
 <div  class="bg ">
-    <div class="col-md-5 mx-auto">
+    <div class="col-md-5 mx-auto " style="margin-top: 10%;">
         <form [formGroup]="LoginForm" (submit)="Login()" autocomplete="off"> 
             <mat-card>
                 <mat-toolbar style="background-color: indigo;color: ivory;">
@@ -7,7 +7,17 @@
                     <span>Log In</span>
                     <span class="fill-remaining"></span>
                 </mat-toolbar>
-                <p style="color: red;" *ngIf="incorrect">Username and password are incorrect</p>
+                <br>
+                <p style="color: red;" *ngIf="incorrect">Username or password are incorrect</p>
+
+                <mat-form-field appearance="fill" class="col-md-6 mx-auto ">
+                    <mat-label>Select Role</mat-label>
+                        <mat-select [(value)]="selected" >
+                                <mat-option value="1">Customer</mat-option>
+                                <mat-option value="2">Admin</mat-option>
+                        </mat-select>
+                </mat-form-field>
+                
                 <mat-form-field class="col-md-12">
                     <input matInput type="text" placeholder="Email/Phone" formControlName="EmailorPhone">
                     <mat-icon matSuffix>account_circle</mat-icon>

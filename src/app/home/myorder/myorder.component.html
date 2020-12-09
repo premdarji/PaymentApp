@@ -2,7 +2,7 @@
 
     <mat-toolbar class="mt-5 mb-3">
         <span class="fill-remaining"></span>
-        <span>My Orders</span>
+        <span>{{commondata.Myorder}}</span>
         <span class="fill-remaining"></span>
     </mat-toolbar>
     <mat-card *ngFor="let product of Products" class="shadow mb-4 mt-4" > 
@@ -10,23 +10,23 @@
         <div class="col-md-6">
             <table class="table table-hover">
                 <tr>
-                    <td><strong>Name</strong></td>
+                    <td><strong>{{commondata.NameOrder}}</strong></td>
                     <td><strong>{{product.name}}</strong></td>
                 </tr>
                 <tr>
-                    <td><strong>Price</strong></td>
+                    <td><strong>{{commondata.Price}}</strong></td>
                     <td><strong>{{product.price}}</strong></td>
                 </tr>
                 <tr>
-                    <td><strong>Quantity</strong></td>
+                    <td><strong>{{commondata.Qunatity}}</strong></td>
                     <td><strong>{{product.quantity}}</strong></td>
                 </tr>
                 <tr>
-                    <td><strong>Amount</strong></td>
+                    <td><strong>{{commondata.Amount}}</strong></td>
                     <td><strong>{{product.amount}}</strong></td>
                 </tr>
                 <tr>
-                    <td><strong>Created On</strong></td>
+                    <td><strong>{{commondata.Cretedon}}</strong></td>
                     <td><strong>{{product.createdOn | date}}</strong></td>
                 </tr>
 

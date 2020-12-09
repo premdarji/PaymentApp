@@ -35,7 +35,7 @@ export const initialState :ProductState={
 
 
 export function reducer(state = initialState, action:ProductActions ): ProductState {
- debugger;
+
     switch (action.type) {
   
         case ProductActionTypes.GetProductList:

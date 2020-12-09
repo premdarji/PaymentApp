@@ -166,7 +166,7 @@ export class ProductEffects {
           this.productService.RemoveFormCart(action.cartId).pipe(
               map((result)=>{
               
-                console.log(result);
+      
                 return new fromProductActions.GetCartList();
               }),
           ),
@@ -183,7 +183,7 @@ export class ProductEffects {
           this.languageservice.GetData(action.data).pipe(
               map((result:any)=>{
               
-                console.log(result);
+              
                 return new fromProductActions.GetCommonFieldsSuccess(result);
               }),
           ),
@@ -199,8 +199,7 @@ export class ProductEffects {
         switchMap((action)=>
           this.orderservice.GetAll().pipe(
               map((result:any[])=>{
-              
-                console.log(result);
+           
                 return new fromProductActions.GetOrderListSuccess(result);
               }),
           ),

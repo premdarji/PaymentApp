@@ -39,6 +39,10 @@ export class UserService {
     return this.http.post(this.APIURL+"/Login/login",formdata);
   }
 
+  AdminLogin(formdata){
+    return this.http.post(this.APIURL+"/Login/AdminLogin",formdata);
+  }
+
   VarifyEmail(email){
     return this.http.post(this.APIURL+"/Login/ForgotPassword?Email="+email,email);
   }
