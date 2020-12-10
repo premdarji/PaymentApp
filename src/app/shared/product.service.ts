@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { Product } from '../models/Product.model';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +15,11 @@ export class ProductService {
 
   ProductForm:FormGroup=new FormGroup({
     ProductId:new FormControl(0),
-    Name:new FormControl(''),
-    Price:new FormControl(0),
-    Quantity:new FormControl(0),
+    Name:new FormControl('',Validators.required),
+    Price:new FormControl('' ,Validators.required),
+    Quantity:new FormControl('',[Validators.required,Validators.min(0)]),
     Description:new FormControl(''),
-    CategoryId:new FormControl(),
+    CategoryId:new FormControl('',Validators.required),
     ImageUrl:new FormControl('')
 
   })
@@ -94,6 +94,12 @@ export class ProductService {
   PopulateForm(data){
     this.http.get(this.APIURL+"/Product/GetById/"+data).subscribe(res=>{
      
+      var str=new String(res.imageUrl);
+      console.log(str)
+      var index=str.indexOf("h");
+      console.log(index)
+      var str2=str.slice(12,)
+      console.log(str2)
       this.ProductForm.setValue({
         ProductId:res.productId,
         Name:res.name,
@@ -101,7 +107,7 @@ export class ProductService {
         CategoryId:res.categoryId,
         Quantity:res.quantity,
         Description:res.description,
-        ImageUrl:res.imageUrl
+        ImageUrl:str2
       })
     })
   }
@@ -112,5 +118,21 @@ export class ProductService {
 
   UpdateProduct(id,data){
     return this.http.put(this.APIURL+"/Product/Update/"+id,data);
+  }
+
+  initializeForm(){
+    this.ProductForm.setValue({
+      ProductId:0,
+      Name:'',
+      Price:'',
+      Quantity:'',
+      Description:'',
+      CategoryId:'',
+      ImageUrl:''
+    })
+  }
+
+  GetAllProducts(){
+    return this.http.get(this.APIURL+"/Product/AllProduct");
   }
 }

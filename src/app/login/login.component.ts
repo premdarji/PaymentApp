@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
         let token=res;
         if(token["value"]!=null)
         {
-         localStorage.setItem("token",token["value"]);
+         localStorage.setItem("admintoken",token["value"]);
          this.router.navigate(['/admin']);
          this.LoginForm.reset();
          this.InitializeForm();

@@ -6,6 +6,7 @@ import { ProductService } from 'src/app/shared/product.service';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { ProductComponent } from '../product/product.component';
 import { ConfirmComponent, ConfirmDialogModel } from 'src/app/confirm/confirm.component';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 
 
@@ -40,11 +41,12 @@ export class DashboardComponent implements OnInit {
   
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: false}) sorting: MatSort;
 
 
   constructor(private productservice:ProductService,
-    private dialog:MatDialog) { 
+    private dialog:MatDialog,
+    private notification:NotificationService) { 
 
   
   }
@@ -56,20 +58,18 @@ export class DashboardComponent implements OnInit {
 
 
   loadProduct(){
-    this.productservice.GetAll(1,20).subscribe(res=>{
+    this.productservice.GetAllProducts().subscribe(res=>{
       this.products=res;
-      console.log(this.products)
-    
       this.dataSource = new MatTableDataSource(this.products);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.dataSource.paginator=this.paginator
+      this.dataSource.sort = this.sorting;
  
     })
   }
 
   // ngAfterViewInit() {
   //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
+  //   this.dataSource.sort = this.sorting;
   // }
 
   applyFilter(event: Event) {
@@ -93,6 +93,8 @@ export class DashboardComponent implements OnInit {
   }
 
   newProduct(){
+    this.productservice.ProductForm.reset();
+    this.productservice.initializeForm();
     const dialogconfig=new MatDialogConfig();
     dialogconfig.disableClose=false;
     dialogconfig.autoFocus=true;
@@ -117,6 +119,7 @@ export class DashboardComponent implements OnInit {
           this.productservice.DeleteProduct(data).subscribe(res=>{
             console.log(res)
             this.loadProduct();
+            this.notification.Delete("Product is deleted")
 
           })
            

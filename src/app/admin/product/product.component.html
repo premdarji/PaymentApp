@@ -13,13 +13,16 @@
                             <input type="hidden" formControlName="ProductId">
                             <mat-form-field>
                                 <input matInput placeholder="Product Name" formControlName="Name">
+                                <mat-error>Field is required</mat-error>
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput placeholder="Price" formControlName="Price">
+                                <mat-error>Field is required</mat-error>
                             </mat-form-field>
                     
                             <mat-form-field>
                                 <input matInput placeholder="Quantity" formControlName="Quantity">
+                                <mat-error>Field is required</mat-error>
                             </mat-form-field>
                     </div>
                     
@@ -34,6 +37,7 @@
                                         <mat-option *ngFor="let cat of category" value="{{cat.categoryId}}">{{cat.name}}</mat-option>
                                       
                                 </mat-select>
+                                <mat-error>Field is required</mat-error>
                             </mat-form-field>
                     
                             <mat-form-field>
@@ -43,8 +47,8 @@
                        
                                 <input  type="file" placeholder="file" (change)="Onfileselected($event)" formControlName="ImageUrl">
                         
-                            <div>
-                                    <button mat-raised-button color="primary"  type="submit" (click)="Submit()">Save</button>
+                            <div class="mt-2">
+                                    <button mat-raised-button color="primary" class="mr-3"  type="submit" (click)="Submit()" [disabled]="productService.ProductForm.invalid"  >Save</button> 
                                     <button mat-raised-button color="warn" (click)="clear()">Cancel</button>
                                                 
                             </div>
