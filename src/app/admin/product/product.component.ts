@@ -19,25 +19,31 @@ export class ProductComponent implements OnInit {
 
     category:any;
     selected="";
-    selectedfile:any;
+    selectedfile="assets\\Images\\default.png";
+  
 
 
   ngOnInit(): void {
-   
+   //debugger
     this.GetCategory();
     if(this.productService.ProductForm.get("ProductId").value>0){
-      console.log("in if")
+   
+    
       this.selected=String(this.productService.ProductForm.get("CategoryId").value);
-      console.log(this.selected)
-      console.log(this.productService.ProductForm.value)
+     
+      this.selectedfile=this.productService.ProductForm.get("ImageUrl").value;
     }
 
   }
 
   Submit(){
     if(this.productService.ProductForm.get("ProductId").value>0){
+      this.productService.ProductForm.patchValue({
+        ImageUrl:this.selectedfile
+      })
+     
       this.productService.UpdateProduct(this.productService.ProductForm.get("ProductId").value,this.productService.ProductForm.value).subscribe(res=>{
-        console.log(res);
+       
         this.dialogref.close();
         this.dashboard.loadProduct();
         this.notification.update("Product is updated");
@@ -55,15 +61,16 @@ export class ProductComponent implements OnInit {
         //   ImageUrl:String(this.selectedfile),
         //   ProductId:0
         // })
-        console.log("else")
+        this.productService.ProductForm.patchValue({
+          ImageUrl:this.selectedfile
+        })
           this.productService.AddProduct().subscribe(res=>{
-          console.log("product is added");
+       
           this.dialogref.close();
           this.notification.update("Product Is Added");
         })
     }
-    console.log(this.productService.ProductForm.get("ProductId").value)
-    console.log(this.productService.ProductForm.value);
+  
  
   }
 
@@ -84,7 +91,7 @@ export class ProductComponent implements OnInit {
     this.selectedfile=event.target.files[0]["name"];
     this.selectedfile="assets\\Images\\"+this.selectedfile;
 
-    console.log(this.selectedfile)
-    console.log(event.target.files[0]["name"])
+     console.log(this.selectedfile)
+    // console.log(event.target.files[0]["name"])
   }
 }

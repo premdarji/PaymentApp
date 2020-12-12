@@ -11,23 +11,6 @@ import { NotificationService } from 'src/app/shared/notification.service';
 
 
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -38,7 +21,7 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['ProductId', 'Name', 'Price', 'Quantity','ImageUrl','CategoryId','Actions'];
  
   dataSource: MatTableDataSource<any>;
-  
+  productData:any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sorting: MatSort;
@@ -83,13 +66,27 @@ export class DashboardComponent implements OnInit {
 
   EditProduct(data){
     console.log("productId:"+data)
+    //debugger
+    this.productservice.PopulateForm(data).subscribe(res=>{
+        this.productData=res;
+    
+        this.productservice.ProductForm.setValue({
+          ProductId:this.productData.productId,
+          Name:this.productData.name,
+          Price:this.productData.price,
+          CategoryId:this.productData.categoryId,
+          Quantity:this.productData.quantity,
+          Description:this.productData.description,
+          ImageUrl:String(this.productData.imageUrl)
+        })
 
-    this.productservice.PopulateForm(data);
-    const dialogconfig=new MatDialogConfig();
-    dialogconfig.disableClose=false;
-    dialogconfig.autoFocus=true;
-    dialogconfig.width="60%";
-    this.dialog.open(ProductComponent,dialogconfig);
+        const dialogconfig=new MatDialogConfig();
+        dialogconfig.disableClose=false;
+        dialogconfig.autoFocus=true;
+        dialogconfig.width="60%";
+        this.dialog.open(ProductComponent,dialogconfig);
+    });
+    
   }
 
   newProduct(){

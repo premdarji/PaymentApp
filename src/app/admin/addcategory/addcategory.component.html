@@ -1,0 +1,18 @@
+<mat-toolbar>
+        <span class="fill-remaining"></span>
+        <span>{{productservice.CategoryForm.get("CategoryId").value > 0 ? "Edit Category":"New Category"}}</span>
+        <span class="fill-remaining"></span>
+</mat-toolbar> 
+
+<form  [formGroup]="productservice.CategoryForm">
+    <div class="controles-container">
+            <input type="hidden" formControlName="CategoryId">
+            <mat-form-field>
+                    <input matInput placeholder="Category Name" formControlName="Name">
+            </mat-form-field>
+    </div>
+    <div>
+        <button mat-raised-button color="primary" class="mx-auto col-md-12" (click)="Save()">Save</button>
+    </div>
+</form>
+    

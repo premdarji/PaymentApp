@@ -4,10 +4,10 @@
       <span>{{productService.ProductForm.get("ProductId").value > 0 ? "Edit Product":"Register Product"}}</span>
       <span class="fill-remaining"></span>
   </mat-toolbar> 
-  <br>
+  
 <form [formGroup]="productService.ProductForm" autocomplete="off">
 
-        <mat-grid-list cols="2" rowHeight="2:1">
+        <mat-grid-list cols="2" rowHeight="1.5:1">
                 <mat-grid-tile>
                     <div class="controles-container">
                             <input type="hidden" formControlName="ProductId">
@@ -24,6 +24,9 @@
                                 <input matInput placeholder="Quantity" formControlName="Quantity">
                                 <mat-error>Field is required</mat-error>
                             </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="Description" formControlName="Description">
+                            </mat-form-field>
                     </div>
                     
                 
@@ -32,7 +35,7 @@
                     <div class="controles-container">
                             <mat-form-field >
                                     <mat-label>Select Category</mat-label>
-                                <mat-select [(value)]="selected" formControlName="CategoryId">
+                                <mat-select [(ngModel)]="selected" formControlName="CategoryId">
                                   
                                         <mat-option *ngFor="let cat of category" value="{{cat.categoryId}}">{{cat.name}}</mat-option>
                                       
@@ -40,14 +43,14 @@
                                 <mat-error>Field is required</mat-error>
                             </mat-form-field>
                     
-                            <mat-form-field>
-                                <input matInput placeholder="Description" formControlName="Description">
-                            </mat-form-field>
+                            
                     
-                       
-                                <input  type="file" placeholder="file" (change)="Onfileselected($event)" formControlName="ImageUrl">
+                                
+                                <input  type="file" placeholder="file" (change)="Onfileselected($event)" >
+                               
                         
                             <div class="mt-2">
+                                    <img class="card-img-top mr-3" src="{{selectedfile}}" alt="" style="height: 100px;width: 100px;" >
                                     <button mat-raised-button color="primary" class="mr-3"  type="submit" (click)="Submit()" [disabled]="productService.ProductForm.invalid"  >Save</button> 
                                     <button mat-raised-button color="warn" (click)="clear()">Cancel</button>
                                                 
