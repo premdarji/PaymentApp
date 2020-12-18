@@ -16,6 +16,7 @@ import * as selector from "../Common/index";
 
 import {DOCUMENT} from '@angular/common';
 import { LanguageService } from '../shared/language.service';
+import { SignalRserviceService } from '../shared/signal-rservice.service';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class HomeComponent  implements OnInit  {
    private notification:NotificationService,
    private store: Store<ProductState>,
    @Inject(DOCUMENT) private document:Document,
-   private language:LanguageService
+   private language:LanguageService,
+   private signalservice:SignalRserviceService
 
     ) { }
 
@@ -45,6 +47,13 @@ export class HomeComponent  implements OnInit  {
 
   ngOnInit(): void {
 
+    this.signalservice.startConnection();
+
+    setTimeout(()=>{
+      this.signalservice.askServerListener();
+    },2000)
+
+
 
     this.store.dispatch(new fromActions.GetCommonFields("en"));
   
@@ -53,6 +62,8 @@ export class HomeComponent  implements OnInit  {
       if (result) {
       this.commondata = result;
       }
+
+
     })
 
     // this.language.GetData("en").subscribe(res=>{

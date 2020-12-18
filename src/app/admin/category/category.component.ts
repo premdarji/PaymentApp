@@ -29,7 +29,8 @@ export class CategoryComponent implements OnInit {
 
   constructor(private productservice:ProductService,
     private dialog:MatDialog,
-    private notification:NotificationService) { }
+    private notification:NotificationService,
+  ) { }
 
   category:any;
 

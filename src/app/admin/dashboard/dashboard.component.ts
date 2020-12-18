@@ -7,6 +7,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { ProductComponent } from '../product/product.component';
 import { ConfirmComponent, ConfirmDialogModel } from 'src/app/confirm/confirm.component';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { SignalRserviceService } from 'src/app/shared/signal-rservice.service';
 
 
 
@@ -22,6 +23,7 @@ export class DashboardComponent implements OnInit {
  
   dataSource: MatTableDataSource<any>;
   productData:any;
+  databySignal:any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sorting: MatSort;
@@ -29,14 +31,21 @@ export class DashboardComponent implements OnInit {
 
   constructor(private productservice:ProductService,
     private dialog:MatDialog,
-    private notification:NotificationService) { 
-
-  
-  }
+    private notification:NotificationService,
+    public signalservice:SignalRserviceService
+    ) { }
 
   
   ngOnInit(): void {
    this.loadProduct();
+   this.signalservice.startConnection();
+  //  this.signalservice.addTransferChartDataListener();
+  //  this.signalservice.startHttpRequest();
+ 
+    setTimeout(()=>{
+      this.signalservice.askServerListener();
+      this.signalservice.askServer();
+    },2000)
   }
 
 
