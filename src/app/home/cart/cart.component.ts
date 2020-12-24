@@ -46,7 +46,6 @@ export class CartComponent implements OnInit {
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
-      console.log(this.commondata)
       }
     })
 
@@ -64,9 +63,6 @@ export class CartComponent implements OnInit {
         if(this.cartItems.length>0){
           this.showComponent=true;
         }
-     
-       console.log(this.cartItems);
-       console.log(this.showComponent)
        this.CartTotal();
        this.home.GetCount();
       }
@@ -81,9 +77,9 @@ export class CartComponent implements OnInit {
      if(this.cartItems.length>0){
        
        this.showComponent = true;
-       console.log(this.showComponent)
+     
      }
-      console.log(this.cartItems)
+
       this.CartTotal();
       
      })
@@ -159,7 +155,7 @@ export class CartComponent implements OnInit {
       this.total += (element.quantity*element.price)
     });
 
-    console.log(this.total);
+   
   }
 
   PlaceOrder(){

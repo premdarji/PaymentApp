@@ -9,6 +9,9 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
 import { Store,select } from '@ngrx/store';
 
+import * as jspdf from 'jspdf';  
+import html2canvas from 'html2canvas'; 
+
 
 import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
@@ -38,7 +41,7 @@ export class BuyComponent implements OnInit {
 
   ProductId: any; //Getting Product id from URL
   ProductData: any; //Getting Product details
-
+  orderId:any;
 
 
   secondFormGroup: FormGroup;
@@ -62,7 +65,6 @@ export class BuyComponent implements OnInit {
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
-      console.log(this.commondata)
       }
     })
 
@@ -90,7 +92,6 @@ export class BuyComponent implements OnInit {
     this.store.pipe(select(selector.GetProductById)).subscribe((result: any) => {
       if (result) {
       this.ProductData = result;
-      console.log(this.ProductData)
       }
     })
 
@@ -135,12 +136,6 @@ export class BuyComponent implements OnInit {
     }
   }
 
-  OrderDetail(){
-    console.log(this.ProductData);
-    console.log(this.qty);
-    console.log("Billing amt:"+this.total);
-    console.log(this.secondFormGroup.value)
-  }
 
 
 //paywith razorpay gateway method
@@ -175,29 +170,18 @@ export class BuyComponent implements OnInit {
     };
     options.handler = ((response, error) => {
       options.response = response;
-      console.log(response);
-      console.log(options);
+    
       let paymentDetail={
         PaymentId:options.response['razorpay_payment_id'],
         Amount:options['amount']/100,
       }
+
       this.order.CreateOrder(paymentDetail).subscribe(res=>{
-        console.log(res);
-        let Details={
-          ProductId:this.ProductId,
-          Amount:options['amount']/100,
-          Quantity:Number(this.qty),
-          OrderId:res["id"]
-        }
-        this.order.PostDetailOrder(Details).subscribe(res=>{
-          this.zone.run(()=>{
-            this.router.navigate(['/home/order']);
-          })
-        })
-      
-        
+        this.orderId=res['id'];
+        this.Generate();
+    
       })
-      // call your backend api to verify payment signature & capture transaction
+      
     });
     options.modal.ondismiss = (() => {
       // handle the case when user closes the form while transaction is in progress
@@ -210,6 +194,58 @@ export class BuyComponent implements OnInit {
   }
 
 
+
+
+
+  
+
+  Generate(){
+
+    var data = document.getElementById('contentToConvert'); 
+    html2canvas(data).then(canvas => {  
+      // Few necessary setting options  
+      var imgWidth = 200;   
+      var pageHeight = 1600;    
+      var imgHeight = canvas.height * imgWidth / canvas.width;  
+      var heightLeft = imgHeight;  
+  
+      const contentDataURL = canvas.toDataURL('image/png')  
+     
+      let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
+      var position = 0;  
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
+      pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
+      this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
+        
+       
+      })
+
+
+      let Details={
+        ProductId:this.ProductId,
+        Amount:this.final,
+        Quantity:Number(this.qty),
+        OrderId:this.orderId
+      }
+      this.order.PostDetailOrder(Details).subscribe(res=>{
+
+        
+        this.zone.run(()=>{
+          this.router.navigate(['/home/order']);
+        })
+      })
+
+
+
+    
+
+    });  
+
+        //removing items from cart
+            
+          
+
+  }
 
 
 }

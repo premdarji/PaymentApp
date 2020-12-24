@@ -29,4 +29,12 @@ export class OrderService {
   PostDetailOrder(Detail){
     return this.http.post(this.APIURL+"/Order/Detail",Detail);
   }
+
+  GetInvoiceDetails(){
+    return this.http.get(this.APIURL+"/Order/Invoice");
+  }
+
+  SendInvoiceMail(id){
+    return this.http.post(this.APIURL+"/Order/Invoice",id);
+  }
 }

@@ -9,11 +9,15 @@ import { ProductService } from 'src/app/shared/product.service';
 import { WindowrefService } from 'src/app/shared/windowref.service';
 import { HomeComponent } from '../home.component';
 
+import * as jspdf from 'jspdf';  
+import html2canvas from 'html2canvas'; 
+
 
 import { Store ,select} from '@ngrx/store';
 import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
 import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
+import { generate } from 'rxjs';
 
 @Component({
   selector: 'app-checkout',
@@ -36,12 +40,12 @@ export class CheckoutComponent implements OnInit {
 
 
     cartItems:any[]=[];
-
+    orderId:any;
     temp:any;
     showComponent=false;
     total:number=0;
 
-    qty="1";
+    qty=1;
     Discount=0;
     final=0;
     offerapplied=false;
@@ -59,7 +63,6 @@ export class CheckoutComponent implements OnInit {
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
-      console.log(this.commondata)
       }
     })
 
@@ -80,7 +83,7 @@ export class CheckoutComponent implements OnInit {
        
         this.temp=res;
         this.showComponent = true;
-        console.log(this.cartItems)
+       
         this.temp.forEach(element => {
          if(element.stock>0){
            if(element.quantity>element.stock){
@@ -89,6 +92,7 @@ export class CheckoutComponent implements OnInit {
            this.cartItems.push(element)
          }
         });
+
         this.CartTotal();
         
       })
@@ -114,14 +118,13 @@ export class CheckoutComponent implements OnInit {
           });
       
           dialogRef.afterClosed().subscribe(dialogResult => {
-         
-            console.log(dialogResult)
+  
                 if(dialogResult==true){
                     this.productservice.RemoveFormCart(this.cartItems[index].cartId).subscribe(res=>{
                     debugger;
                     this.total -= this.cartItems[index].price;
                     this.home.GetCount();
-                    console.log(res);
+              
                     this.GetCartItems();
                       
                     })
@@ -138,7 +141,7 @@ export class CheckoutComponent implements OnInit {
             this.cartItems[index].quantity=this.cartItems[index].quantity+1;
             this.total += this.cartItems[index].price;
             this.final=this.total;
-            console.log(res);
+     
         })
       }
       else{
@@ -153,7 +156,7 @@ export class CheckoutComponent implements OnInit {
        this.total += (element.quantity*element.price)
        this.final=this.total;
      });
-     console.log(this.total);
+
    }
 
 
@@ -184,6 +187,7 @@ export class CheckoutComponent implements OnInit {
 
 
   payWithRazor() {
+   
     const options: any = {
       key: 'rzp_test_L4Raaco7n2tzbD',
       amount: this.final*100, // amount should be in paise format to display Rs 1255 without decimal point
@@ -209,35 +213,23 @@ export class CheckoutComponent implements OnInit {
       }
     };
     options.handler = ((response, error) => {
+      
       options.response = response;
-      console.log(response);
-      console.log(options);
+
       let paymentDetail={
         PaymentId:options.response['razorpay_payment_id'],
         Amount:this.final
       }
-      let Detail={
-        ProductId:'',
-        Amount:0,
-        Quantity:'',
-        OrderId:''
-      }
+     
+  
       this.order.CreateOrder(paymentDetail).subscribe(res=>{
-        this.cartItems.forEach(element => {
-          Detail.ProductId=element.productId,
-          Detail.Amount=element.quantity*element.price,
-          Detail.Quantity=element.quantity,
-          Detail.OrderId=res["id"]
-          console.log(Detail);
-          this.order.PostDetailOrder(Detail).subscribe(res=>{})
-          this.productservice.RemoveFormCart(element.cartId).subscribe(res=>{})
-          
-      
-        });
+    
+        this.orderId=res['id'];
+        this.Generate();
+    
         this.home.GetCount();
-        this.zone.run(()=>{
-          this.router.navigate(['/home/order']);
-        })
+       
+      
       
       })
       
@@ -254,5 +246,68 @@ export class CheckoutComponent implements OnInit {
     rzp.open();
   }
 
+
+
+
+
+  Generate(){
+
+    var data = document.getElementById('contentToConvert');  
+
+    html2canvas(data).then(canvas => {  
+      // Few necessary setting options  
+      var imgWidth = 200;   
+      var pageHeight = 1600;    
+      var imgHeight = canvas.height * imgWidth / canvas.width;  
+      var heightLeft = imgHeight;  
+  
+      const contentDataURL = canvas.toDataURL('image/png')  
+  
+      let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
+   
+      var position = 0;  
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
+  
+      pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
+
+
+
+
+      let Detail={
+        ProductId:'',
+        Amount:0,
+        Quantity:'',
+        OrderId:''
+      }
+
+      this.cartItems.forEach(element => {
+        Detail.ProductId=element.productId,
+        Detail.Amount=element.quantity*element.price,
+        Detail.Quantity=element.quantity,
+        Detail.OrderId=this.orderId;
+
+      
+        this.order.PostDetailOrder(Detail).subscribe(res=>{})
+        this.productservice.RemoveFormCart(element.cartId).subscribe(res=>{})
+        
+    
+      });
+
+      this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
+        
+       
+      })
+      this.zone.run(()=>{
+        this.router.navigate(['/home/order']);
+      })
+    
+
+    });  
+
+        //removing items from cart
+            
+          
+
+  }
 
 }

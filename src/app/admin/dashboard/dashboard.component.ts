@@ -38,14 +38,14 @@ export class DashboardComponent implements OnInit {
   
   ngOnInit(): void {
    this.loadProduct();
-   this.signalservice.startConnection();
-  //  this.signalservice.addTransferChartDataListener();
-  //  this.signalservice.startHttpRequest();
+  //  this.signalservice.startConnection();
+  // //  this.signalservice.addTransferChartDataListener();
+  // //  this.signalservice.startHttpRequest();
  
-    setTimeout(()=>{
-      this.signalservice.askServerListener();
-      this.signalservice.askServer();
-    },2000)
+  //   setTimeout(()=>{
+  //     this.signalservice.askServerListener();
+  //     this.signalservice.askServer();
+  //   },2000)
   }
 
 
@@ -59,10 +59,7 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  // ngAfterViewInit() {
-  //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sorting;
-  // }
+ 
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -74,8 +71,6 @@ export class DashboardComponent implements OnInit {
   }
 
   EditProduct(data){
-    console.log("productId:"+data)
-    //debugger
     this.productservice.PopulateForm(data).subscribe(res=>{
         this.productData=res;
     
@@ -109,8 +104,6 @@ export class DashboardComponent implements OnInit {
   }
 
   Delete(data){
-
-    console.log("deleted product:"+data)
     const message = `Are you sure you want remove this product?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef=this.dialog.open(ConfirmComponent, {
@@ -120,10 +113,8 @@ export class DashboardComponent implements OnInit {
 
      dialogRef.afterClosed().subscribe(dialogResult => {
     
-         console.log(dialogResult)
          if(dialogResult==true){
           this.productservice.DeleteProduct(data).subscribe(res=>{
-            console.log(res)
             this.loadProduct();
             this.notification.Delete("Product is deleted")
 

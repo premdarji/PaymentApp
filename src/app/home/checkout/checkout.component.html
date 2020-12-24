@@ -1,4 +1,12 @@
 
+
+
+
+<!-- 
+    <button (click)="Generate()">Create</button>
+ -->
+
+
 <mat-vertical-stepper [linear]="true" #stepper>
     <mat-step [stepControl]>
         <mat-card style="display: flex;" class="shadow col-md-6 mb-4"  *ngFor="let product of cartItems;let i=index">
@@ -62,14 +70,8 @@
         <div>
           <button mat-button matStepperPrevious>{{commondata.Back}}</button>
           <button mat-button matStepperNext>{{commondata.Next}}</button>
-          <!-- <button mat-raised-button [matMenuTriggerFor]="menu">Select Address</button> -->
-          <mat-menu #menu="matMenu">
-               
-            <button mat-menu-item >Address 1</button>
-             <button mat-menu-item >Address 2</button>
-            <button mat-menu-item>Address 3</button>
-            <button mat-menu-item >Address 4</button>
-        </mat-menu>
+         
+         
         </div>
       </form>
     </mat-step>
@@ -77,12 +79,12 @@
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>{{commondata.Paymentdetail}}</ng-template>
             <div>
-                <mat-form-field class="col-md-6">
+                <!-- <mat-form-field class="col-md-6">
                     <mat-label>{{commondata.Offer}}</mat-label>
                 <mat-select>
                     <mat-option value="offer.id" (click)="discount(offer.availabe,i)" [disabled]="offer.availabe==0" *ngFor="let offer of offers;let i =index">{{offer.offer}}</mat-option>
                 </mat-select>
-                </mat-form-field><br>
+                </mat-form-field><br> -->
                 
                 <b>{{commondata.Price}}:{{total}}</b><br>
                 <div *ngIf="offerapplied" style="color: blue;">
@@ -109,3 +111,54 @@
       </div>
     </mat-step> -->
   </mat-vertical-stepper>
+
+  <hr>
+
+
+
+
+  
+  <div style="margin-bottom: 100px;  ">  
+      <mat-card class="col-md-6 mx-auto"  > 
+          <div  id="contentToConvert" >
+            <mat-toolbar>
+              <span class="fill-remaining"></span>
+              <span>My Order App</span>
+              <span class="fill-remaining"></span>
+            </mat-toolbar>
+              <br>
+              <hr>
+             
+              <b> Order Details:</b> 
+                  <table class="table table-bordered"  style="width: 100%;">  
+                          <tr>  
+                            <th>Name</th>  
+                            <th>Price</th>  
+                            <th>Quantity</th>  
+                            <th>Amount</th>
+                          </tr>  
+                          <tr *ngFor="let item of cartItems">
+                              <td>{{item.name}}</td>
+                              <td>{{item.price}}</td>
+                              <td>{{item.quantity}}</td>
+                              <td>{{item.quantity*item.price}}</td>
+                          </tr>
+                         
+                  </table> 
+                        
+                        <b>Grand Total:-</b><p>{{final | currency : "INR"}}</p>
+                        <hr>
+  
+                        <b> Thanks for the shopping</b>
+  
+  
+          </div> 
+       
+            
+      </mat-card>  
+    </div>   
+
+
+
+
+

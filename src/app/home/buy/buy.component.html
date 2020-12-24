@@ -104,3 +104,52 @@
     </mat-step> -->
 
   </mat-vertical-stepper>
+
+
+  <hr>
+
+
+  <div class="hidden" style="margin-bottom: 100px;">  
+    <mat-card class="col-md-6 mx-auto"> 
+        <div  id="contentToConvert">
+          <mat-toolbar>
+            <span class="fill-remaining"></span>
+            <span>My Order App</span>
+            <span class="fill-remaining"></span>
+          </mat-toolbar>
+            
+            <br>
+            <hr>
+            <!-- <b>Invoice Id:</b><p>{{id}}</p>
+            <b>customer Name:</b><p>vbh</p>-->
+            <!-- <b>Order No:</b><p>{{orderId}}</p> -->
+            <b> Order Details:</b> 
+                <table class="table table-bordered">  
+                        <tr>  
+                          <th>Name</th>  
+                          <th>Price</th>  
+                          <th>Quantity</th>  
+                          <th>Amount</th>
+                        </tr>  
+                        <tr >
+                            <td>{{ProductData.name}}</td>
+                            <td>{{ProductData.price}}</td>
+                            <td>{{qty}}</td>
+                            <td>{{ProductData.price*qty}}</td>
+                        </tr>
+                       
+                </table> 
+                      
+                      <b>Grand Total:-</b><p>{{ProductData.price*qty | currency : "INR"}}</p>
+                      <hr>
+
+                      <b> Thanks for the shopping</b>
+
+
+        </div> 
+     
+          
+    </mat-card>  
+  </div>  
+
+  

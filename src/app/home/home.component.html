@@ -36,69 +36,75 @@
   
   <mat-drawer-content>
 
+    <div *ngIf="commondata!=null">
 
 
-    <mat-toolbar class="headerclass">
-      <span (click)="drawer.toggle()"><mat-icon>menu</mat-icon></span>
-      <div [ngSwitch]="selectedclass">
-        <span *ngSwitchCase="'1'">{{commondata.Name}}</span>
-        <span *ngSwitchCase="'2'">{{commondata.OpName}}</span>
-        <span *ngSwitchDefault="">{{commondata.Name}}</span>
-      </div>
-    
-    
-
-
-      <span class="fill-remaining"></span>
-      <mat-form-field apperance="fill"> 
-
-          <!-- <mat-label>Language</mat-label> -->
-                <mat-select [(value)]="SelectedLang">
-                   
-                  <mat-option value="1" (click)="Language('en')">English </mat-option>
-                 <mat-option  value="2" (click)="Language('fr')">French</mat-option>
-                </mat-select>
-               
-      </mat-form-field>
-      <a class="nav-link headerclass "  routerLink="/home"><p>{{commondata.Home}}</p>
-        <span class="sr-only"></span>
-      </a>
-      <a class="nav-link headerclass" style="cursor: pointer;"    (click)="Cart()"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
-      <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 1%;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
-      <mat-menu #menu="matMenu">
-       
-          <button mat-menu-item (click)="ChangePassword()"><strong>{{commondata.ChangePassword}}</strong></button>
-           <button mat-menu-item (click)="UpdateProfile()"><strong>{{commondata.UpdateProfile}}</strong></button>
-          <button mat-menu-item (click)="Orders()"><strong>{{commondata.MyOrder}}</strong></button>
-          <button mat-menu-item (click)="Logout()"><strong>{{commondata.LogOut}}</strong></button>
-          <!-- <button mat-menu-item (click)="style1()"><strong>style 1</strong></button>
-          <button mat-menu-item (click)="style2()"><strong>style 2</strong></button> -->
-       
-      </mat-menu>
-
-      <mat-menu #menu2="matMenu">
-        <button mat-menu-item (click)="ChangePassword()">Change Password</button>
-        <button mat-menu-item (click)="UpdateProfile()">Update Profile</button>
-      </mat-menu>
-    </mat-toolbar>
-
-    <router-outlet></router-outlet>
-
-
-    <div style="margin-bottom: 0%; margin-block-end: 0%;" class="footer" >
-      <footer class="py-2 " [ngClass]="{'class1':true}">
-        <div class="container">
-          <div [ngSwitch]="selectedclass">
-            <p class="m-0 text-center text-white" *ngSwitchCase="'1'">{{commondata.Copyright}} &copy; {{commondata.Name}} 2020</p>
-            <p class="m-0 text-center text-white" *ngSwitchCase="'2'">{{commondata.Copyright}} &copy; {{commondata.OpName}} 2020</p>
-            <p class="m-0 text-center text-white" *ngSwitchDefault="">{{commondata.Copyright}} &copy; {{commondata.OpName}} 2020</p>
-          </div>
-         
+      <mat-toolbar class="headerclass">
+        <span (click)="drawer.toggle()"><mat-icon>menu</mat-icon></span>
+        <div [ngSwitch]="selectedclass">
+          <span *ngSwitchCase="'1'">{{commondata.Name}}</span>
+          <span *ngSwitchCase="'2'">{{commondata.OpName}}</span>
+          <span *ngSwitchDefault="">{{commondata.Name}}</span>
         </div>
-        <!-- /.container -->
-      </footer>
+      
+      
   
+  
+        <span class="fill-remaining"></span>
+        <mat-form-field apperance="fill"> 
+  
+            <!-- <mat-label>Language</mat-label> -->
+                  <mat-select [(value)]="SelectedLang">
+                     
+                    <mat-option value="1" (click)="Language('en')">English </mat-option>
+                   <mat-option  value="2" (click)="Language('fr')">French</mat-option>
+                  </mat-select>
+                 
+        </mat-form-field>
+        <a class="nav-link headerclass "  routerLink="/home">{{commondata.Home}}
+          <span class="sr-only"></span>
+        </a>
+        <a class="nav-link headerclass" style="cursor: pointer;"    (click)="Cart()"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
+        <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 1%;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
+        <mat-menu #menu="matMenu">
+         
+            <button mat-menu-item (click)="ChangePassword()"><strong>{{commondata.ChangePassword}}</strong></button>
+             <button mat-menu-item (click)="UpdateProfile()"><strong>{{commondata.UpdateProfile}}</strong></button>
+            <button mat-menu-item (click)="Orders()"><strong>{{commondata.MyOrder}}</strong></button>
+            <button mat-menu-item (click)="Logout()"><strong>{{commondata.LogOut}}</strong></button>
+            <!-- <button mat-menu-item (click)="style1()"><strong>style 1</strong></button>
+            <button mat-menu-item (click)="style2()"><strong>style 2</strong></button> -->
+         
+        </mat-menu>
+  
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="ChangePassword()">Change Password</button>
+          <button mat-menu-item (click)="UpdateProfile()">Update Profile</button>
+        </mat-menu>
+      </mat-toolbar>
+  
+      <router-outlet></router-outlet>
+  
+  
+      <div style="margin-bottom: 0%; margin-block-end: 0%;" class="footer" >
+        <footer class="py-2 " [ngClass]="{'class1':true}">
+          <div class="container">
+            <div [ngSwitch]="selectedclass">
+              <p class="m-0 text-center text-white" *ngSwitchCase="'1'">{{commondata.Copyright}} &copy; {{commondata.Name}} 2020</p>
+              <p class="m-0 text-center text-white" *ngSwitchCase="'2'">{{commondata.Copyright}} &copy; {{commondata.OpName}} 2020</p>
+              <p class="m-0 text-center text-white" *ngSwitchDefault="">{{commondata.Copyright}} &copy; {{commondata.OpName}} 2020</p>
+            </div>
+           
+          </div>
+          <!-- /.container -->
+        </footer>
+    
+      </div>
+
+
     </div>
+
+
 
   </mat-drawer-content>
 </mat-drawer-container>

@@ -109,8 +109,8 @@ export class ProductService {
     return this.http.delete(this.APIURL+"/Product/Delete/"+data)
   }
 
-  UpdateProduct(id,data){
-    return this.http.put(this.APIURL+"/Product/Update/"+id,data);
+  UpdateProduct(data){
+    return this.http.put(this.APIURL+"/Product/Update",data);
   }
 
   initializeForm(){
@@ -157,7 +157,7 @@ export class ProductService {
       Name:''
     })
   }
-  UpdateCategory(id){
-    return this.http.put(this.APIURL+"/Category/Update/"+id,this.CategoryForm.value);
+  UpdateCategory(){
+    return this.http.put(this.APIURL+"/Category/Update/",this.CategoryForm.value);
   }
 }

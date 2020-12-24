@@ -47,11 +47,11 @@ export class HomeComponent  implements OnInit  {
 
   ngOnInit(): void {
 
-    this.signalservice.startConnection();
+    // this.signalservice.startConnection();
 
-    setTimeout(()=>{
-      this.signalservice.askServerListener();
-    },2000)
+    // setTimeout(()=>{
+    //   this.signalservice.askServerListener();
+    // },2000)
 
 
 
@@ -61,6 +61,7 @@ export class HomeComponent  implements OnInit  {
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
+      console.log(this.commondata)
       }
 
 
@@ -140,30 +141,15 @@ export class HomeComponent  implements OnInit  {
       this.count=res;
    
     })
-    // this.store.dispatch(new fromActions.GetCartCount());
-    // this.store.pipe(select(selector.CartCount)).subscribe((result: any) => {
-    //   if (result) {
-    //   this.count = result;
-    //   console.log(this.count)
-    //   }
-    // })
   }
 
   Orders(){
     this.router.navigate(['/home/order'])
   }
 
-  // LHSort(){
-  //   let key="price";
-  //   this.dashboard.sortLH(key);
-  // }
-  // HLSort(){
-  //   let key="price";
-  //   this.dashboard.sortHL(key);
-  // }
-
-
  
+
+
   Cart(){
     this.GetCount();
     if(this.count==0){

@@ -42,7 +42,7 @@ export class ProductComponent implements OnInit {
         ImageUrl:this.selectedfile
       })
      
-      this.productService.UpdateProduct(this.productService.ProductForm.get("ProductId").value,this.productService.ProductForm.value).subscribe(res=>{
+      this.productService.UpdateProduct(this.productService.ProductForm.value).subscribe(res=>{
        
         this.dialogref.close();
         this.dashboard.loadProduct();
@@ -52,15 +52,7 @@ export class ProductComponent implements OnInit {
       })
     }
     else{
-        // this.productService.ProductForm.setValue({
-        //   Name:this.productService.ProductForm.get("Name").value,
-        //   Price:this.productService.ProductForm.get("Price").value,
-        //   Quantity:this.productService.ProductForm.get("Quantity").value,
-        //   Description:this.productService.ProductForm.get("Description").value,
-        //   CategoryId:this.productService.ProductForm.get("CategoryId").value,
-        //   ImageUrl:String(this.selectedfile),
-        //   ProductId:0
-        // })
+      
         this.productService.ProductForm.patchValue({
           ImageUrl:this.selectedfile
         })
@@ -90,8 +82,5 @@ export class ProductComponent implements OnInit {
   Onfileselected(event){
     this.selectedfile=event.target.files[0]["name"];
     this.selectedfile="assets\\Images\\"+this.selectedfile;
-
-     console.log(this.selectedfile)
-    // console.log(event.target.files[0]["name"])
   }
 }

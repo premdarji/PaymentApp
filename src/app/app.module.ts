@@ -31,6 +31,7 @@ import * as fromProduct from 'src/app/Common/Reducer/Product.reducer';
 import * as indexproduct from 'src/app/Common/index';
 import * as actions from 'src/app/Common/Actions/Product.actions';
 import { AppEffects, reducers ,metaReducers} from './Common/Store/app-state';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 
 
@@ -45,6 +46,7 @@ import { AppEffects, reducers ,metaReducers} from './Common/Store/app-state';
     ChangepasswordComponent,
     ForgotpasswordComponent,
     ConfirmComponent,
+    InvoiceComponent,
   
     
     

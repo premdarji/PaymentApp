@@ -41,7 +41,6 @@ export class CategoryComponent implements OnInit {
   loadCategory(){
     this.productservice.GetCategory().subscribe(res=>{
       this.category=res;
-      console.log(this.category)
       this.dataSource = new MatTableDataSource(this.category);
       this.dataSource.paginator=this.paginator
       this.dataSource.sort = this.sorting;
@@ -92,10 +91,8 @@ export class CategoryComponent implements OnInit {
 
      dialogRef.afterClosed().subscribe(dialogResult => {
     
-         console.log(dialogResult)
          if(dialogResult==true){
           this.productservice.DeleteCategory(data).subscribe(res=>{
-            console.log(res)
             this.loadCategory();
             this.notification.Delete("Category is deleted")
 

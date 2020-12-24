@@ -20,13 +20,13 @@ export class AddcategoryComponent implements OnInit {
   Save(){
 
     if(this.productservice.CategoryForm.get("CategoryId").value>0){
-      this.productservice.UpdateCategory(this.productservice.CategoryForm.get("CategoryId").value).subscribe(res=>{
+      this.productservice.UpdateCategory().subscribe(res=>{
         this.notification.update("Category updated");
         this.dialogref.close();
       })
     }
+    
     else{
-      console.log(this.productservice.CategoryForm.value)
       this.productservice.AddCategory().subscribe(res=>{
         this.notification.update("Category added");
         this.dialogref.close();

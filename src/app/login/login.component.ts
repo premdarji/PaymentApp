@@ -33,17 +33,17 @@ export class LoginComponent implements OnInit {
   Register(){
     localStorage.clear();
     this.router.navigate(['/register']);
-    console.log("in register")
+
   }
 
 
   Login(){
     var val=String(this.selected)
-    console.log(val)
 
     if(val=="1"){
       this.service.Login(this.LoginForm.value).subscribe(res=>{
         let token=res;
+       
         if(token["value"]!=null)
         {
          localStorage.setItem("token",token["value"]);
@@ -52,7 +52,6 @@ export class LoginComponent implements OnInit {
          this.InitializeForm();
         }
         else{
-         console.log(res);
          this.incorrect=true;
    
         }
@@ -72,7 +71,7 @@ export class LoginComponent implements OnInit {
          this.InitializeForm();
         }
         else{
-         console.log(res);
+       
          this.incorrect=true;
    
         }

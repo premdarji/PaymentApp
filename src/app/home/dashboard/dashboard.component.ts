@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     //this.RefreshProducts(); 
+   
     this.loadProduct();
     this.GetProducts();
 
@@ -74,9 +75,11 @@ export class DashboardComponent implements OnInit {
   }
 
   loadProduct(){
+
+   
     this.store.pipe(select(selector.CheckLimit)).subscribe((result: any) => {
       if (result==false) {
-        this.store.dispatch(new fromActions.GetProductList(this.PageNumber,this.PageSize));
+      this.store.dispatch(new fromActions.GetProductList(this.PageNumber,this.PageSize));
         this.GetProducts();
       }
     })
@@ -172,7 +175,7 @@ export class DashboardComponent implements OnInit {
   }
 
   AddToWishlist(data,index){
-    console.log(data);
+  
     this.notification.update("Added to wishlist");
     this.products[index].isWishListItem = true;
     this.store.dispatch(new fromActions.AddToWishlist(this.products,data));

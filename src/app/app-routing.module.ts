@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { adminAuthenticationGuard } from './adminauthentication.guard';
+import { InvoiceComponent } from './invoice/invoice.component';
 // import { pathToFileURL } from 'url';
 // import { HomeComponent } from './home/home.component';
 // import { LoginComponent } from './login/login.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path:'login',component:LoginComponent},
   {path:'register',component:RegisterComponent},
   {path:"forgot",component:ForgotpasswordComponent},
+  {path:"invoice",component:InvoiceComponent},
   {path:"admin",loadChildren:()=>import(`../app/admin/admin.module`).then(m=>m.AdminModule),canActivate:[adminAuthenticationGuard]}
   
 ];
