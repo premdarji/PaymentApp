@@ -69,7 +69,6 @@ export class DashboardComponent implements OnInit {
     this.store.pipe(select(selector.GetProductList)).subscribe((result: any) => {
       if (result) {
       this.products = result;
-      console.log(this.products)
       }
     })
   }
@@ -126,17 +125,7 @@ export class DashboardComponent implements OnInit {
   }
 
   AddtoCart(data){
-    // this.service.AddtoCart(data).subscribe(res=>{
-    //  if(res["message"]=="exist"){
-    //    this.notification.Delete("Product already added");
-    //  }
-    //  else{
-    //   this.notification.update("Product Added to cart");
-    //   this.home.GetCount();
-    //  }
-     
-    // })
-
+  
     this.store.dispatch(new fromActions.AddToCart(data));
     this.home.GetCount();
     //this.store.dispatch(new fromActions.GetCartCount());
@@ -168,10 +157,7 @@ export class DashboardComponent implements OnInit {
     this.products[index].isWishListItem = false;
     this.notification.Delete("Removed from wishlist");
     this.store.dispatch(new fromActions.RemoveFromWishlist(this.products,data));
-    //this.GetProducts();
-    // this.wishlistservice.RemoveFromWishlist(data).subscribe(res=>{
-     
-    // })
+   
   }
 
   AddToWishlist(data,index){
@@ -180,13 +166,6 @@ export class DashboardComponent implements OnInit {
     this.products[index].isWishListItem = true;
     this.store.dispatch(new fromActions.AddToWishlist(this.products,data));
 
-   // this.GetProducts();
-
-    // this.wishlistservice.AddToWishlist(data).subscribe(res=>{
-    //   console.log("added to wishlist");
-    //   this.notification.update("Added to wishlist");
-    //   this.products[index].isWishListItem = true; 
-    // })
   }
 
 

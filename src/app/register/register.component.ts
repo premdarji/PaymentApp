@@ -51,13 +51,12 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
 
-
-    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
-      if (result) {
-      this.commondata = result;
-      console.log(this.commondata)
-      }
-    })
+     
+ 
+   
+     // this.store.dispatch(new fromActions.GetCommonFields("en"));
+    
+ 
 
 
 
@@ -67,6 +66,16 @@ export class RegisterComponent implements OnInit {
     let token=localStorage.getItem("token");
     if(token!=null){
       this.updateform();
+    }
+    else{
+      this.store.dispatch(new fromActions.GetCommonFields("en"));
+      
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
     }
 
   }
@@ -94,7 +103,7 @@ export class RegisterComponent implements OnInit {
           else{
             console.log("submitted");
             this.router.navigate(['/login']);
-            this.notification.success("User Registered Successfully");
+            this.notification.success("User Registered Successfully and activation link sent your registered email");
 
           }
       
@@ -112,9 +121,16 @@ export class RegisterComponent implements OnInit {
 
   updateform(){
 
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      console.log(this.commondata)
+      }
+    })
+
     this.service.populateform().subscribe(res=>{
         this.user=res;
-        console.log(this.user)
+        //console.log(this.user)
         this.selected=String(this.user.cityId);
         console.log("selected is"+this.selected);
         this.UserForm.setValue({

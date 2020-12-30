@@ -3,6 +3,13 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ProductService } from 'src/app/shared/product.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 
+
+import * as fromActions from "../../Common/Actions/Product.actions";
+import * as selector from "../../Common/index";
+import { Store,select } from '@ngrx/store';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+
+
 @Component({
   selector: 'app-addcategory',
   templateUrl: './addcategory.component.html',
@@ -12,25 +19,31 @@ export class AddcategoryComponent implements OnInit {
 
   constructor(private dialogref:MatDialogRef<AddcategoryComponent>,
     public productservice:ProductService,
-    private notification:NotificationService) { }
+    private notification:NotificationService,
+    private store:Store<ProductState>) { }
 
   ngOnInit(): void {
   }
 
   Save(){
 
+
     if(this.productservice.CategoryForm.get("CategoryId").value>0){
-      this.productservice.UpdateCategory().subscribe(res=>{
-        this.notification.update("Category updated");
-        this.dialogref.close();
-      })
+      this.store.dispatch(new fromActions.UpdateCategory());
+      this.dialogref.close();
+      // this.productservice.UpdateCategory().subscribe(res=>{
+      //   this.notification.update("Category updated");
+      //   this.dialogref.close();
+      // })
     }
     
     else{
-      this.productservice.AddCategory().subscribe(res=>{
-        this.notification.update("Category added");
-        this.dialogref.close();
-      })
+      this.store.dispatch(new fromActions.AddCategory());
+      this.dialogref.close();
+      // this.productservice.AddCategory().subscribe(res=>{
+      //   this.notification.update("Category added");
+      //   this.dialogref.close();
+      // })
 
     }
    

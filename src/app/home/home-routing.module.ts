@@ -9,6 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DetailComponent } from './detail/detail.component';
 import { HomeComponent } from './home.component';
 import { MyorderComponent } from './myorder/myorder.component';
+import { CancelOrderComponent } from './cancel-order/cancel-order.component';
 
 const routes: Routes = [
   {
@@ -21,7 +22,8 @@ const routes: Routes = [
            {path:'buy/:id',component:BuyComponent},
            {path:'cart',component:CartComponent},
            {path:'checkout',component:CheckoutComponent},
-           {path:'order',component:MyorderComponent}
+           {path:'order',component:MyorderComponent},
+           {path:"cancel",component:CancelOrderComponent}
   
     ]
   }

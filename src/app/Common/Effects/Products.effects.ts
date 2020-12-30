@@ -34,18 +34,18 @@ export class ProductEffects {
         
       ) {}
 
-      GetProductList$=createEffect(()=>
+    //effects of products
+    GetProductList$=createEffect(()=>
       this.actions$.pipe(
    
         ofType(fromProductActions.ProductActionTypes.GetProductList),
       
-        mergeMap(action=>
+        mergeMap(action  =>
           this.productService.GetAll(action.pageNumber,action.pageSize).pipe(
               map((product:Product[])=>{
                // debugger;
                   if(product["message"]=="nodata"){
                     this.notification.Delete("No More Products")
-                    console.log(product)
                    return new  fromProductActions.GetProductListFailure();
                   }
                   else{
@@ -59,6 +59,22 @@ export class ProductEffects {
     );
 
 
+    
+    GetProductById$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetProductById),
+        switchMap((action)=>
+          this.productService.GetProductById(action.productId).pipe(
+              map((result:Product)=>{
+                return new fromProductActions.GetProductByIdSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
+
+
+    //effects of cart
     GetCartList$=createEffect(()=>
       this.actions$.pipe(
   
@@ -67,8 +83,6 @@ export class ProductEffects {
         mergeMap(action=>
           this.productService.GetCartItems().pipe(
               map((CartItems:any[])=>{
-              
-                console.log(CartItems)
                   return new fromProductActions.GetCartListSuccess(CartItems);
               }),
               catchError(()=>of(new fromProductActions.GetCartListFailure())),
@@ -77,37 +91,6 @@ export class ProductEffects {
       )
     );
 
-
-    AddtoWishlist$=createEffect(()=>
-      this.actions$.pipe(
-        ofType(fromProductActions.ProductActionTypes.AddToWishlist),
-        switchMap((action)=>
-          this.wishlistservice.AddToWishlist(action.productId).pipe(
-              map((result)=>{
-              
-                console.log(result);
-                  return new fromProductActions.GetState();
-              }),
-          ),
-        ),
-      )
-    );
-
-
-    RemoveFromWishlist$=createEffect(()=>
-      this.actions$.pipe(
-        ofType(fromProductActions.ProductActionTypes.RemoveFromWishlist),
-        switchMap((action)=>
-          this.wishlistservice.RemoveFromWishlist(action.productId).pipe(
-              map((result)=>{
-              
-                console.log(result);
-                  return new fromProductActions.GetState();
-              }),
-          ),
-        ),
-      )
-    );
 
     AddToCart$=createEffect(()=>
       this.actions$.pipe(
@@ -123,22 +106,6 @@ export class ProductEffects {
                 }
                 console.log(result);
                 return new fromProductActions.GetState();
-              }),
-          ),
-        ),
-      )
-    );
-
-
-    GetProductById$=createEffect(()=>
-      this.actions$.pipe(
-        ofType(fromProductActions.ProductActionTypes.GetProductById),
-        switchMap((action)=>
-          this.productService.GetProductById(action.productId).pipe(
-              map((result:Product)=>{
-              
-                console.log(result);
-                return new fromProductActions.GetProductByIdSuccess(result);
               }),
           ),
         ),
@@ -176,16 +143,15 @@ export class ProductEffects {
     );
 
 
-
-    GetCommonFields$=createEffect(()=>
+    GetCartCount$=createEffect(()=>
       this.actions$.pipe(
-        ofType(fromProductActions.ProductActionTypes.GetCommonFields),
+        ofType(fromProductActions.ProductActionTypes.GetCartCount),
         switchMap((action)=>
-          this.languageservice.GetData(action.data).pipe(
-              map((result:any)=>{
+          this.productService.GetCount().pipe(
+              map((result)=>{
               
-              
-                return new fromProductActions.GetCommonFieldsSuccess(result);
+                console.log(result);
+                return new fromProductActions.GetCartCountSuccess(result);
               }),
           ),
         ),
@@ -193,6 +159,85 @@ export class ProductEffects {
     );
 
 
+
+    //effects of wishlist
+    AddtoWishlist$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.AddToWishlist),
+        switchMap((action)=>
+          this.wishlistservice.AddToWishlist(action.productId).pipe(
+              map((result)=>{
+                  return new fromProductActions.GetState();
+              }),
+          ),
+        ),
+      )
+    );
+
+
+    RemoveFromWishlist$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.RemoveFromWishlist),
+        switchMap((action)=>
+          this.wishlistservice.RemoveFromWishlist(action.productId).pipe(
+              map((result)=>{
+                  return new fromProductActions.GetState();
+              }),
+          ),
+        ),
+      )
+    );
+
+   
+
+    
+
+
+    //effect of translation        
+    GetCommonFields$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetCommonFields),
+        switchMap((action)=>
+          this.languageservice.GetData(action.data).pipe(
+              map((result:any)=>{
+            
+                return new fromProductActions.GetCommonFieldsSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
+
+    //effects of order          
+    GetOrderById$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetOrderById),
+        switchMap((action)=>
+          this.orderservice.getOrderDetailById(action.OrderId).pipe(
+              map((result:any)=>{
+                return new fromProductActions.GetOrderByIdSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
+
+    CancelOrder$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.CancelOrder),
+        switchMap((action)=>
+          this.orderservice.cancelOrder(action.Order).pipe(
+              map((result:any)=>{
+                if(result==true){
+                  this.notification.Delete("Order cancelled");
+                  return new fromProductActions.GetOrderList();
+                }
+                
+              }),
+          ),
+        ),
+      )
+    );
 
     GetOrderList$=createEffect(()=>
       this.actions$.pipe(
@@ -208,21 +253,93 @@ export class ProductEffects {
       )
     );
 
-              
-
-    GetCartCount$=createEffect(()=>
+    CreateOrder$=createEffect(()=>
       this.actions$.pipe(
-        ofType(fromProductActions.ProductActionTypes.GetCartCount),
+        ofType(fromProductActions.ProductActionTypes.CreateOrder),
         switchMap((action)=>
-          this.productService.GetCount().pipe(
-              map((result)=>{
-              
-                console.log(result);
-                return new fromProductActions.GetCartCountSuccess(result);
+          this.orderservice.CreateOrder(action.Order).pipe(
+              map((result:any)=>{
+                console.log(result['id']);
+                return new fromProductActions.CreateOrderSuccess(result['id']);
               }),
           ),
         ),
       )
     );
+
+    PostOrderDetails$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.CreateOrderDetails),
+        switchMap((action)=>
+          this.orderservice.PostDetailOrder(action.OrderDetails).pipe(
+              map((result:any)=>{
+                console.log(result);
+                return new fromProductActions.GetOrderList();
+              }),
+          ),
+        ),
+      )
+    );
+
+
+    //effects of category
+    GetCategory$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetCategories),
+        switchMap((action)=>
+          this.productService.GetCategory().pipe(
+              map((result:any[])=>{
+                return new fromProductActions.GetCategoriesSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
+
+    DeleteCategory$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.DeleteCategory),
+        switchMap((action)=>
+          this.productService.DeleteCategory(action.CategoryId).pipe(
+              map((result)=>{
+                this.notification.Delete("category removed");
+                return new fromProductActions.GetCategories();
+              }),
+          ),
+        ),
+      )
+    );
+
+    AddCategory$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.AddCategory),
+        switchMap((action)=>
+          this.productService.AddCategory().pipe(
+              map((result)=>{
+                this.notification.success("category added");
+                return new fromProductActions.GetCategories();
+              }),
+          ),
+        ),
+      )
+    );
+
+    UpdateCategory$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.UpdateCategory),
+        switchMap((action)=>
+          this.productService.UpdateCategory().pipe(
+              map((result)=>{
+                this.notification.update("category Updated");
+                return new fromProductActions.GetCategories();
+              }),
+          ),
+        ),
+      )
+    );
+
+              
+
+   
 
 }

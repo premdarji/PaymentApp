@@ -40,8 +40,9 @@ export class CartComponent implements OnInit {
   buy:boolean;
   counter:number=0;
   commondata:any;
+
+  
   ngOnInit(): void {
-  //this.GetCartItems();
   
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
@@ -49,53 +50,30 @@ export class CartComponent implements OnInit {
       }
     })
 
-
-
-   this.home.GetCount();
+    this.home.GetCount();
     this.store.dispatch(new fromActions.GetCartList());
-    this.loadcart();
+    this.loadCart();
   }
 
-  loadcart(){
+  loadCart(){
     this.store.pipe(select(selector.GetCartItems)).subscribe((result: any) => {
       if (result) {
         this.cartItems=result;
         if(this.cartItems.length>0){
           this.showComponent=true;
         }
-       this.CartTotal();
+       this.cartTotal();
        this.home.GetCount();
       }
     })
   }
 
-  GetCartItems(){
-    this.service.GetCartItems().subscribe(res=>{
-      
-      this.cartItems=res;
-     
-     if(this.cartItems.length>0){
-       
-       this.showComponent = true;
-     
-     }
-
-      this.CartTotal();
-      
-     })
-  }
-
-  Remove(id,index){
+  removeFromCart(id,index){
 
     if(this.cartItems[index].quantity>1){
-      // this.productservice.UpdateCart(id,this.cartItems[index].quantity-1).subscribe(res=>{
-      //   this.cartItems[index].quantity=this.cartItems[index].quantity-1;
-      //   this.total -= this.cartItems[index].price;
-      // })
       this.cartItems[index].quantity=this.cartItems[index].quantity-1;
       this.total-=this.cartItems[index].price;
-      this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));
-     
+      this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));    
     }
     else{
       
@@ -107,35 +85,20 @@ export class CartComponent implements OnInit {
         });
     
          dialogRef.afterClosed().subscribe(dialogResult => {
-        
-             console.log(dialogResult)
              if(dialogResult==true){
-              //  this.productservice.RemoveFormCart(this.cartItems[index].cartId).subscribe(res=>{
-              //   debugger;
-              //   this.total -= this.cartItems[index].price;
-              //   this.home.GetCount();
-              //    console.log(res);
-              //   this.GetCartItems();
-              //   this.notification.Delete("Item is removed from cart"); 
-               //})
                this.total-=this.cartItems[index].price;
                this.home.GetCount();
                this.store.dispatch(new fromActions.RemoveFromCart(id));
-               this.loadcart();
+               this.loadCart();
                this.notification.Delete("Item is removed from cart"); 
              }
          });
     }
   
   }
-  Add(id,index){
+  addToCart(id,index){
 
     if(this.cartItems[index].stock>this.cartItems[index].quantity){
-      // this.productservice.UpdateCart(id,this.cartItems[index].quantity+1).subscribe(res=>{
-      //   this.cartItems[index].quantity=this.cartItems[index].quantity+1;
-      //   this.total += this.cartItems[index].price;
-      //   console.log(res);
-      // })
       this.cartItems[index].quantity=this.cartItems[index].quantity+1;
       this.total+=this.cartItems[index].price;
       this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));
@@ -148,7 +111,7 @@ export class CartComponent implements OnInit {
 
   }
 
-  CartTotal(){
+  cartTotal(){
     this.total=0;
     this.cartItems.forEach(element => {
   
@@ -158,7 +121,7 @@ export class CartComponent implements OnInit {
    
   }
 
-  PlaceOrder(){
+  placeOrder(){
     if(this.cartItems.length==0){
       this.notification.Delete("Cart is empty,please add item in your cart");
     }
@@ -170,14 +133,7 @@ export class CartComponent implements OnInit {
 
 
   delete(id){
-    // this.productservice.RemoveFormCart(id).subscribe(res=>{
-    //   this.GetCartItems();
-    //   this.home.GetCount();
-    //   this.notification.Delete("Item removed form cart");
-    // })
     this.store.dispatch(new fromActions.RemoveFromCart(id));
-    this.loadcart();
- 
     this.notification.Delete("Item removed form cart");
    
   }

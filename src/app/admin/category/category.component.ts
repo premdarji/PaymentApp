@@ -8,6 +8,11 @@ import { AddcategoryComponent } from '../addcategory/addcategory.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { ConfirmDialogModel, ConfirmComponent } from 'src/app/confirm/confirm.component';
 
+import * as fromActions from "../../Common/Actions/Product.actions";
+import * as selector from "../../Common/index";
+import { Store,select } from '@ngrx/store';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
@@ -30,6 +35,8 @@ export class CategoryComponent implements OnInit {
   constructor(private productservice:ProductService,
     private dialog:MatDialog,
     private notification:NotificationService,
+    private store:Store<ProductState>
+
   ) { }
 
   category:any;
@@ -39,14 +46,21 @@ export class CategoryComponent implements OnInit {
   }
 
   loadCategory(){
-    this.productservice.GetCategory().subscribe(res=>{
-      this.category=res;
+    this.store.dispatch(new fromActions.GetCategories());
+    this.store.pipe(select(selector.Categories)).subscribe((result: any) => {
+      if (result) {
+      this.category = result;
       this.dataSource = new MatTableDataSource(this.category);
       this.dataSource.paginator=this.paginator
       this.dataSource.sort = this.sorting;
+      }
+    })
+    // this.productservice.GetCategory().subscribe(res=>{
+    //   this.category=res;
+    // 
  
 
-    })
+    // })
   }
 
 
@@ -80,8 +94,6 @@ export class CategoryComponent implements OnInit {
   }
 
   Delete(data){
-
-
     const message = `Are you sure you want remove this Category?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef=this.dialog.open(ConfirmComponent, {
@@ -90,14 +102,13 @@ export class CategoryComponent implements OnInit {
     });
 
      dialogRef.afterClosed().subscribe(dialogResult => {
-    
          if(dialogResult==true){
-          this.productservice.DeleteCategory(data).subscribe(res=>{
-            this.loadCategory();
-            this.notification.Delete("Category is deleted")
+           this.store.dispatch(new fromActions.DeleteCategory(data));
+          // this.productservice.DeleteCategory(data).subscribe(res=>{
+          //   this.loadCategory();
+          //   this.notification.Delete("Category is deleted")
 
-          })
-           
+          // })  
 
          }
      });

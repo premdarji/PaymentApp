@@ -20,7 +20,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatGridListModule} from '@angular/material/grid-list';
-
+import {MatRadioModule} from '@angular/material/radio';
  
 
 @NgModule({
@@ -45,7 +45,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MatGridListModule
+    MatGridListModule,
+    MatRadioModule
     
   ],
   exports:[
@@ -68,7 +69,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MatGridListModule
+    MatGridListModule,
+    MatRadioModule
 
   ]
 })

@@ -61,7 +61,7 @@
        
         <div>
           <button mat-button matStepperPrevious>{{commondata.Back}}</button>
-          <button mat-button matStepperNext (click)="CountTotal()">{{commondata.Next}}</button>
+          <button mat-button matStepperNext (click)="countTotal()">{{commondata.Next}}</button>
           <!-- <button mat-raised-button>Select Address</button> -->
         </div>
       </form>
@@ -109,7 +109,7 @@
   <hr>
 
 
-  <div class="hidden" style="margin-bottom: 100px;">  
+  <div class="hidden" style="margin-bottom: 100px;" >  
     <mat-card class="col-md-6 mx-auto"> 
         <div  id="contentToConvert">
           <mat-toolbar>
@@ -135,12 +135,12 @@
                             <td>{{ProductData.name}}</td>
                             <td>{{ProductData.price}}</td>
                             <td>{{qty}}</td>
-                            <td>{{ProductData.price*qty}}</td>
+                            <!-- <td>{{ProductData.price*qty}}</td> -->
                         </tr>
                        
                 </table> 
                       
-                      <b>Grand Total:-</b><p>{{ProductData.price*qty | currency : "INR"}}</p>
+                      <!-- <b>Grand Total:-</b><p>{{ProductData.price*qty | currency : "INR"}}</p> -->
                       <hr>
 
                       <b> Thanks for the shopping</b>

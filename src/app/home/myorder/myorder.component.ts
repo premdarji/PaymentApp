@@ -10,6 +10,8 @@ import { Store,select } from '@ngrx/store';
 
 import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CancelOrderComponent } from '../cancel-order/cancel-order.component';
 
 
 
@@ -22,7 +24,8 @@ export class MyorderComponent implements OnInit {
 
   constructor(private orders:OrderService,
     private home:HomeComponent,
-    private store:Store<ProductState>) { }
+    private store:Store<ProductState>,
+    private dialog:MatDialog) { }
 
   commondata:any;
 
@@ -42,19 +45,24 @@ export class MyorderComponent implements OnInit {
   }
 
   GetOrders(){
-    // this.orders.GetAll().subscribe(res=>{
-    //   this.home.GetCount();
-    //   console.log(res);
-    //   this.Products=res;
-    // })
-
+  
     this.store.dispatch(new fromActions.GetOrderList());
 
     this.store.pipe(select(selector.OrderList)).subscribe((result: any) => {
       if (result) {
       this.Products = result;
-      console.log(this.Products)
+ 
       }
     })
+  }
+
+  cancelOrder(id){
+   
+    const dialogconfig=new MatDialogConfig();
+    dialogconfig.disableClose=false;
+    dialogconfig.autoFocus=true;
+    dialogconfig.width="40%";
+    dialogconfig.data=id;
+    this.dialog.open(CancelOrderComponent,dialogconfig);
   }
 }

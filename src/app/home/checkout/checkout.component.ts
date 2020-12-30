@@ -59,15 +59,14 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
 
-
+    
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
       }
     })
 
-
-    this.GetCartItems();
+    this.getCartItems();
     this.home.GetCount();
 
     this.secondFormGroup = this._formBuilder.group({
@@ -78,12 +77,15 @@ export class CheckoutComponent implements OnInit {
     });
    }
  
-   GetCartItems(){
-     this.productservice.GetCartItems().subscribe(res=>{
-       
-        this.temp=res;
+   getCartItems(){
+    this.cartItems=[];
+    this.store.dispatch(new fromActions.GetCartList());
+    this.store.pipe(select(selector.GetCartItems)).subscribe((result: any) => {
+     
+      if (result) {
+        this.temp=result;
         this.showComponent = true;
-       
+      
         this.temp.forEach(element => {
          if(element.stock>0){
            if(element.quantity>element.stock){
@@ -92,20 +94,17 @@ export class CheckoutComponent implements OnInit {
            this.cartItems.push(element)
          }
         });
-
-        this.CartTotal();
-        
-      })
+        this.cartTotal();
+      }
+    })
    }
  
-   Remove(id,index){
+   removeFromCart(id,index){
   
       if(this.cartItems[index].quantity>1){
-        this.productservice.UpdateCart(id,this.cartItems[index].quantity-1).subscribe(res=>{
-          this.cartItems[index].quantity=this.cartItems[index].quantity-1;
-          this.total -= this.cartItems[index].price;
-          this.final=this.total;
-        })
+        this.cartItems[index].quantity=this.cartItems[index].quantity-1;
+        this.total-=this.cartItems[index].price;
+        this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity)); 
         
      }
       else{
@@ -120,29 +119,27 @@ export class CheckoutComponent implements OnInit {
           dialogRef.afterClosed().subscribe(dialogResult => {
   
                 if(dialogResult==true){
-                    this.productservice.RemoveFormCart(this.cartItems[index].cartId).subscribe(res=>{
-                    debugger;
-                    this.total -= this.cartItems[index].price;
-                    this.home.GetCount();
-              
-                    this.GetCartItems();
-                      
-                    })
+
+                  this.total-=this.cartItems[index].price;
+                  this.home.GetCount();
+                  this.store.dispatch(new fromActions.RemoveFromCart(id));
+               
+                  this.notification.Delete("Item is removed from cart"); 
+                
                 }
            });
        }
    
     } 
 
-   Add(id,index){
+   addToCart(id,index){
   
       if(this.cartItems[index].stock>this.cartItems[index].quantity){
-          this.productservice.UpdateCart(id,this.cartItems[index].quantity+1).subscribe(res=>{
-            this.cartItems[index].quantity=this.cartItems[index].quantity+1;
-            this.total += this.cartItems[index].price;
-            this.final=this.total;
-     
-        })
+
+        this.cartItems[index].quantity=this.cartItems[index].quantity+1;
+        this.total+=this.cartItems[index].price;
+        this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));
+
       }
       else{
         this.notification.Delete("Out of Stock")
@@ -150,7 +147,7 @@ export class CheckoutComponent implements OnInit {
       
     }
  
-   CartTotal(){
+   cartTotal(){
      this.total=0;
      this.cartItems.forEach(element => {
        this.total += (element.quantity*element.price)
@@ -175,14 +172,6 @@ export class CheckoutComponent implements OnInit {
       this.offers[index].availabe=0;
       this.offerapplied=true;
     }
-  }
-
-
-  OrderDetail(){
-    console.log(this.cartItems);
-    console.log(this.total);
-    console.log(this.secondFormGroup.value);
-
   }
 
 
@@ -221,24 +210,19 @@ export class CheckoutComponent implements OnInit {
         Amount:this.final
       }
      
-  
-      this.order.CreateOrder(paymentDetail).subscribe(res=>{
-    
-        this.orderId=res['id'];
-        this.Generate();
-    
-        this.home.GetCount();
-       
-      
-      
+
+      this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
+      this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
+        if (result) {
+        this.orderId = result;
+        
+        this.generateInvoicePdf();
+        }
       })
-      
-    
   
-      // call your backend api to verify payment signature & capture transaction
     });
     options.modal.ondismiss = (() => {
-      // handle the case when user closes the form while transaction is in progress
+      
       console.log('Transaction cancelled.');
       this.notification.Delete("Complete payment for order");
     });
@@ -250,7 +234,7 @@ export class CheckoutComponent implements OnInit {
 
 
 
-  Generate(){
+  generateInvoicePdf(){
 
     var data = document.getElementById('contentToConvert');  
 
@@ -286,25 +270,24 @@ export class CheckoutComponent implements OnInit {
         Detail.Quantity=element.quantity,
         Detail.OrderId=this.orderId;
 
-      
-        this.order.PostDetailOrder(Detail).subscribe(res=>{})
-        this.productservice.RemoveFormCart(element.cartId).subscribe(res=>{})
-        
+        this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
+        this.store.dispatch(new fromActions.RemoveFromCart(element.cartId));
     
       });
 
-      this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
+      // this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
         
        
-      })
-      this.zone.run(()=>{
-        this.router.navigate(['/home/order']);
-      })
+      // })
+    
     
 
     });  
+    this.zone.run(()=>{
+      this.router.navigate(['/home/order']);
+    })
 
-        //removing items from cart
+  
             
           
 

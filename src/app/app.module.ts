@@ -32,6 +32,8 @@ import * as indexproduct from 'src/app/Common/index';
 import * as actions from 'src/app/Common/Actions/Product.actions';
 import { AppEffects, reducers ,metaReducers} from './Common/Store/app-state';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { ActivationComponent } from './activation/activation.component';
+
 
 
 
@@ -47,6 +49,8 @@ import { InvoiceComponent } from './invoice/invoice.component';
     ForgotpasswordComponent,
     ConfirmComponent,
     InvoiceComponent,
+    ActivationComponent,
+   
   
     
     

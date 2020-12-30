@@ -22,9 +22,9 @@
                     <p class="card-text">{{product.description}}</p>
                     
                     <div *ngIf="product.stock>0">
-                      <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
+                      <button class="btn-sm btn btn-outline-danger" (click)="removeFromCart(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
                   <strong>Qty:-<b>{{product.quantity}}</b></strong>
-                 <button class="btn-sm btn btn-outline-success" (click)="Add(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
+                 <button class="btn-sm btn btn-outline-success" (click)="addToCart(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
                   
                   </div>
                   <div *ngIf="product.stock==0">
@@ -146,7 +146,7 @@
                          
                   </table> 
                         
-                        <b>Grand Total:-</b><p>{{final | currency : "INR"}}</p>
+                        <b>Grand Total:-</b><p>{{total | currency : "INR"}}</p>
                         <hr>
   
                         <b> Thanks for the shopping</b>

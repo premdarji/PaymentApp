@@ -1,0 +1,29 @@
+<div class="container">
+    <mat-toolbar>
+        <span class="fill-remaining"></span>
+        <span>Cancel Order Request</span>
+        <span class="fill-remaining"></span>
+    </mat-toolbar>
+    <hr>
+    <label id="example-radio-group-label">Pick your favorite season</label>
+        <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        [(ngModel)]="selectedReason">
+        <mat-radio-button class="example-radio-button" *ngFor="let reason of reasons" [value]="reason" >
+            {{reason}}
+        </mat-radio-button>
+        </mat-radio-group>
+       
+
+        <mat-form-field class="example-full-width" *ngIf="selectedReason=='Other'">
+            <mat-label>Leave a reason</mat-label>
+            <textarea matInput [(ngModel)]="otherReason"></textarea>
+        </mat-form-field>
+       
+
+        <div class="align-right">
+            <button mat-raised-button color="warn" (click)="confirmCancel()">Continue</button>
+           
+        </div>
+</div>

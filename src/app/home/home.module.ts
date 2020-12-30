@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { RouterModule, Routes } from '@angular/router';
 
@@ -21,6 +21,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MyorderComponent } from './myorder/myorder.component';
+import { CancelOrderComponent } from './cancel-order/cancel-order.component';
 
 
 // import { StoreModule } from "@ngrx/store";
@@ -39,6 +40,7 @@ import { MyorderComponent } from './myorder/myorder.component';
   CartComponent,
   CheckoutComponent,
   MyorderComponent,
+  CancelOrderComponent,
  
 ],
   imports: [
@@ -61,7 +63,8 @@ import { MyorderComponent } from './myorder/myorder.component';
     // EffectsModule.forFeature([ProductEffects])
     
   ],
-  providers:[RegisterComponent]
+  providers:[RegisterComponent,DatePipe],
+  entryComponents:[CancelOrderComponent]
 
 })
 export class HomeModule { }

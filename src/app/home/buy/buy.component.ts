@@ -60,19 +60,15 @@ export class BuyComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-
-
+    //translation
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
       }
     })
 
-
-    this. ProductId = this.actRoute.snapshot.params['id'];
-   
-    this.GetProductById(this.ProductId);
-
+    this. ProductId = this.actRoute.snapshot.params['id'];   
+    this.getProductById(this.ProductId);
     this.secondFormGroup = this._formBuilder.group({
       Add: ['', Validators.required],
       City:[''],
@@ -81,14 +77,8 @@ export class BuyComponent implements OnInit {
     });
   }
 
-  GetProductById(id){
-    // this.sevice.GetProductById(id).subscribe(res=>{
-
-    //   this.ProductData=res;
-    //   console.log(this.ProductData)
-    // })
+  getProductById(id){
     this.store.dispatch(new fromActions.GetProductById(id));
-
     this.store.pipe(select(selector.GetProductById)).subscribe((result: any) => {
       if (result) {
       this.ProductData = result;
@@ -98,8 +88,7 @@ export class BuyComponent implements OnInit {
   }
 
 
-  CountTotal(){
-
+  countTotal(){
     this.total=Number(this.qty)*this.ProductData.price;
     this.final=this.total
     for(var item of this.offers){
@@ -108,11 +97,9 @@ export class BuyComponent implements OnInit {
         this.final=this.total-this.Discount;
       }
     }
-  
   }
 
-
-  checkstock(){
+  checkStock(){
     if(this.ProductData.quantity<Number(this.qty)){
       this.notification.Delete("Not enogh in stock")
       this.qty=this.ProductData.quantity
@@ -135,8 +122,6 @@ export class BuyComponent implements OnInit {
       this.offerapplied=true;
     }
   }
-
-
 
 //paywith razorpay gateway method
   payWithRazor(val) {
@@ -176,10 +161,13 @@ export class BuyComponent implements OnInit {
         Amount:options['amount']/100,
       }
 
-      this.order.CreateOrder(paymentDetail).subscribe(res=>{
-        this.orderId=res['id'];
-        this.Generate();
-    
+      this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
+      this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
+        if (result) {
+        this.orderId = result;
+        console.log(this.orderId);
+        this.generateInvoicePdf();
+        }
       })
       
     });
@@ -190,7 +178,7 @@ export class BuyComponent implements OnInit {
     const rzp = new this.winRef.nativeWindow.Razorpay(options);
     rzp.open();
     
-    console.log(rzp.PaymentId);
+   
   }
 
 
@@ -199,11 +187,11 @@ export class BuyComponent implements OnInit {
 
   
 
-  Generate(){
+  generateInvoicePdf(){
 
     var data = document.getElementById('contentToConvert'); 
     html2canvas(data).then(canvas => {  
-      // Few necessary setting options  
+
       var imgWidth = 200;   
       var pageHeight = 1600;    
       var imgHeight = canvas.height * imgWidth / canvas.width;  
@@ -215,10 +203,11 @@ export class BuyComponent implements OnInit {
       var position = 0;  
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
       pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
-      this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
+      // this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
         
        
-      })
+      // })
+
 
 
       let Details={
@@ -227,13 +216,24 @@ export class BuyComponent implements OnInit {
         Quantity:Number(this.qty),
         OrderId:this.orderId
       }
-      this.order.PostDetailOrder(Details).subscribe(res=>{
+
+      this.store.dispatch(new fromActions.CreateOrderDetails(Details));
+
+
+
+      // let Details={
+      //   ProductId:this.ProductId,
+      //   Amount:this.final,
+      //   Quantity:Number(this.qty),
+      //   OrderId:this.orderId
+      // }
+      // this.order.PostDetailOrder(Details).subscribe(res=>{
 
         
-        this.zone.run(()=>{
-          this.router.navigate(['/home/order']);
-        })
-      })
+      //   this.zone.run(()=>{
+      //     this.router.navigate(['/home/order']);
+      //   })
+      // })
 
 
 
@@ -241,7 +241,7 @@ export class BuyComponent implements OnInit {
 
     });  
 
-        //removing items from cart
+    
             
           
 

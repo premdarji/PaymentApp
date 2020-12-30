@@ -32,9 +32,9 @@
                     </table>
                   
                     <div *ngIf="product.stock>0">
-                        <button class="btn-sm btn btn-outline-danger" (click)="Remove(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
+                        <button class="btn-sm btn btn-outline-danger" (click)="removeFromCart(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>
                     <strong>Qty:-<b>{{product.quantity}}</b></strong>
-                   <button class="btn-sm btn btn-outline-success" (click)="Add(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
+                   <button class="btn-sm btn btn-outline-success" (click)="addToCart(product.cartId,i)"><mat-icon>add_circle</mat-icon></button>
                     
                     </div>
                     <div *ngIf="product.stock==0">
@@ -59,7 +59,7 @@
         <strong class="col-md-4 float-right">{{commondata.Total}}:<b style="color: red;">{{total | currency : "INR"}}</b></strong><br>
         <strong class="col-md-4 float-right">{{commondata.Tax}}:2%</strong><br>
         <strong class="col-md-4 float-right">{{commondata.AmountPayable}}:<b style="color: red;">{{total+(total*2/100)| currency:"INR"}}</b></strong>
-        <button class="col-md-6" mat-raised-button color="primary"  (click)="PlaceOrder()" >{{commondata.PlaceOrder}}</button>
+        <button class="col-md-6" mat-raised-button color="primary"  (click)="placeOrder()" >{{commondata.PlaceOrder}}</button>
     </div>
 
 </div>

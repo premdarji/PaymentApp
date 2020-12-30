@@ -4,6 +4,7 @@ import * as fromProduct from '../Common/Reducer/Product.reducer';
 import * as ProductActions from '../Common/Actions/Product.actions';
 import * as fromRoot from '../Common/Store/app-state';
 import { state } from '@angular/animations';
+import { stat } from 'fs';
 
 
 // Extends the app state to include the navigation feature.
@@ -19,17 +20,11 @@ export interface State extends fromRoot.AppState {
 export const getProductFeatureState = createFeatureSelector<fromProduct.ProductState>(fromProduct.productsFeatureKey);
 
 
+//selectors related to product
 export const GetProductList = createSelector(
   getProductFeatureState,
   (state:fromProduct.ProductState) => state.products,
 );
-
-export const GetCartItems=createSelector(
-  getProductFeatureState,
-  (state:fromProduct.ProductState)=>state.cartItems
-);
-
-
 
 export const GetProductById=createSelector(
   getProductFeatureState,
@@ -41,20 +36,47 @@ export const CheckLimit=createSelector(
   (state:fromProduct.ProductState)=>state.limitreached
 )
 
-export const OrderList =createSelector(
+//selectors related to cart
+export const GetCartItems=createSelector(
   getProductFeatureState,
-  (state:fromProduct.ProductState)=>state.orderList
-)
+  (state:fromProduct.ProductState)=>state.cartItems
+);
 
 export const CartCount=createSelector(
   getProductFeatureState,
   (state:fromProduct.ProductState)=>state.cartCount
 )
 
+//selectors realted to order
+export const OrderList =createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.orderList
+)
+
+export const OrderId=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.orderId
+)
+
+export const OrderById=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.OrderItemById
+)
+
+//selectors related to translation
 export const CommonData=createSelector(
   getProductFeatureState,
   (state:fromProduct.ProductState)=>state.CommonFields
 )
+
+//selectors related to category
+
+export const Categories=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.Categories
+)
+
+
 
 export const reducer=fromProduct.reducer;
 export const actions=ProductActions;

@@ -58,6 +58,7 @@ export class UserService {
 
 
   
+  
 
   changePassword(formdata){
     const helper = new JwtHelperService();
@@ -88,6 +89,11 @@ export class UserService {
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let id=decodedToken["UserID"];
     return id;
+  }
+
+
+  ActivateUser(id){
+    return this.http.post(this.APIURL+"/User/Activate/"+id,null);
   }
 
 }

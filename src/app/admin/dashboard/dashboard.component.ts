@@ -12,6 +12,7 @@ import { SignalRserviceService } from 'src/app/shared/signal-rservice.service';
 
 
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -34,6 +35,7 @@ export class DashboardComponent implements OnInit {
     private notification:NotificationService,
     public signalservice:SignalRserviceService
     ) { }
+
 
   
   ngOnInit(): void {

@@ -44,6 +44,7 @@ export class HomeComponent  implements OnInit  {
     id:number;
     commondata:any;
     SelectedLang="1";
+    opened=false
 
   ngOnInit(): void {
 
