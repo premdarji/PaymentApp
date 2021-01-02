@@ -4,6 +4,14 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { NotificationService } from 'src/app/shared/notification.service';
 
+
+import * as fromActions from "../../Common/Actions/Product.actions";
+import * as selector from "../../Common/index";
+import { Store,select } from '@ngrx/store';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+
+
+
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -14,7 +22,8 @@ export class ProductComponent implements OnInit {
   constructor(public productService:ProductService,
     private dialogref:MatDialogRef<ProductComponent>,
     private notification:NotificationService,
-    private dashboard:DashboardComponent
+    private dashboard:DashboardComponent,
+    private store:Store<ProductState>
 ) { }
 
     category:any;
@@ -25,7 +34,7 @@ export class ProductComponent implements OnInit {
 
   ngOnInit(): void {
    //debugger
-    this.GetCategory();
+    this.getCategory();
     if(this.productService.ProductForm.get("ProductId").value>0){
    
     
@@ -36,41 +45,35 @@ export class ProductComponent implements OnInit {
 
   }
 
-  Submit(){
+  submit(){
     if(this.productService.ProductForm.get("ProductId").value>0){
       this.productService.ProductForm.patchValue({
         ImageUrl:this.selectedfile
       })
      
-      this.productService.UpdateProduct(this.productService.ProductForm.value).subscribe(res=>{
-       
-        this.dialogref.close();
-        this.dashboard.loadProduct();
-        this.notification.update("Product is updated");
-   
-      
-      })
+      this.store.dispatch(new fromActions.UpdateProduct());
+      this.dialogref.close();
+      this.notification.update("Product is updated");
     }
     else{
       
         this.productService.ProductForm.patchValue({
           ImageUrl:this.selectedfile
         })
-          this.productService.AddProduct().subscribe(res=>{
-       
-          this.dialogref.close();
-          this.notification.update("Product Is Added");
-        })
+
+        this.store.dispatch(new fromActions.AddProduct());
+        this.dialogref.close();
+        this.notification.update("Product is added");
     }
   
  
   }
 
-  GetCategory(){
-    this.productService.GetCategory().subscribe(res=>{
-    
+  getCategory(){
+
+    this.store.dispatch(new fromActions.GetCategories());
+    this.store.select(selector.Categories).subscribe(res=>{
       this.category=res;
-      
     })
    
   }
@@ -79,7 +82,7 @@ export class ProductComponent implements OnInit {
     this.productService.ProductForm.reset();
   }
 
-  Onfileselected(event){
+  onfileselected(event){
     this.selectedfile=event.target.files[0]["name"];
     this.selectedfile="assets\\Images\\"+this.selectedfile;
   }

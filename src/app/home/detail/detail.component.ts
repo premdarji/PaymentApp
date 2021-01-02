@@ -23,7 +23,7 @@ export class DetailComponent implements OnInit {
   }
 
   GetProductById(id){
-    this.sevice.GetProductById(id).subscribe(res=>{
+    this.sevice.getProductById(id).subscribe(res=>{
       console.log(res);
       this.ProductData=res;
     })

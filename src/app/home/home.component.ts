@@ -17,6 +17,7 @@ import * as selector from "../Common/index";
 import {DOCUMENT} from '@angular/common';
 import { LanguageService } from '../shared/language.service';
 import { SignalRserviceService } from '../shared/signal-rservice.service';
+import { LoginComponent } from '../login/login.component';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class HomeComponent  implements OnInit  {
    private notification:NotificationService,
    private store: Store<ProductState>,
    @Inject(DOCUMENT) private document:Document,
-   private language:LanguageService,
+   private languageService:LanguageService,
    private signalservice:SignalRserviceService
 
     ) { }
@@ -45,17 +46,11 @@ export class HomeComponent  implements OnInit  {
     commondata:any;
     SelectedLang="1";
     opened=false
+    isLoggedIn=true;
+    user:any;
 
   ngOnInit(): void {
-
-    // this.signalservice.startConnection();
-
-    // setTimeout(()=>{
-    //   this.signalservice.askServerListener();
-    // },2000)
-
-
-
+    this.checkLogInStatus()
     this.store.dispatch(new fromActions.GetCommonFields("en"));
   
 
@@ -64,59 +59,34 @@ export class HomeComponent  implements OnInit  {
       this.commondata = result;
       console.log(this.commondata)
       }
-
-
     })
-
-    // this.language.GetData("en").subscribe(res=>{
-    //   this.commondata=res;
-    // })
-
-    this.GetCount();
+   
+   // this.getCount();
     
-    this.selectedclass=this.service.GetID()
+    //this.selectedclass=this.service.getID()
  
 
       
-    this.id=this.service.GetID();
+    //this.id=this.service.getID();
 
     var link=this.document.getElementById('theme');
 
     if(this.id==1){
      
-      link.setAttribute('href','clienta.css');
+      link.setAttribute('href','clientb.css');
     }
     else{
       
-      link.setAttribute('href','clientb.css')
+      link.setAttribute('href','clienta.css')
       
     }
-
-
-
-    // const headel=this.document.getElementsByTagName('head')[0];
-
-    // const newlink=this.document.createElement('link');
-    // newlink.rel="stylesheet";
-    // if(this.id==12){
-    //   newlink.href="clienta.css";
-    //   console.log("in if")
-    // }
-    // else{
-    //   newlink.href="clientb.css";
-    //   console.log("in else")
-    // }
-    
-    // newlink.type="text/css";
-
-    // headel.appendChild(newlink);
 
 
     
   }
-  user:any;
 
-  ChangePassword(){
+
+  changePassword(){
     const dialogconfig=new MatDialogConfig();
     dialogconfig.disableClose=false;
     dialogconfig.autoFocus=true;
@@ -124,44 +94,52 @@ export class HomeComponent  implements OnInit  {
     this.dialog.open(ChangepasswordComponent,dialogconfig);
   }
 
-  UpdateProfile(){
-
+  updateProfile(){
     this.router.navigate(['/home/register'])
-
-
   }
 
-  Logout(){
+  logout(){
     localStorage.clear();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   
-  GetCount(){
-    this.product.GetCount().subscribe(res=>{
+  getCount(){
+    this.product.getCount().subscribe(res=>{
       this.count=res;
    
     })
   }
 
-  Orders(){
+  orders(){
     this.router.navigate(['/home/order'])
   }
 
  
 
 
-  Cart(){
-    this.GetCount();
-    if(this.count==0){
-      this.notification.Delete("Cart Is Empty");
+  cart(){
+    if(this.checkLogInStatus()){
+        this.getCount();
+        if(this.count==0){
+          this.notification.Delete("Cart Is Empty");
+        }
+        else{
+          this.router.navigate(['home/cart']);
+        }
     }
     else{
-      this.router.navigate(['home/cart']);
+      const dialogconfig=new MatDialogConfig();
+      dialogconfig.disableClose=false;
+      dialogconfig.autoFocus=true;
+      dialogconfig.width="40%";
+      this.dialog.open(LoginComponent,dialogconfig);
+      this.notification.Delete("Please log in or register then only you can open your cart");
     }
+    
   }
 
-  Language(data){
+  language(data){
 
     if(data=="en"){
       this.store.dispatch(new fromActions.GetCommonFields("en"));
@@ -169,9 +147,25 @@ export class HomeComponent  implements OnInit  {
     else{
       this.store.dispatch(new fromActions.GetCommonFields("fr"));
     }
-   
-    // this.language.GetData(data).subscribe(res=>{
-    //   this.commondata=res;
-    // })
+  }
+
+  checkLogInStatus():boolean{
+    this.store.dispatch(new fromActions.CheckLogInStatus());
+    this.store.pipe(select(selector.IsLoggedIn)).subscribe(res=>{
+     this.isLoggedIn=res;
+    })
+    if(this.isLoggedIn==true){
+      return true;
+    }
+    return false;
+  }
+
+  login(){
+    const dialogconfig=new MatDialogConfig();
+    dialogconfig.disableClose=false;
+    dialogconfig.autoFocus=true;
+    dialogconfig.width="40%";
+    this.dialog.open(LoginComponent,dialogconfig);
+
   }
 }

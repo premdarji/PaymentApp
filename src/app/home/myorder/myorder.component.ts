@@ -39,12 +39,12 @@ export class MyorderComponent implements OnInit {
       }
     })
 
-   this.GetOrders();
+   this.getOrders();
     
 
   }
 
-  GetOrders(){
+  getOrders(){
   
     this.store.dispatch(new fromActions.GetOrderList());
 

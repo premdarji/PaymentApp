@@ -2,6 +2,7 @@
 import { createFeatureSelector } from '@ngrx/store';
 import {Product} from 'src/app/models/Product.model';
 import {ProductActionTypes,ProductActions} from '../Actions/Product.actions';
+import { stat } from 'fs';
  
 //export const productsFeatureKey = "products";
 //export const getProductFeatureState = createFeatureSelector<ProductState>('myproduct');
@@ -20,7 +21,9 @@ export interface ProductState{
     CommonFields:any;
     OrderItemById:any;
     Categories:any[];
-    orderId:number
+    orderId:number;
+    productsGuest:any[];
+    isLooggedIn:boolean;
 
 }
 
@@ -35,13 +38,15 @@ export const initialState :ProductState={
     CommonFields:null,
     OrderItemById:null,
     Categories:[],
-    orderId:0
+    orderId:0,
+    productsGuest:[],
+    isLooggedIn:false
 
 }
 
 
 export function reducer(state = initialState, action:ProductActions ): ProductState {
-    debugger
+   
     switch (action.type) {
   
         //cases of product
@@ -59,12 +64,24 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
             return{...state,limitreached:true};
         
         case ProductActionTypes.GetProductById:
-            return {...state};
+        
+            return {...state,product:null};
         
         case ProductActionTypes.GetProductByIdSuccess:
+          
             return{...state,product:action.product};
         
+        case ProductActionTypes.GetAllProductsGuest:
+            return { ...state};
+        case ProductActionTypes.GetAllProductsGuestSuccess:
+            return { ...state,productsGuest:action.products};
 
+        case ProductActionTypes.AddProduct:
+            return { ...state};
+        case ProductActionTypes.DeleteProduct:
+            return{...state};
+        case ProductActionTypes.UpdateProduct:
+            return{...state};
         //cases of cart
         case ProductActionTypes.GetCartList:
             return{...state,cartItems:null};
@@ -127,6 +144,8 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
         case ProductActionTypes.GetState:
             return{...state};
 
+        case ProductActionTypes.SendEmail:
+            return{...state};    
 
         //cases of translation
         case ProductActionTypes.GetCommonFields:
@@ -150,6 +169,23 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
         case ProductActionTypes.UpdateCategory:
             return{...state};
 
+        //cases of user
+
+        case ProductActionTypes.LogInUser:
+            return {...state};
+        
+        case ProductActionTypes.LogInUserSuccess:
+            return {...state,isLooggedIn:true};
+        
+        case ProductActionTypes.CheckLogInStatus:
+            return { ...state};
+
+        case ProductActionTypes.CheckLogInStatusSuccess:
+            return{...state,isLooggedIn:true};
+
+        case ProductActionTypes.CheckLogInStatusFailure:
+            return {...state,isLooggedIn:false};
+            
         default:
             return {...state};
        

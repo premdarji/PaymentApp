@@ -54,7 +54,6 @@ export class CancelOrderComponent implements OnInit {
       this.reason=this.selectedReason;
     }
 
-
     var createdDate=new Date(this.orderDetail.createdOn);
 
     var Difference_In_Time =  this.myDate.getTime()-createdDate.getTime(); 

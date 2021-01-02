@@ -13,18 +13,18 @@ export class LanguageService {
   temp:any;
   constructor(private http:HttpClient) { }
 
-  GetData(data:any){
+  getData(data:any){
 
    
     if(data=="en"){
-      //return this.http.get("assets/en.json")
+  
       return this.http.get(this.APIURL+"/Common/"+1);
     }
     else{
       return this.http.get(this.APIURL+"/Common/"+2);
     }
 
-    //return this.http.get("assets/fr.json");
+   
     
   }
 }

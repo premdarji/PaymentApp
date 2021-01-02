@@ -39,8 +39,8 @@ export class BuyComponent implements OnInit {
     private store:Store<ProductState>
     ) { }
 
-  ProductId: any; //Getting Product id from URL
-  ProductData: any; //Getting Product details
+  productId: any; //Getting Product id from URL
+  productData: any; //Getting Product details
   orderId:any;
 
 
@@ -48,9 +48,9 @@ export class BuyComponent implements OnInit {
 
   qty="1";
   total=0;
-  Discount=0;
+  discount=0;
   final=0;
-  Quantity=0;
+  quantity=0;
   offerapplied=false;
   checking =false;
   commondata:any;
@@ -67,8 +67,8 @@ export class BuyComponent implements OnInit {
       }
     })
 
-    this. ProductId = this.actRoute.snapshot.params['id'];   
-    this.getProductById(this.ProductId);
+    this. productId = this.actRoute.snapshot.params['id'];   
+    this.getProductById(this.productId);
     this.secondFormGroup = this._formBuilder.group({
       Add: ['', Validators.required],
       City:[''],
@@ -81,7 +81,7 @@ export class BuyComponent implements OnInit {
     this.store.dispatch(new fromActions.GetProductById(id));
     this.store.pipe(select(selector.GetProductById)).subscribe((result: any) => {
       if (result) {
-      this.ProductData = result;
+      this.productData = result;
       }
     })
 
@@ -89,39 +89,25 @@ export class BuyComponent implements OnInit {
 
 
   countTotal(){
-    this.total=Number(this.qty)*this.ProductData.price;
+    this.total=Number(this.qty)*this.productData.price;
     this.final=this.total
     for(var item of this.offers){
       if(item.availabe==0){
-        this.Discount=this.total*20/100;
-        this.final=this.total-this.Discount;
+        this.discount=this.total*20/100;
+        this.final=this.total-this.discount;
       }
     }
   }
 
   checkStock(){
-    if(this.ProductData.quantity<Number(this.qty)){
+    if(this.productData.quantity<Number(this.qty)){
       this.notification.Delete("Not enogh in stock")
-      this.qty=this.ProductData.quantity
+      this.qty=this.productData.quantity
       //this.stepper.previous();
     }
   }
 
-  discount(availabe,index){
-    if(index==0 && availabe==1){
-      let price=this.total;
-      this.Discount=price*20/100;
-      this.final=this.total-this.Discount;
-      this.offers[index].availabe=0;
-      this.offerapplied=true
-    }
-    if(index==1 && availabe==1){
  
-      this.final=this.total;
-      this.offers[index].availabe=0;
-      this.offerapplied=true;
-    }
-  }
 
 //paywith razorpay gateway method
   payWithRazor(val) {
@@ -166,9 +152,21 @@ export class BuyComponent implements OnInit {
         if (result) {
         this.orderId = result;
         console.log(this.orderId);
-        this.generateInvoicePdf();
+
+        let Details={
+          ProductId:this.productId,
+          Amount:this.final,
+          Quantity:Number(this.qty),
+          OrderId:this.orderId
         }
+  
+        this.store.dispatch(new fromActions.CreateOrderDetails(Details));
+  
+        }
+        this.sendInvoice();
+
       })
+      
       
     });
     options.modal.ondismiss = (() => {
@@ -187,65 +185,69 @@ export class BuyComponent implements OnInit {
 
   
 
-  generateInvoicePdf(){
+  // generateInvoicePdf(){
 
-    var data = document.getElementById('contentToConvert'); 
-    html2canvas(data).then(canvas => {  
+  //   var data = document.getElementById('contentToConvert'); 
+  //   html2canvas(data).then(canvas => {  
 
-      var imgWidth = 200;   
-      var pageHeight = 1600;    
-      var imgHeight = canvas.height * imgWidth / canvas.width;  
-      var heightLeft = imgHeight;  
+  //     var imgWidth = 200;   
+  //     var pageHeight = 1600;    
+  //     var imgHeight = canvas.height * imgWidth / canvas.width;  
+  //     var heightLeft = imgHeight;  
   
-      const contentDataURL = canvas.toDataURL('image/png')  
+  //     const contentDataURL = canvas.toDataURL('image/png')  
      
-      let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
-      var position = 0;  
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
-      pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
-      // this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
-        
-       
-      // })
+  //     let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
+  //     var position = 0;  
+  //     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
+  //     pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
+    
 
+  //     let Details={
+  //       ProductId:this.ProductId,
+  //       Amount:this.final,
+  //       Quantity:Number(this.qty),
+  //       OrderId:this.orderId
+  //     }
 
+  //     this.store.dispatch(new fromActions.CreateOrderDetails(Details));
 
-      let Details={
-        ProductId:this.ProductId,
-        Amount:this.final,
-        Quantity:Number(this.qty),
-        OrderId:this.orderId
-      }
+  //     this.store.dispatch(new fromActions.SendEmail(this.orderId))
 
-      this.store.dispatch(new fromActions.CreateOrderDetails(Details));
-
-
-
-      // let Details={
-      //   ProductId:this.ProductId,
-      //   Amount:this.final,
-      //   Quantity:Number(this.qty),
-      //   OrderId:this.orderId
-      // }
-      // this.order.PostDetailOrder(Details).subscribe(res=>{
+  //     // let Details={
+  //     //   ProductId:this.ProductId,
+  //     //   Amount:this.final,
+  //     //   Quantity:Number(this.qty),
+  //     //   OrderId:this.orderId
+  //     // }
+  //     // this.order.PostDetailOrder(Details).subscribe(res=>{
 
         
-      //   this.zone.run(()=>{
-      //     this.router.navigate(['/home/order']);
-      //   })
-      // })
+  //     //   this.zone.run(()=>{
+  //     //     this.router.navigate(['/home/order']);
+  //     //   })
+  //     // })
 
+  //     this.zone.run(()=>{
+  //          this.router.navigate(['/home/order']);
+  //        })
 
 
     
 
-    });  
+  //   });  
 
     
             
           
 
-  }
+  // }
 
+  sendInvoice(){
+    this.store.dispatch(new fromActions.SendEmail(this.orderId));
+    this.zone.run(()=>{
+      this.router.navigate(['/home/order']);
+    })
+  }
 
 }

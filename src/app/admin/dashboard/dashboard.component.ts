@@ -10,6 +10,11 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { SignalRserviceService } from 'src/app/shared/signal-rservice.service';
 
 
+import * as fromActions from "../../Common/Actions/Product.actions";
+import * as selector from "../../Common/index";
+import { Store,select } from '@ngrx/store';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+
 
 
 
@@ -19,13 +24,7 @@ import { SignalRserviceService } from 'src/app/shared/signal-rservice.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  products:any;
-  displayedColumns: string[] = ['ProductId', 'Name', 'Price', 'Quantity','ImageUrl','CategoryId','Actions'];
  
-  dataSource: MatTableDataSource<any>;
-  productData:any;
-  databySignal:any;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sorting: MatSort;
 
@@ -33,10 +32,17 @@ export class DashboardComponent implements OnInit {
   constructor(private productservice:ProductService,
     private dialog:MatDialog,
     private notification:NotificationService,
-    public signalservice:SignalRserviceService
+    public signalservice:SignalRserviceService,
+    private store:Store<ProductState>
     ) { }
 
 
+    products:any;
+    displayedColumns: string[] = ['ProductId', 'Name', 'Price', 'Quantity','ImageUrl','CategoryId','Actions'];
+   
+    dataSource: MatTableDataSource<any>;
+    productData:any;
+    databySignal:any;
   
   ngOnInit(): void {
    this.loadProduct();
@@ -52,13 +58,19 @@ export class DashboardComponent implements OnInit {
 
 
   loadProduct(){
-    this.productservice.GetAllProducts().subscribe(res=>{
-      this.products=res;
-      this.dataSource = new MatTableDataSource(this.products);
-      this.dataSource.paginator=this.paginator
-      this.dataSource.sort = this.sorting;
- 
+
+    this.store.dispatch(new fromActions.GetAllProductsGuest());
+
+    this.store.pipe(select(selector.ProductsGuest)).subscribe((result: any) => {
+      if (result) {
+        this.products=result;
+        console.log(this.products)
+        this.dataSource = new MatTableDataSource(this.products);
+        this.dataSource.paginator=this.paginator
+        this.dataSource.sort = this.sorting;
+      }
     })
+
   }
 
  
@@ -73,7 +85,34 @@ export class DashboardComponent implements OnInit {
   }
 
   EditProduct(data){
-    this.productservice.PopulateForm(data).subscribe(res=>{
+
+    // this.store.dispatch(new fromActions.GetProductById(data));
+    // this.store.select(selector.GetProductById).subscribe(res=>{
+    //   if(res!=null){
+    //     console.log(res)
+    //     this.productData=res;
+      
+    //     this.productservice.ProductForm.setValue({
+    //       ProductId:this.productData.productId,
+    //       Name:this.productData.name,
+    //       Price:this.productData.price,
+    //       CategoryId:this.productData.categoryId,
+    //       Quantity:this.productData.quantity,
+    //       Description:this.productData.description,
+    //       ImageUrl:String(this.productData.imageUrl)
+    //     })
+  
+    //     const dialogconfig=new MatDialogConfig();
+    //     dialogconfig.disableClose=false;
+    //     dialogconfig.autoFocus=true;
+    //     dialogconfig.width="60%";
+    //     this.dialog.open(ProductComponent,dialogconfig);
+
+
+    //   }
+    // })
+
+    this.productservice.populateForm(data).subscribe(res=>{
         this.productData=res;
     
         this.productservice.ProductForm.setValue({
@@ -116,12 +155,9 @@ export class DashboardComponent implements OnInit {
      dialogRef.afterClosed().subscribe(dialogResult => {
     
          if(dialogResult==true){
-          this.productservice.DeleteProduct(data).subscribe(res=>{
-            this.loadProduct();
-            this.notification.Delete("Product is deleted")
 
-          })
-           
+          this.store.dispatch(new fromActions.DeleteProduct(data));
+          this.notification.Delete("Product is deleted");           
 
          }
      });

@@ -16,6 +16,9 @@ import { WishlistService } from 'src/app/shared/wishlist.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { OrderService } from 'src/app/shared/order.service';
 import { LanguageService } from 'src/app/shared/language.service';
+import { UserService } from 'src/app/shared/User';
+import { AuthenticationGuard } from 'src/app/authentication.guard';
+import { AuthguardService } from 'src/app/shared/authguard.service';
 
 
 
@@ -28,7 +31,9 @@ export class ProductEffects {
         private router: Router,
         private notification:NotificationService,
         private orderservice:OrderService,
-        private languageservice:LanguageService
+        private languageservice:LanguageService,
+        private userService:UserService,
+        private authguard:AuthguardService
       
       
         
@@ -41,7 +46,7 @@ export class ProductEffects {
         ofType(fromProductActions.ProductActionTypes.GetProductList),
       
         mergeMap(action  =>
-          this.productService.GetAll(action.pageNumber,action.pageSize).pipe(
+          this.productService.getAll(action.pageNumber,action.pageSize).pipe(
               map((product:Product[])=>{
                // debugger;
                   if(product["message"]=="nodata"){
@@ -64,7 +69,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetProductById),
         switchMap((action)=>
-          this.productService.GetProductById(action.productId).pipe(
+          this.productService.getProductById(action.productId).pipe(
               map((result:Product)=>{
                 return new fromProductActions.GetProductByIdSuccess(result);
               }),
@@ -72,6 +77,65 @@ export class ProductEffects {
         ),
       )
     );
+
+    GetProductsForGuest$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetAllProductsGuest),
+        switchMap((action)=>
+          this.productService.getAllProducts().pipe(
+              map((result:any[])=>{
+               console.log(result)
+                return new fromProductActions.GetAllProductsGuestSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
+
+    AddProduct$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.AddProduct),
+        switchMap((action)=>
+          this.productService.addProduct().pipe(
+              map((result:any[])=>{
+              
+                return new fromProductActions.GetAllProductsGuest();
+              }),
+          ),
+        ),
+      )
+    );
+
+    
+    DeleteProduct$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.DeleteProduct),
+        switchMap((action)=>
+          this.productService.deleteProduct(action.productId).pipe(
+              map((result:any[])=>{
+              
+                return new fromProductActions.GetAllProductsGuest();
+              }),
+          ),
+        ),
+      )
+    );
+
+    UpdateProduct$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.UpdateProduct),
+        switchMap((action)=>
+          this.productService.updateProduct().pipe(
+              map((result:any[])=>{
+              
+                return new fromProductActions.GetAllProductsGuest();
+              }),
+          ),
+        ),
+      )
+    );
+
+
 
 
     //effects of cart
@@ -81,7 +145,7 @@ export class ProductEffects {
         ofType(fromProductActions.ProductActionTypes.GetCartList),
       
         mergeMap(action=>
-          this.productService.GetCartItems().pipe(
+          this.productService.getCartItems().pipe(
               map((CartItems:any[])=>{
                   return new fromProductActions.GetCartListSuccess(CartItems);
               }),
@@ -96,7 +160,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.AddToCart),
         switchMap((action)=>
-          this.productService.AddtoCart(action.productId).pipe(
+          this.productService.addtoCart(action.productId).pipe(
               map((result)=>{
                 if(result["message"]=="exist"){
                   this.notification.Delete("Product already added")
@@ -116,7 +180,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.UpdateCart),
         switchMap((action)=>
-          this.productService.UpdateCart(action.cartId,action.qty).pipe(
+          this.productService.updateCart(action.cartId,action.qty).pipe(
               map((result)=>{
               
                 console.log(result);
@@ -131,7 +195,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.RemoveFromCart),
         switchMap((action)=>
-          this.productService.RemoveFormCart(action.cartId).pipe(
+          this.productService.removeFormCart(action.cartId).pipe(
               map((result)=>{
               
       
@@ -147,7 +211,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetCartCount),
         switchMap((action)=>
-          this.productService.GetCount().pipe(
+          this.productService.getCount().pipe(
               map((result)=>{
               
                 console.log(result);
@@ -165,7 +229,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.AddToWishlist),
         switchMap((action)=>
-          this.wishlistservice.AddToWishlist(action.productId).pipe(
+          this.wishlistservice.addToWishlist(action.productId).pipe(
               map((result)=>{
                   return new fromProductActions.GetState();
               }),
@@ -179,7 +243,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.RemoveFromWishlist),
         switchMap((action)=>
-          this.wishlistservice.RemoveFromWishlist(action.productId).pipe(
+          this.wishlistservice.removeFromWishlist(action.productId).pipe(
               map((result)=>{
                   return new fromProductActions.GetState();
               }),
@@ -198,7 +262,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetCommonFields),
         switchMap((action)=>
-          this.languageservice.GetData(action.data).pipe(
+          this.languageservice.getData(action.data).pipe(
               map((result:any)=>{
             
                 return new fromProductActions.GetCommonFieldsSuccess(result);
@@ -243,7 +307,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetOrderList),
         switchMap((action)=>
-          this.orderservice.GetAll().pipe(
+          this.orderservice.getAll().pipe(
               map((result:any[])=>{
            
                 return new fromProductActions.GetOrderListSuccess(result);
@@ -257,7 +321,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.CreateOrder),
         switchMap((action)=>
-          this.orderservice.CreateOrder(action.Order).pipe(
+          this.orderservice.createOrder(action.Order).pipe(
               map((result:any)=>{
                 console.log(result['id']);
                 return new fromProductActions.CreateOrderSuccess(result['id']);
@@ -270,11 +334,26 @@ export class ProductEffects {
     PostOrderDetails$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.CreateOrderDetails),
-        switchMap((action)=>
-          this.orderservice.PostDetailOrder(action.OrderDetails).pipe(
+        mergeMap((action)=>
+          this.orderservice.postDetailOrder(action.OrderDetails).pipe(
               map((result:any)=>{
                 console.log(result);
-                return new fromProductActions.GetOrderList();
+                return new fromProductActions.GetState();
+              }),
+          ),
+        ),
+      )
+    );
+
+
+    SendEmail$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.SendEmail),
+        switchMap((action)=>
+          this.orderservice.sendInvoiceMail(action.OrderId).pipe(
+              map((result:any)=>{
+                console.log(result);
+                return new fromProductActions.GetState() ;
               }),
           ),
         ),
@@ -287,7 +366,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetCategories),
         switchMap((action)=>
-          this.productService.GetCategory().pipe(
+          this.productService.getCategory().pipe(
               map((result:any[])=>{
                 return new fromProductActions.GetCategoriesSuccess(result);
               }),
@@ -300,7 +379,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.DeleteCategory),
         switchMap((action)=>
-          this.productService.DeleteCategory(action.CategoryId).pipe(
+          this.productService.deleteCategory(action.CategoryId).pipe(
               map((result)=>{
                 this.notification.Delete("category removed");
                 return new fromProductActions.GetCategories();
@@ -314,7 +393,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.AddCategory),
         switchMap((action)=>
-          this.productService.AddCategory().pipe(
+          this.productService.addCategory().pipe(
               map((result)=>{
                 this.notification.success("category added");
                 return new fromProductActions.GetCategories();
@@ -328,7 +407,7 @@ export class ProductEffects {
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.UpdateCategory),
         switchMap((action)=>
-          this.productService.UpdateCategory().pipe(
+          this.productService.updateCategory().pipe(
               map((result)=>{
                 this.notification.update("category Updated");
                 return new fromProductActions.GetCategories();
@@ -337,6 +416,47 @@ export class ProductEffects {
         ),
       )
     );
+
+
+    //effects of user
+
+    LogInUser$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.LogInUser),
+        switchMap((action)=>
+          this.userService.login(action.UserData).pipe(
+              map((result)=>{
+                if(result['message']=='invalid credentials'){
+                 return new fromProductActions.CheckLogInStatusFailure();
+                }
+                localStorage.setItem("token",result["value"]);
+                return new fromProductActions.LogInUserSuccess();
+              }),
+          ),
+        ),
+      )
+    );
+
+    CheckLoginStatus$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.CheckLogInStatus),
+        switchMap((action)=>
+          this.userService.checkLogInStatus().pipe(
+              map((result)=>{
+                console.log(result);
+                if(result==true){
+                  return new fromProductActions.CheckLogInStatusSuccess();
+                }
+                return new fromProductActions.CheckLogInStatusFailure();
+               
+              }),
+          ),
+        ),
+      )
+    );
+
+
+
 
               
 

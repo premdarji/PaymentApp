@@ -1,10 +1,17 @@
 import { tokenName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ForgotpasswordComponent } from '../forgotpassword/forgotpassword.component';
 import { UserService } from '../shared/User';
+
+import * as fromActions from "../Common/Actions/Product.actions";
+import * as selector from "../Common/index";
+import { Store,select } from '@ngrx/store';
+import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
+import { AuthenticationGuard } from '../authentication.guard';
+import { AuthguardService } from '../shared/authguard.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +22,10 @@ export class LoginComponent implements OnInit {
 
   constructor(public service:UserService,
     private dialog:MatDialog,
-    private router:Router) { }
+    private router:Router,
+    private store:Store<ProductState>,
+    private authetication:AuthguardService,
+    private dialogref:MatDialogRef<LoginComponent>) { }
 
   incorrect:boolean=false;
   selected="1";
@@ -27,48 +37,57 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    // this.store.dispatch(new fromActions.CheckLogInStatus());
+    // this.store.select(selector.IsLoggedIn).subscribe(res=>{
+    //   if(res==true){
+    //     console.log("User is Logged in")
+    //   }
+    //   else{
+    //     console.log("user not logged in")
+    //   }
+      
+    // })
     
   }
 
-  Register(){
+  register(){
+    this.dialogref.close();
     localStorage.clear();
     this.router.navigate(['/register']);
 
   }
 
 
-  Login(){
+  login(){
     var val=String(this.selected)
 
     if(val=="1"){
-      this.service.Login(this.LoginForm.value).subscribe(res=>{
-        let token=res;
-       
-        if(token["value"]!=null)
-        {
-         localStorage.setItem("token",token["value"]);
-         this.router.navigate(['/home']);
-         this.LoginForm.reset();
-         this.InitializeForm();
+
+      this.store.dispatch(new fromActions.LogInUser(this.LoginForm.value));
+
+      this.store.pipe(select(selector.IsLoggedIn)).subscribe(result=>{
+        if(result==true){
+          this.dialogref.close();
+          this.router.navigate(['/home']);
+          this.LoginForm.reset();
+          this.initializeForm();
         }
-        else{
-         this.incorrect=true;
-   
-        }
-        
-       })
+        this.incorrect=true
+      })
 
     }
     else{
 
-      this.service.AdminLogin(this.LoginForm.value).subscribe(res=>{
+      this.service.adminLogin(this.LoginForm.value).subscribe(res=>{
         let token=res;
         if(token["value"]!=null)
         {
          localStorage.setItem("admintoken",token["value"]);
+         this.dialogref.close();
          this.router.navigate(['/admin']);
          this.LoginForm.reset();
-         this.InitializeForm();
+         this.initializeForm();
         }
         else{
        
@@ -81,7 +100,7 @@ export class LoginComponent implements OnInit {
     
   }
 
-  Forgot(){
+  forgot(){
   
     const dialogconfig=new MatDialogConfig();
     dialogconfig.disableClose=false;
@@ -90,7 +109,7 @@ export class LoginComponent implements OnInit {
     this.dialog.open(ForgotpasswordComponent,dialogconfig);
   }
 
-  InitializeForm(){
+  initializeForm(){
     this.LoginForm.setValue({
       EmailorPhone:'',
       Password:''

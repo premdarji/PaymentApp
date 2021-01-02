@@ -55,12 +55,7 @@ export class CategoryComponent implements OnInit {
       this.dataSource.sort = this.sorting;
       }
     })
-    // this.productservice.GetCategory().subscribe(res=>{
-    //   this.category=res;
-    // 
- 
-
-    // })
+  
   }
 
 
@@ -75,7 +70,7 @@ export class CategoryComponent implements OnInit {
 
   NewCategory(){
     this.productservice.CategoryForm.reset();
-    this.productservice.InitializeCategory();
+    this.productservice.initializeCategory();
     const dialogconfig=new MatDialogConfig();
     dialogconfig.disableClose=false;
     dialogconfig.autoFocus=true;
@@ -84,7 +79,7 @@ export class CategoryComponent implements OnInit {
   }
 
   Edit(data){
-    this.productservice.PopulateCategory(data);
+    this.productservice.populateCategory(data);
     const dialogconfig=new MatDialogConfig();
     dialogconfig.disableClose=false;
     dialogconfig.autoFocus=true;
@@ -104,12 +99,7 @@ export class CategoryComponent implements OnInit {
      dialogRef.afterClosed().subscribe(dialogResult => {
          if(dialogResult==true){
            this.store.dispatch(new fromActions.DeleteCategory(data));
-          // this.productservice.DeleteCategory(data).subscribe(res=>{
-          //   this.loadCategory();
-          //   this.notification.Delete("Category is deleted")
-
-          // })  
-
+       
          }
      });
   }

@@ -23,17 +23,15 @@ export class ForgotpasswordComponent implements OnInit {
 
   verify(email){
    
-    this.service.VarifyEmail(email).subscribe(res=>{
+    this.service.varifyEmail(email).subscribe(res=>{
       this.token=res;
      
       if(this.token["value"]!=null)
-      {
-       
+      {    
         this.NotVarified=false;
         this.IsTrue=true;
         this.isvarified=true;
-        localStorage.setItem("token",this.token["value"]);
-       
+        localStorage.setItem("token",this.token["value"]);      
       }
       if(res["message"]=="not varified"){
        
@@ -47,7 +45,7 @@ export class ForgotpasswordComponent implements OnInit {
 
   change(){
   
-    this.service.Reset(this.service.ForgotPasswordForm.value).subscribe(res=>
+    this.service.reset(this.service.ForgotPasswordForm.value).subscribe(res=>
       {
         this.service.ForgotPasswordForm.reset();
         

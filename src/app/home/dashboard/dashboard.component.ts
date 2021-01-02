@@ -14,6 +14,8 @@ import * as selector from "../../Common/index";
 import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
 import { debug } from 'console';
 import { LanguageService } from 'src/app/shared/language.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { LoginComponent } from 'src/app/login/login.component';
 
 
 
@@ -31,28 +33,28 @@ export class DashboardComponent implements OnInit {
     private wishlistservice:WishlistService,
     private home:HomeComponent,
     private store: Store<ProductState>,
-    private lang:LanguageService
+    private lang:LanguageService,
+    private dialog:MatDialog
   ) { }
   //private store: Store<AppState>
 
   products:Product[]=[];
- 
-  Products:any[]=[];
   filter:any;
   selected="";
   wishlist:any[]=[];
   temp:any;
-  PageNumber=1;
-  PageSize=6;
+  pageNumber=1;
+  pageSize=6;
   categoryselected:boolean=false;
   commondata:any;
+  isLoggedIn:boolean;
   
 
   ngOnInit(): void {
     //this.RefreshProducts(); 
-   
+   // this.store.dispatch(new fromActions.CheckLogInStatus());
     this.loadProduct();
-    this.GetProducts();
+   // this.getProducts();
 
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
@@ -65,7 +67,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  GetProducts(){
+  getProducts(){
     this.store.pipe(select(selector.GetProductList)).subscribe((result: any) => {
       if (result) {
       this.products = result;
@@ -75,40 +77,60 @@ export class DashboardComponent implements OnInit {
 
   loadProduct(){
 
-   
-    this.store.pipe(select(selector.CheckLimit)).subscribe((result: any) => {
-      if (result==false) {
-      this.store.dispatch(new fromActions.GetProductList(this.PageNumber,this.PageSize));
-        this.GetProducts();
-      }
+    this.store.pipe(select(selector.IsLoggedIn)).subscribe((result: any) => {
+      
+      this.isLoggedIn = result;
+        if(this.isLoggedIn==false){
+          console.log("not logged in")
+          this.store.dispatch(new fromActions.GetAllProductsGuest());
+          this.store.pipe(select(selector.ProductsGuest)).subscribe((result: any) => {
+            if (result) {
+            this.products = result;
+            }
+          })
+    
+        }
+        else{
+          this.getProducts();
+          this.store.pipe(select(selector.CheckLimit)).subscribe((result: any) => {
+            if (result==false) {
+            this.store.dispatch(new fromActions.GetProductList(this.pageNumber,this.pageSize));
+              this.getProducts();
+            }
+          })
+    
+        }  
+      
     })
+
+   
 
   }
   
 
-  RefreshProducts(){
-    this.service.GetAll(this.PageNumber,this.PageSize).subscribe(res=>{
-      if(res["message"]=="nodata"){
-        this.PageNumber=this.PageNumber-1;
-        this.notification.Delete("No More Products")
-      }
-      else{
-        this.temp=res;
-        this.Products.push(...this.temp);
-        console.log(this.Products)
-      }
+  // refreshProducts(){
+  //   this.service.getAll(this.PageNumber,this.PageSize).subscribe(res=>{
+  //     if(res["message"]=="nodata"){
+  //       this.PageNumber=this.PageNumber-1;
+  //       this.notification.Delete("No More Products")
+  //     }
+  //     else{
+  //       this.temp=res;
+  //       this.Products.push(...this.temp);
+  //       console.log(this.Products)
+  //     }
       
-    })
-  }
+  //   })
+  // }
 
-  NoCategory(){
+  noCategory(){
     this.categoryselected=false;
     this.products=[];
-    this.PageNumber=1;
-    this.GetProducts();
+    this.pageNumber=1;
+    this.getProducts();
   }
 
-  Clear(){
+  clear(){
     console.log("clear")
     this.filter='';
   }
@@ -124,18 +146,23 @@ export class DashboardComponent implements OnInit {
     this.reverse = true;
   }
 
-  AddtoCart(data){
-  
-    this.store.dispatch(new fromActions.AddToCart(data));
-    this.home.GetCount();
-    //this.store.dispatch(new fromActions.GetCartCount());
+  addtoCart(data){
+
+    if(this.checkLoginStatus()){
+      this.store.dispatch(new fromActions.AddToCart(data));
+      this.home.getCount();
+    }
+    else{
+      this.login();
+      this.notification.Delete("Please log in or register  before add this product to your cart");
+    }
    
   }
 
-  GetProductsByCategory(data){
+  getProductsByCategory(data){
     this.categoryselected=true;
     console.log(this.selected)
-    this.service.GetProductsByCategory(data).subscribe(res=>{
+    this.service.getProductsByCategory(data).subscribe(res=>{
       this.products=[];
       this.temp=res;
       this.products.push(...this.temp)
@@ -143,28 +170,70 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  Detail(Id){
+  detail(Id){
     this.router.navigate(['/home/detail/',Id]);
 
   }
 
-  BuyNow(Id){
-    this.router.navigate(['/home/buy/',Id]);
+  buyNow(Id){
+    if(this.checkLoginStatus()){
+      this.router.navigate(['/home/buy/',Id]);
+    }
+    else{
+      this.login()
+      this.notification.Delete("Please log in or register  before buy this product")
+    }
   }
 
-  Removefromwishlist(data,index){
+  removefromwishlist(data,index){
+    if(this.checkLoginStatus()){
+      this.products[index].isWishListItem = false;
+      this.notification.Delete("Removed from wishlist");
+      this.store.dispatch(new fromActions.RemoveFromWishlist(this.products,data));
 
-    this.products[index].isWishListItem = false;
-    this.notification.Delete("Removed from wishlist");
-    this.store.dispatch(new fromActions.RemoveFromWishlist(this.products,data));
+    }
+    else{
+
+    }
+
+   
    
   }
 
-  AddToWishlist(data,index){
-  
+  addToWishlist(data,index){
+    if(this.checkLoginStatus()){
+      
     this.notification.update("Added to wishlist");
     this.products[index].isWishListItem = true;
     this.store.dispatch(new fromActions.AddToWishlist(this.products,data));
+
+    }
+    else{
+      this.notification.Delete("Login to your account first to add items in your wishlist");
+    }
+
+
+
+  }
+
+  checkLoginStatus():boolean{
+    this.store.dispatch(new fromActions.CheckLogInStatus());
+    this.store.select(selector.IsLoggedIn).subscribe(res=>{
+     this.isLoggedIn=res
+    })
+    if(this.isLoggedIn==true){
+      return true;
+    }
+    return false;
+  
+  }
+
+  login(){
+    const dialogconfig=new MatDialogConfig();
+    dialogconfig.disableClose=false;
+    dialogconfig.autoFocus=true;
+    dialogconfig.width="40%";
+    this.dialog.open(LoginComponent,dialogconfig);
 
   }
 
@@ -185,10 +254,9 @@ export class DashboardComponent implements OnInit {
       // you're at the bottom of the page
 
       if(this.categoryselected==false){
-        console.log(this.PageNumber)
         this.store.pipe(select(selector.CheckLimit)).subscribe((result: any) => {
           if (result==false) {
-            this.PageNumber=this.PageNumber+1;
+            this.pageNumber=this.pageNumber+1;
 
             //this.RefreshProducts();
             this.loadProduct()

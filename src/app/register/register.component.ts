@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
 
 
 
-    this.service.GetAllCity().subscribe(res=>{
+    this.service.getAllCity().subscribe(res=>{
       this.cities=res;
     })
     let token=localStorage.getItem("token");
@@ -82,11 +82,11 @@ export class RegisterComponent implements OnInit {
 
   get f() { return this.UserForm.controls; }
 
-  Register(){
+  register(){
     if(!this.UserForm.invalid){
       if(this.UserForm.controls["UserId"].value>0){
         console.log("done")
-        this.service.UpdateUser(this.UserForm.value).subscribe(res=>{
+        this.service.updateUser(this.UserForm.value).subscribe(res=>{
           
           this.router.navigate(['/home']);
           this.notification.update("Profile Updated");
@@ -96,7 +96,7 @@ export class RegisterComponent implements OnInit {
       }
       else{
         console.log(this.UserForm.value);
-        this.service.Submit(this.UserForm.value).subscribe(res=>{
+        this.service.submit(this.UserForm.value).subscribe(res=>{
           if(res['message']=="Exist"){
             this.notification.Delete("Email Address already exist");
           }

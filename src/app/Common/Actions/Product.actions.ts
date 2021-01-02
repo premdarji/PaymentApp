@@ -17,7 +17,12 @@ GetProductById="[ProductById] Get",
 GetProductByIdSuccess="[ProductSuccess] GetSuccess",
 GetProductByIdFailure="[ProductFailure] GetFailure",
 
+GetAllProductsGuest="[Product] Get",
+GetAllProductsGuestSuccess="[Product] Success",
 
+AddProduct="[Product] Add",
+UpdateProduct="[Product] Update",
+DeleteProduct="[Product] Delete",
 
 //methods related to category
 
@@ -71,14 +76,24 @@ GetOrderByIdFailure="[OrderFailure] GetFailure",
 
 CancelOrder="[Cancel] Order",
 
+SendEmail="[Order] Email",
+
 
 //methods related to translation
 GetCommonFields="[GetCommon] Get",
-GetCommonFieldsSuccess="[GetCommon] GetSuccess"
+GetCommonFieldsSuccess="[GetCommon] GetSuccess",
+
+//methods related to user
+LogInUser="[User] Login",
+LogInUserSuccess="[User] LoginSuccess",
+
+CheckLogInStatus="[Login] Status",
+CheckLogInStatusSuccess="[Login] StatusSuccess",
+CheckLogInStatusFailure="[Login] StatusFailure",
+
 
 }
 
-//methods related to user
 
 
 
@@ -111,6 +126,31 @@ export class GetProductByIdSuccess implements Action{
     constructor(public product:Product){};
 }
 
+export class GetAllProductsGuest implements Action{
+    readonly type =ProductActionTypes.GetAllProductsGuest;
+    constructor(){};
+
+}
+
+export class GetAllProductsGuestSuccess implements Action{
+    readonly type=ProductActionTypes.GetAllProductsGuestSuccess;
+    constructor(public products:any[]){};
+}
+
+
+export class DeleteProduct implements Action{
+    readonly type=ProductActionTypes.DeleteProduct;
+    constructor(public productId:number){};
+}
+export class AddProduct implements Action{
+    readonly type=ProductActionTypes.AddProduct;
+    constructor(){};
+}
+
+export class UpdateProduct implements Action{
+    readonly type=ProductActionTypes.UpdateProduct;
+    constructor(){};
+}
 
 
 //methods for cart
@@ -224,6 +264,12 @@ export class CreateOrderDetails implements Action{
     constructor(public OrderDetails:any){};
 }
 
+
+export class SendEmail implements Action{
+    readonly type=ProductActionTypes.SendEmail;
+    constructor(public OrderId:number){};
+}
+
 //methods of translation
 export class GetCommonFields implements Action{
     readonly type=ProductActionTypes.GetCommonFields;
@@ -262,6 +308,32 @@ export class UpdateCategory implements Action{
     constructor(){};
 }
 
+//methods of user
+
+export class LogInUser implements Action{
+    readonly type=ProductActionTypes.LogInUser;
+    constructor(public UserData:any){};
+}
+
+export class LogInUserSuccess implements Action{
+    readonly type=ProductActionTypes.LogInUserSuccess;
+    constructor(){};
+}
+
+export class CheckLogInStatus implements Action{
+    readonly type=ProductActionTypes.CheckLogInStatus;
+    constructor(){};
+}
+export class CheckLogInStatusSuccess implements Action{
+    readonly type=ProductActionTypes.CheckLogInStatusSuccess;
+    constructor(){};
+}
+
+export class CheckLogInStatusFailure implements Action{
+    readonly type =ProductActionTypes.CheckLogInStatusFailure;
+    constructor(){};
+}
+
 export type ProductActions=
 GetProductList|
 GetProductListSuccess|
@@ -293,6 +365,17 @@ UpdateCategory|
 CreateOrder|
 CreateOrderDetails|
 CreateOrderSuccess|
+SendEmail|
+GetAllProductsGuest|
+GetAllProductsGuestSuccess|
+DeleteProduct|
+AddProduct|
+UpdateProduct|
+LogInUser|
+LogInUserSuccess|
+CheckLogInStatus|
+CheckLogInStatusSuccess|
+CheckLogInStatusFailure|
 GetState;
     
 

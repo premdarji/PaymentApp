@@ -11,7 +11,7 @@ export class WishlistService {
 
   constructor(private http:HttpClient) { }
 
-  AddToWishlist(id){
+  addToWishlist(id){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
@@ -23,11 +23,11 @@ export class WishlistService {
     return this.http.post(this.APIURL+"/Wishlist",wishlist);
 
   }
-  GetWishlist(){
+  getWishlist(){
     return this.http.get(this.APIURL+"/Wishlist");
   }
 
-  RemoveFromWishlist(id){
+  removeFromWishlist(id){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];

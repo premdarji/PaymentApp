@@ -56,30 +56,39 @@
             <!-- <mat-label>Language</mat-label> -->
                   <mat-select [(value)]="SelectedLang">
                      
-                    <mat-option value="1" (click)="Language('en')">English </mat-option>
-                   <mat-option  value="2" (click)="Language('fr')">French</mat-option>
+                    <mat-option value="1" (click)="language('en')">English </mat-option>
+                   <mat-option  value="2" (click)="language('fr')">French</mat-option>
                   </mat-select>
                  
         </mat-form-field>
         <a class="nav-link headerclass "  routerLink="/home">{{commondata.Home}}
           <span class="sr-only"></span>
         </a>
-        <a class="nav-link headerclass" style="cursor: pointer;"    (click)="Cart()"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
-        <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 1%;" [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon></button>
+        <a class="nav-link headerclass" style="cursor: pointer;"    (click)="cart()"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
+        
+        <div *ngIf="isLoggedIn">
+          <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 10%;" [matMenuTriggerFor]="menu" ><mat-icon>account_circle</mat-icon></button>
+        </div>
+        <div *ngIf="!isLoggedIn">
+          <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 10%;"  (click)="login()"><mat-icon>login</mat-icon></button>
+        </div>
+       
+       
         <mat-menu #menu="matMenu">
          
-            <button mat-menu-item (click)="ChangePassword()"><strong>{{commondata.ChangePassword}}</strong></button>
-             <button mat-menu-item (click)="UpdateProfile()"><strong>{{commondata.UpdateProfile}}</strong></button>
-            <button mat-menu-item (click)="Orders()"><strong>{{commondata.MyOrder}}</strong></button>
-            <button mat-menu-item (click)="Logout()"><strong>{{commondata.LogOut}}</strong></button>
+            <button mat-menu-item (click)="changePassword()"><strong>{{commondata.ChangePassword}}</strong></button>
+             <button mat-menu-item (click)="updateProfile()"><strong>{{commondata.UpdateProfile}}</strong></button>
+            <button mat-menu-item (click)="orders()"><strong>{{commondata.MyOrder}}</strong></button>
+            <button mat-menu-item (click)="logout()" ><strong>{{commondata.LogOut}}</strong></button>
+          
             <!-- <button mat-menu-item (click)="style1()"><strong>style 1</strong></button>
             <button mat-menu-item (click)="style2()"><strong>style 2</strong></button> -->
          
         </mat-menu>
   
         <mat-menu #menu2="matMenu">
-          <button mat-menu-item (click)="ChangePassword()">Change Password</button>
-          <button mat-menu-item (click)="UpdateProfile()">Update Profile</button>
+          <button mat-menu-item (click)="changePassword()">Change Password</button>
+          <button mat-menu-item (click)="updateProfile()">Update Profile</button>
         </mat-menu>
       </mat-toolbar>
   

@@ -47,7 +47,7 @@
         <div class="col-md-9 mx-auto mt-5 ">
           <mat-form-field class="col-md-8">
             <input matInput placeholder="{{commondata.search}}"  autocomplete="off" [(ngModel)]="filter">
-            <button matSuffix class="btn btn-outliner" (click)="Clear()" aria-expanded="false"><mat-icon>clear</mat-icon></button>
+            <button matSuffix class="btn btn-outliner" (click)="clear()" aria-expanded="false"><mat-icon>clear</mat-icon></button>
           </mat-form-field>
           <div class="col-md-3 float-right">
 
@@ -58,12 +58,12 @@
             </mat-menu>
             <button mat-raised-button [matMenuTriggerFor]="category">{{commondata.Category}}</button>
             <mat-menu #category="matMenu">
-              <button mat-menu-item (click)="NoCategory()"><strong>{{commondata.All}}</strong></button>
-              <button mat-menu-item  (click)="GetProductsByCategory(6)"><strong>{{commondata.Mobile}}</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(2)"><strong>{{commondata.Laptops}}</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(4)"><strong>{{commondata.Clothing}}</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(5)"><strong>{{commondata.Footwear}}</strong></button>
-              <button mat-menu-item (click)="GetProductsByCategory(3)"><strong>{{commondata.Furniture}}</strong></button>
+              <button mat-menu-item (click)="noCategory()"><strong>{{commondata.All}}</strong></button>
+              <button mat-menu-item  (click)="getProductsByCategory(6)"><strong>{{commondata.Mobile}}</strong></button>
+              <button mat-menu-item (click)="getProductsByCategory(2)"><strong>{{commondata.Laptops}}</strong></button>
+              <button mat-menu-item (click)="getProductsByCategory(4)"><strong>{{commondata.Clothing}}</strong></button>
+              <button mat-menu-item (click)="getProductsByCategory(5)"><strong>{{commondata.Footwear}}</strong></button>
+              <button mat-menu-item (click)="getProductsByCategory(3)"><strong>{{commondata.Furniture}}</strong></button>
             </mat-menu>
           </div>
         </div>
@@ -79,8 +79,8 @@
             <div class="card-body">
               <h4 class="card-title">
                 <b class="btn">{{product.name}}</b>
-               <mat-icon style="color: red; cursor: pointer;" *ngIf="!product.isWishListItem" class="float-right" (click)="AddToWishlist(product.productId,i)">favorite_border</mat-icon>
-                 <mat-icon style="color: red; cursor: pointer;" *ngIf="product.isWishListItem"   class="float-right" (click)="Removefromwishlist(product.productId,i)">favorite</mat-icon>
+               <mat-icon style="color: red; cursor: pointer;" *ngIf="!product.isWishListItem" class="float-right" (click)="addToWishlist(product.productId,i)">favorite_border</mat-icon>
+                 <mat-icon style="color: red; cursor: pointer;" *ngIf="product.isWishListItem"   class="float-right" (click)="removefromwishlist(product.productId,i)">favorite</mat-icon>
                 
               </h4>
               <h5>{{product.price}}</h5>
@@ -90,8 +90,8 @@
          
             
             <div style="display: flex;justify-content: space-between;" >
-              <button mat-raised-button color="primary" (click)="AddtoCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon>{{commondata.Cart}}</button>
-              <button mat-raised-button color="warn" (click)="BuyNow(product.productId)" *ngIf="product.quantity>0">{{commondata.Buy}}</button>
+              <button mat-raised-button color="primary" (click)="addtoCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon>{{commondata.Cart}}</button>
+              <button mat-raised-button color="warn" (click)="buyNow(product.productId)" *ngIf="product.quantity>0">{{commondata.Buy}}</button>
             
                 <img src="assets\Images\images.png" width="30%" height="35px" *ngIf="product.quantity==0">
               

@@ -13,9 +13,9 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  Logout(){
+  logout(){
     localStorage.clear();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home/dashboard']);
   }
 
 }

@@ -13,8 +13,9 @@ import { ActivationComponent } from './activation/activation.component';
 // import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  {path:'',component:LoginComponent},
-  {path:'home',loadChildren:()=>import(`../app/home/home.module`).then(m=>m.HomeModule),canActivate:[AuthenticationGuard]},
+  //{path:'',component:LoginComponent},
+  {path:'',redirectTo:'home',pathMatch:"full"},
+  {path:'home',loadChildren:()=>import(`../app/home/home.module`).then(m=>m.HomeModule)},
   {path:'login',component:LoginComponent},
   {path:'register',component:RegisterComponent},
   {path:"forgot",component:ForgotpasswordComponent},

@@ -35,7 +35,7 @@ export class ProductService {
   constructor(private http:HttpClient) { }
 
  
-  GetAll(number,size):Observable<Product[]>{
+  getAll(number,size):Observable<Product[]>{
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
@@ -43,17 +43,17 @@ export class ProductService {
     return this.http.get<Product[]>(this.APIURL+"/Product/GetAll/"+userid+'/'+number+"/"+size);
   }
 
-  GetProductsByCategory(id){
+  getProductsByCategory(id){
 
     return this.http.get(this.APIURL+"/Product/GetByCategory/"+id);
   }
 
 
-  GetProductById(id){
+  getProductById(id){
     return this.http.get(this.APIURL+"/Product/GetById/"+id);
   }
 
-  AddtoCart(id){
+  addtoCart(id){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
@@ -66,14 +66,14 @@ export class ProductService {
     return this.http.post(this.APIURL+"/Cart",Cart);
   }
 
-  GetCartItems(){
+  getCartItems(){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
     return this.http.get(this.APIURL+"/Cart/GetByUserId/"+userid);
   }
 
-  GetCount(){
+  getCount(){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
@@ -81,36 +81,36 @@ export class ProductService {
 
   }
 
-  RemoveFormCart(id){
+  removeFormCart(id){
     return this.http.delete(this.APIURL+"/Cart/Delete/"+id);
   }
   
-  UpdateCart(id,qty){
+  updateCart(id,qty){
     return this.http.put(this.APIURL+"/Cart/Update/"+id+"/"+qty,null);
   }
 
 
   //product crud operations
-  AddProduct(){
+  addProduct(){
     return this.http.post(this.APIURL+"/Product/Add",this.ProductForm.value);
   }
 
-  GetCategory(){
+  getCategory(){
     return this.http.get(this.APIURL+"/Category/GetAll");
   }
 
-  PopulateForm(data){
+  populateForm(data){
     //debugger
     return this.http.get(this.APIURL+"/Product/GetById/"+data)
     
   }
 
-  DeleteProduct(data){
+  deleteProduct(data){
     return this.http.delete(this.APIURL+"/Product/Delete/"+data)
   }
 
-  UpdateProduct(data){
-    return this.http.put(this.APIURL+"/Product/Update",data);
+  updateProduct(){
+    return this.http.put(this.APIURL+"/Product/Update",this.ProductForm.value);
   }
 
   initializeForm(){
@@ -125,7 +125,7 @@ export class ProductService {
     })
   }
 
-  GetAllProducts(){
+  getAllProducts(){
     return this.http.get(this.APIURL+"/Product/AllProduct");
   }
 
@@ -133,15 +133,15 @@ export class ProductService {
 
   //operations on category
 
-  AddCategory(){
+  addCategory(){
     return this.http.post(this.APIURL+"/Category/Add",this.CategoryForm.value);
   }
 
-  DeleteCategory(id){
+  deleteCategory(id){
     return this.http.delete(this.APIURL+"/Category/Delete/"+id);
   }
 
-  PopulateCategory(id){
+  populateCategory(id){
     this.http.get(this.APIURL+"/Category/GetById/"+id).subscribe(res=>{
       this.categorydata=res;
       this.CategoryForm.setValue({
@@ -152,13 +152,13 @@ export class ProductService {
   }
 
   
-  InitializeCategory(){
+  initializeCategory(){
     this.CategoryForm.setValue({
       CategoryId:0,
       Name:''
     })
   }
-  UpdateCategory(){
+  updateCategory(){
     return this.http.put(this.APIURL+"/Category/Update/",this.CategoryForm.value);
   }
 }

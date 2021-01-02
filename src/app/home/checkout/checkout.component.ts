@@ -18,6 +18,7 @@ import { ProductState } from 'src/app/Common/Reducer/Product.reducer';
 import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
 import { generate } from 'rxjs';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-checkout',
@@ -26,16 +27,16 @@ import { generate } from 'rxjs';
 })
 export class CheckoutComponent implements OnInit {
 
-  constructor(private productservice:ProductService,
-    private home:HomeComponent,
-    public dialog: MatDialog,
-    public _formBuilder: FormBuilder,
-    private winRef:WindowrefService,
-    private order:OrderService,
-    private notification:NotificationService,
-    private zone:NgZone,
-    private router:Router,
-    private store: Store<ProductState>
+    constructor(private productservice:ProductService,
+      private home:HomeComponent,
+      public dialog: MatDialog,
+      public _formBuilder: FormBuilder,
+      private winRef:WindowrefService,
+      private order:OrderService,
+      private notification:NotificationService,
+      private zone:NgZone,
+      private router:Router,
+      private store: Store<ProductState>
     ){}
 
 
@@ -57,82 +58,82 @@ export class CheckoutComponent implements OnInit {
     ]
     commondata:any;
 
-  ngOnInit(): void {
+    ngOnInit(): void {
 
-    
-    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
-      if (result) {
-      this.commondata = result;
-      }
-    })
-
-    this.getCartItems();
-    this.home.GetCount();
-
-    this.secondFormGroup = this._formBuilder.group({
-      Add: ['', Validators.required],
-      City:[''],
-      Dist:[''],
-      Pin:['']
-    });
-   }
- 
-   getCartItems(){
-    this.cartItems=[];
-    this.store.dispatch(new fromActions.GetCartList());
-    this.store.pipe(select(selector.GetCartItems)).subscribe((result: any) => {
-     
-      if (result) {
-        this.temp=result;
-        this.showComponent = true;
       
-        this.temp.forEach(element => {
-         if(element.stock>0){
-           if(element.quantity>element.stock){
-             element.quantity=element.stock;
-           }
-           this.cartItems.push(element)
-         }
-        });
-        this.cartTotal();
-      }
-    })
-   }
+      this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+        if (result) {
+        this.commondata = result;
+        }
+      })
+
+      this.getCartItems();
+      this.home.getCount();
+
+      this.secondFormGroup = this._formBuilder.group({
+        Add: ['', Validators.required],
+        City:[''],
+        Dist:[''],
+        Pin:['']
+      });
+    }
  
-   removeFromCart(id,index){
-  
-      if(this.cartItems[index].quantity>1){
-        this.cartItems[index].quantity=this.cartItems[index].quantity-1;
-        this.total-=this.cartItems[index].price;
-        this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity)); 
+    getCartItems(){
+      this.cartItems=[];
+      this.store.dispatch(new fromActions.GetCartList());
+      this.store.pipe(select(selector.GetCartItems)).subscribe((result: any) => {
+     
+        if (result) {
+          this.temp=result;
+          this.showComponent = true;
         
-     }
-      else{
+          this.temp.forEach(element => {
+          if(element.stock>0){
+            if(element.quantity>element.stock){
+              element.quantity=element.stock;
+            }
+            this.cartItems.push(element)
+          }
+          });
+          this.cartTotal();
+        }
+      })
+    }
+ 
+
+   removeFromCart(id,index){
+        if(this.cartItems[index].quantity>1){
+          this.cartItems[index].quantity=this.cartItems[index].quantity-1;
+          this.total-=this.cartItems[index].price;
+          this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity)); 
+          
+        }
+        else{
           
             const message = `Are you sure you want remove this product?`;
             const dialogData = new ConfirmDialogModel("Confirm Action", message);
             const dialogRef=this.dialog.open(ConfirmComponent, {
-            maxWidth: "400px",
-            data: dialogData
-          });
+                maxWidth: "400px",
+                data: dialogData
+            });
       
-          dialogRef.afterClosed().subscribe(dialogResult => {
-  
-                if(dialogResult==true){
+            dialogRef.afterClosed().subscribe(dialogResult => {
+    
+                  if(dialogResult==true){
 
-                  this.total-=this.cartItems[index].price;
-                  this.home.GetCount();
-                  this.store.dispatch(new fromActions.RemoveFromCart(id));
-               
-                  this.notification.Delete("Item is removed from cart"); 
+                    this.total-=this.cartItems[index].price;
+                    this.home.getCount();
+                    this.store.dispatch(new fromActions.RemoveFromCart(id));
                 
-                }
-           });
-       }
+                    this.notification.Delete("Item is removed from cart"); 
+                  
+                  }
+            });
+          }
    
     } 
 
-   addToCart(id,index){
+    addToCart(id,index){
   
       if(this.cartItems[index].stock>this.cartItems[index].quantity){
 
@@ -147,150 +148,185 @@ export class CheckoutComponent implements OnInit {
       
     }
  
-   cartTotal(){
-     this.total=0;
-     this.cartItems.forEach(element => {
-       this.total += (element.quantity*element.price)
-       this.final=this.total;
-     });
+    cartTotal(){
+      this.total=0;
+      this.cartItems.forEach(element => {
+        this.total += (element.quantity*element.price)
+        this.final=this.total;
+      });
 
-   }
+    }
 
 
  
   
-  discount(availabe,index){
-    if(index==0 && availabe==1){
-      let price=this.total;
-      this.Discount=price*10/100;
-      this.final=this.total-this.Discount;
-      this.offers[index].availabe=0;
-      this.offerapplied=true
+    discount(availabe,index){
+      if(index==0 && availabe==1){
+        let price=this.total;
+        this.Discount=price*10/100;
+        this.final=this.total-this.Discount;
+        this.offers[index].availabe=0;
+        this.offerapplied=true
+      }
+      if(index==1 && availabe==1){
+        this.final=this.total;
+        this.offers[index].availabe=0;
+        this.offerapplied=true;
+      }
     }
-    if(index==1 && availabe==1){
-      this.final=this.total;
-      this.offers[index].availabe=0;
-      this.offerapplied=true;
-    }
-  }
 
 
-  payWithRazor() {
+    payWithRazor() {
    
-    const options: any = {
-      key: 'rzp_test_L4Raaco7n2tzbD',
-      amount: this.final*100, // amount should be in paise format to display Rs 1255 without decimal point
-      currency: 'INR',
-      name: 'Shopping Demo', // company name or product name
-      description: '',  // product description
-      image: '', // company logo or product image
-      offerid:"offer_FrxZtzVpJaf8Np",
-      //order_id: 2, // order_id created by you in backend
-      modal: {
-        // We should prevent closing of the form when esc key is pressed.
-        escape: false,
-      },
-      notes: {
-        // include notes if any
-      },
-      prefill:{
-        Email:"demo@gmail.com",
-        contact:"8877887766"
-      },
-      theme: {
-        color: '#0c238a'
-      }
-    };
-    options.handler = ((response, error) => {
-      
-      options.response = response;
-
-      let paymentDetail={
-        PaymentId:options.response['razorpay_payment_id'],
-        Amount:this.final
-      }
-     
-
-      this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
-      this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
-        if (result) {
-        this.orderId = result;
-        
-        this.generateInvoicePdf();
+      const options: any = {
+        key: 'rzp_test_L4Raaco7n2tzbD',
+        amount: this.final*100, // amount should be in paise format to display Rs 1255 without decimal point
+        currency: 'INR',
+        name: 'Shopping Demo', // company name or product name
+        description: '',  // product description
+        image: '', // company logo or product image
+        offerid:"offer_FrxZtzVpJaf8Np",
+        //order_id: 2, // order_id created by you in backend
+        modal: {
+          // We should prevent closing of the form when esc key is pressed.
+          escape: false,
+        },
+        notes: {
+          // include notes if any
+        },
+        prefill:{
+          Email:"demo@gmail.com",
+          contact:"8877887766"
+        },
+        theme: {
+          color: '#0c238a'
         }
-      })
-  
-    });
-    options.modal.ondismiss = (() => {
+      };
+      options.handler = ((response, error) => {
+        
+        options.response = response;
+
+        let paymentDetail={
+          PaymentId:options.response['razorpay_payment_id'],
+          Amount:this.final
+        }
       
-      console.log('Transaction cancelled.');
-      this.notification.Delete("Complete payment for order");
-    });
-    const rzp = new this.winRef.nativeWindow.Razorpay(options);
-    rzp.open();
-  }
+
+        this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
+        this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
+          if (result) {
+            this.orderId = result;
 
 
-
-
-
-  generateInvoicePdf(){
-
-    var data = document.getElementById('contentToConvert');  
-
-    html2canvas(data).then(canvas => {  
-      // Few necessary setting options  
-      var imgWidth = 200;   
-      var pageHeight = 1600;    
-      var imgHeight = canvas.height * imgWidth / canvas.width;  
-      var heightLeft = imgHeight;  
-  
-      const contentDataURL = canvas.toDataURL('image/png')  
-  
-      let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
-   
-      var position = 0;  
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
-  
-      pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
-
-
-
-
-      let Detail={
-        ProductId:'',
-        Amount:0,
-        Quantity:'',
-        OrderId:''
-      }
-
-      this.cartItems.forEach(element => {
-        Detail.ProductId=element.productId,
-        Detail.Amount=element.quantity*element.price,
-        Detail.Quantity=element.quantity,
-        Detail.OrderId=this.orderId;
-
-        this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
-        this.store.dispatch(new fromActions.RemoveFromCart(element.cartId));
+            let Detail={
+              ProductId:'',
+              Amount:0,
+              Quantity:'',
+              OrderId:''
+            }
+            let lastIndex=this.cartItems.length;
+            this.cartItems.forEach(element => {
+              debugger
+              Detail.ProductId=element.productId,
+              Detail.Amount=element.quantity*element.price,
+              Detail.Quantity=element.quantity,
+              Detail.OrderId=this.orderId;
+              this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
+            // this.deleteFromCart(element.cartId);
+              if(lastIndex-1==this.cartItems.indexOf(element)){
+              // this.sendInvoiceDetails();
+              }
+              
+            });
+      
+      
+          
+            this.zone.run(()=>{
+              this.router.navigate(['/home/order']);
+            })
+          
+            
+        
+          }
+          this.sendInvoiceDetails()
+        })
     
       });
-
-      // this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
+      options.modal.ondismiss = (() => {
         
-       
-      // })
-    
-    
+        console.log('Transaction cancelled.');
+        this.notification.Delete("Complete payment for order");
+      });
+      const rzp = new this.winRef.nativeWindow.Razorpay(options);
+      rzp.open();
+    }
 
-    });  
-    this.zone.run(()=>{
-      this.router.navigate(['/home/order']);
-    })
 
+
+
+
+  // generateInvoicePdf(){
+
+  //   var data = document.getElementById('contentToConvert');  
+
+  //   html2canvas(data).then(canvas => {  
+  //     // Few necessary setting options  
+  //     var imgWidth = 200;   
+  //     var pageHeight = 1600;    
+  //     var imgHeight = canvas.height * imgWidth / canvas.width;  
+  //     var heightLeft = imgHeight;  
   
-            
-          
+  //     const contentDataURL = canvas.toDataURL('image/png')  
+  
+  //     let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
+   
+  //     var position = 0;  
+  //     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
+  
+  //     pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
 
+
+
+
+  //     let Detail={
+  //       ProductId:'',
+  //       Amount:0,
+  //       Quantity:'',
+  //       OrderId:''
+  //     }
+
+  //     this.cartItems.forEach(element => {
+  //       debugger
+  //       Detail.ProductId=element.productId,
+  //       Detail.Amount=element.quantity*element.price,
+  //       Detail.Quantity=element.quantity,
+  //       Detail.OrderId=this.orderId;
+  //       console.log(Detail)
+  //       this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
+  //       this.deleteFromCart(element.cartId);
+  //     });
+
+  //     this.store.dispatch(new fromActions.SendEmail(this.orderId))
+  //     this.zone.run(()=>{
+  //       this.router.navigate(['/home/order']);
+  //     })
+  //     // this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
+       
+       
+  //     // })
+    
+    
+
+  //   });     
+
+  // }
+
+  deleteFromCart(cartId){
+    this.store.dispatch(new fromActions.RemoveFromCart(cartId));
+  }
+
+  sendInvoiceDetails(){
+    this.store.dispatch(new fromActions.SendEmail(this.orderId))
   }
 
 }

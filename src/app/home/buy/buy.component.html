@@ -4,15 +4,15 @@
     <mat-step [stepControl]>
         <mat-card style="display: flex;" class="shadow col-md-6">
             <div class="col-md-4">
-                <img class="card-img-top" src="{{ProductData.imageUrl}}" alt="">
+                <img class="card-img-top" src="{{productData.imageUrl}}" alt="">
             </div>
             <div class="col-md-6">
                 <div class="card-body">
                     <h4 class="card-title">
-                      <b>{{ProductData.name}}</b>
+                      <b>{{productData.name}}</b>
                     </h4>
-                    <h5>{{ProductData.price}}</h5>
-                    <p class="card-text">{{ProductData.description}}</p>
+                    <h5>{{productData.price}}</h5>
+                    <p class="card-text">{{productData.description}}</p>
                 </div>
             </div>
         </mat-card>
@@ -29,7 +29,7 @@
        
         </mat-form-field>
         <div>
-          <button mat-button matStepperNext (click)="checkstock()">{{commondata.Next}}</button>
+          <button mat-button matStepperNext (click)="checkStock()">{{commondata.Next}}</button>
         </div>
   
     </mat-step>
@@ -70,12 +70,12 @@
     
         <ng-template matStepLabel>{{commondata.Paymentdetail}}</ng-template>
         <div>
-          <mat-form-field class="col-md-6">
+          <!-- <mat-form-field class="col-md-6">
             <mat-label>{{commondata.Offer}}</mat-label>
           <mat-select>
             <mat-option value="offer.id" (click)="discount(offer.availabe,i)" [disabled]="offer.availabe==0" *ngFor="let offer of offers;let i =index">{{offer.offer}}</mat-option>
           </mat-select>
-         </mat-form-field><br>
+         </mat-form-field><br> -->
 
           <b>{{commondata.Price}}:{{total}}</b><br>
           <div *ngIf="offerapplied" style="color: blue;">
@@ -107,7 +107,7 @@
 
 
   <hr>
-
+<!-- 
 
   <div class="hidden" style="margin-bottom: 100px;" >  
     <mat-card class="col-md-6 mx-auto"> 
@@ -120,9 +120,9 @@
             
             <br>
             <hr>
-            <!-- <b>Invoice Id:</b><p>{{id}}</p>
-            <b>customer Name:</b><p>vbh</p>-->
-            <!-- <b>Order No:</b><p>{{orderId}}</p> -->
+            <b>Invoice Id:</b><p>{{id}}</p>
+            <b>customer Name:</b><p>vbh</p>
+            <b>Order No:</b><p>{{orderId}}</p>
             <b> Order Details:</b> 
                 <table class="table table-bordered">  
                         <tr>  
@@ -135,12 +135,12 @@
                             <td>{{ProductData.name}}</td>
                             <td>{{ProductData.price}}</td>
                             <td>{{qty}}</td>
-                            <!-- <td>{{ProductData.price*qty}}</td> -->
+                            <td>{{ProductData.price*qty}}</td>
                         </tr>
                        
                 </table> 
                       
-                      <!-- <b>Grand Total:-</b><p>{{ProductData.price*qty | currency : "INR"}}</p> -->
+                      <b>Grand Total:-</b><p>{{ProductData.price*qty | currency : "INR"}}</p>
                       <hr>
 
                       <b> Thanks for the shopping</b>
@@ -150,6 +150,6 @@
      
           
     </mat-card>  
-  </div>  
+  </div>   -->
 
   

@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+import { Observable, of as Observableof } from 'rxjs';
+import { stat } from 'fs';
+import { AuthenticationGuard } from '../authentication.guard';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +15,8 @@ export class UserService {
 
   private readonly APIURL="http://localhost:61237/api";
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,
+              private authguard:AuthenticationGuard) { }
 
 
   ForgotPasswordForm:FormGroup=new FormGroup({
@@ -21,33 +26,33 @@ export class UserService {
   })
 
   
-  Submit(formdata){
+  submit(formdata){
    
     return this.http.post(this.APIURL+"/User/Register",formdata);
   }
 
-  UpdateUser(formdata){
+  updateUser(formdata){
     let id=formdata["UserId"];
     return this.http.put(this.APIURL+"/User/Update/"+id,formdata)
   }
 
-  GetAllCity(){
+  getAllCity(){
     return this.http.get(this.APIURL+"/City/GetAll");
   }
 
-  Login(formdata){
+  login(formdata){
     return this.http.post(this.APIURL+"/Login/login",formdata);
   }
 
-  AdminLogin(formdata){
+  adminLogin(formdata){
     return this.http.post(this.APIURL+"/Login/AdminLogin",formdata);
   }
 
-  VarifyEmail(email){
+  varifyEmail(email){
     return this.http.post(this.APIURL+"/Login/ForgotPassword?Email="+email,email);
   }
 
-  Reset(formdata){
+  reset(formdata){
     let header = new HttpHeaders();
     let token=localStorage.getItem("token");
     header=header.set('Authorization','Bearer '+token);
@@ -84,7 +89,7 @@ export class UserService {
     
   }
 
-  GetID(){
+  getID(){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let id=decodedToken["UserID"];
@@ -92,8 +97,17 @@ export class UserService {
   }
 
 
-  ActivateUser(id){
+  activateUser(id){
     return this.http.post(this.APIURL+"/User/Activate/"+id,null);
+  }
+
+  checkLogInStatus():Observable<boolean>{
+
+    var status=this.authguard.canActivate();
+    if(status==true){
+      return Observableof(true);
+    }
+    return Observableof(false)
   }
 
 }

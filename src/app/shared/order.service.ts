@@ -11,7 +11,7 @@ export class OrderService {
   private readonly APIURL="http://localhost:61237/api";
   constructor(private http:HttpClient) { }
 
-  CreateOrder(orderDetail){
+  createOrder(orderDetail){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
@@ -20,23 +20,23 @@ export class OrderService {
     return this.http.post(this.APIURL+"/Order",orderDetail);
   }
 
-  GetAll(){
+  getAll(){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
     return this.http.get(this.APIURL+"/Order/GetAll/"+userid);
   }
 
-  PostDetailOrder(Detail){
+  postDetailOrder(Detail){
     console.log(Detail)
     return this.http.post(this.APIURL+"/Order/Detail",Detail);
   }
 
-  GetInvoiceDetails(){
+  getInvoiceDetails(){
     return this.http.get(this.APIURL+"/Order/Invoice");
   }
 
-  SendInvoiceMail(id){
+  sendInvoiceMail(id){
     return this.http.post(this.APIURL+"/Order/Invoice",id);
   }
 

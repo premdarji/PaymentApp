@@ -36,6 +36,11 @@ export const CheckLimit=createSelector(
   (state:fromProduct.ProductState)=>state.limitreached
 )
 
+export const ProductsGuest =createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.productsGuest
+)
+
 //selectors related to cart
 export const GetCartItems=createSelector(
   getProductFeatureState,
@@ -76,6 +81,13 @@ export const Categories=createSelector(
   (state:fromProduct.ProductState)=>state.Categories
 )
 
+
+//selectors related to user
+
+export const IsLoggedIn =createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.isLooggedIn
+)
 
 
 export const reducer=fromProduct.reducer;

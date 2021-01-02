@@ -16,7 +16,7 @@ export class InvoiceComponent implements OnInit {
   id:any;
   orderId:any;
   ngOnInit(): void {
-this.invoice.GetInvoiceDetails().subscribe(res=>{
+this.invoice.getInvoiceDetails().subscribe(res=>{
   this.invoiceDetails=res;
   console.log(this.invoiceDetails)
   this.id=this.invoiceDetails[0]['invoiceId'];

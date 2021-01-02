@@ -46,12 +46,12 @@
                             
                     
                                 
-                                <input  type="file" placeholder="file" (change)="Onfileselected($event)" >
+                                <input  type="file" placeholder="file" (change)="onfileselected($event)" >
                                
                         
                             <div class="mt-2">
                                     <img class="card-img-top mr-3" src="{{selectedfile}}" alt="" style="height: 100px;width: 100px;" >
-                                    <button mat-raised-button color="primary" class="mr-3"  type="submit" (click)="Submit()" [disabled]="productService.ProductForm.invalid"  >Save</button> 
+                                    <button mat-raised-button color="primary" class="mr-3"  type="submit" (click)="submit()" [disabled]="productService.ProductForm.invalid"  >Save</button> 
                                     <button mat-raised-button color="warn" (click)="clear()">Cancel</button>
                                                 
                             </div>

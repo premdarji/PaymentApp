@@ -24,7 +24,7 @@ export class ActivationComponent implements OnInit {
 
 
   Activation(){
-    this.userService.ActivateUser(this.UserId).subscribe(res=>{
+    this.userService.activateUser(this.UserId).subscribe(res=>{
       console.log("Activated")
       this.router.navigate(['/login']);
       this.notification.success("Your account is activated ")

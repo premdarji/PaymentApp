@@ -50,7 +50,7 @@ export class CartComponent implements OnInit {
       }
     })
 
-    this.home.GetCount();
+    this.home.getCount();
     this.store.dispatch(new fromActions.GetCartList());
     this.loadCart();
   }
@@ -63,10 +63,11 @@ export class CartComponent implements OnInit {
           this.showComponent=true;
         }
        this.cartTotal();
-       this.home.GetCount();
+       this.home.getCount();
       }
     })
   }
+
 
   removeFromCart(id,index){
 
@@ -87,7 +88,7 @@ export class CartComponent implements OnInit {
          dialogRef.afterClosed().subscribe(dialogResult => {
              if(dialogResult==true){
                this.total-=this.cartItems[index].price;
-               this.home.GetCount();
+               this.home.getCount();
                this.store.dispatch(new fromActions.RemoveFromCart(id));
                this.loadCart();
                this.notification.Delete("Item is removed from cart"); 
@@ -96,6 +97,9 @@ export class CartComponent implements OnInit {
     }
   
   }
+
+
+
   addToCart(id,index){
 
     if(this.cartItems[index].stock>this.cartItems[index].quantity){
@@ -106,21 +110,18 @@ export class CartComponent implements OnInit {
     else{
       this.notification.Delete("out of stock")
     }
-
-   
-
   }
+
 
   cartTotal(){
     this.total=0;
     this.cartItems.forEach(element => {
   
       this.total += (element.quantity*element.price)
-    });
-
-   
+    }); 
   }
 
+  
   placeOrder(){
     if(this.cartItems.length==0){
       this.notification.Delete("Cart is empty,please add item in your cart");

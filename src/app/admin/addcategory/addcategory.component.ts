@@ -31,20 +31,13 @@ export class AddcategoryComponent implements OnInit {
     if(this.productservice.CategoryForm.get("CategoryId").value>0){
       this.store.dispatch(new fromActions.UpdateCategory());
       this.dialogref.close();
-      // this.productservice.UpdateCategory().subscribe(res=>{
-      //   this.notification.update("Category updated");
-      //   this.dialogref.close();
-      // })
+    
     }
     
     else{
       this.store.dispatch(new fromActions.AddCategory());
       this.dialogref.close();
-      // this.productservice.AddCategory().subscribe(res=>{
-      //   this.notification.update("Category added");
-      //   this.dialogref.close();
-      // })
-
+     
     }
    
   }
