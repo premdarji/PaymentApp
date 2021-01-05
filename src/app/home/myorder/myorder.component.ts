@@ -32,15 +32,13 @@ export class MyorderComponent implements OnInit {
   Products:any;
 
   ngOnInit(): void {
-
+  
+    this.getOrders();
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
       }
     })
-
-   this.getOrders();
-    
 
   }
 

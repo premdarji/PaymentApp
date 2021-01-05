@@ -64,8 +64,83 @@
 
 </div>
 
-<div *ngIf="!showComponent">
+<div *ngIf="!showComponent && !showAnnonymous">
     <div class="alert alert-danger col-md-8 mx-auto h-200 mt-10 " role="alert" style="margin-top: 10%; padding-top: 5%; padding-bottom: 5%;">
         Cart is empty ! please add items in your cart
     </div>
 </div>
+
+
+
+
+<!-- Annonymous user cart -->
+
+
+<div  *ngIf="showAnnonymous" class="cart">
+    <mat-toolbar class="mt-4 col-md-10 mx-auto">
+        <span class="fill-remaining"></span>
+        <span>{{commondata.CartItem}}</span>
+        <span class="fill-remaining"></span>
+    </mat-toolbar>
+    <div class="col-md-8 mx-auto" *ngFor="let product of cartItemsAnnonymous; let i= index" >
+        <mat-card  class="mb-1 mt-1">
+            <div style="display: flex;">
+    
+                <div class="col-md-3">
+                    <img class="card-img-top" src="{{product.imageUrl}}" alt="">
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td><strong>{{commondata.NameOrder}}</strong></td>
+                            <td><strong>{{product.name}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{commondata.Price}}</strong></td>
+                            <td><strong>{{product.price}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Description</strong></td>
+                            <td><strong>{{product.description}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{commondata.Total}}</strong></td>
+                            <td><strong>{{product.price*product.quantity}}</strong></td>
+                        </tr>
+                    </table>
+                  
+                    <div >
+                        <button class="btn-sm btn btn-outline-danger" (click)="removeAnnonymous(product.productId,i)"><mat-icon>remove_circle</mat-icon></button>
+                    <strong>Qty:-<b>{{product.quantity}}</b></strong>
+                   <button class="btn-sm btn btn-outline-success" (click)="addAnnonymous(product.productId,i)"><mat-icon>add_circle</mat-icon></button>
+                    
+                    </div>
+                    <div *ngIf="product.stock==0">
+                        {{commondata.Stock}}
+                        <button mat-raised-button color="warn" matTooltip="we give a mail " matTooltipClass="example-tooltip-red">{{commondata.Notify}}</button>
+                    </div>
+                    <!-- <div class="float-right">
+                        <button class="btn-sm btn-outline-danger" (click)="delete(product.cartId)"><mat-icon>delete</mat-icon></button>
+                    </div> -->
+                   
+                </div>
+              
+            </div>
+           
+        </mat-card>
+    
+    </div>
+    <!-- <div class="col-md-8 mx-auto" *ngIf="empty">
+        <strong>Cart Is Empty</strong>
+    </div> -->
+    <div class="col-md-8 mx-auto mb-5 mt-2 " >
+        <strong class="col-md-4 float-right">{{commondata.Total}}:<b style="color: red;">{{total | currency : "INR"}}</b></strong><br>
+        <strong class="col-md-4 float-right">{{commondata.Tax}}:2%</strong><br>
+        <strong class="col-md-4 float-right">{{commondata.AmountPayable}}:<b style="color: red;">{{total+(total*2/100)| currency:"INR"}}</b></strong>
+        <button class="col-md-6" mat-raised-button color="primary"  (click)="placeOrder()" >{{commondata.PlaceOrder}}</button>
+    </div>
+
+</div>
+
+
+

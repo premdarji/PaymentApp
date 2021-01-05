@@ -84,7 +84,7 @@ export class ProductEffects {
         switchMap((action)=>
           this.productService.getAllProducts().pipe(
               map((result:any[])=>{
-               console.log(result)
+               //console.log(result)
                 return new fromProductActions.GetAllProductsGuestSuccess(result);
               }),
           ),
@@ -352,8 +352,8 @@ export class ProductEffects {
         switchMap((action)=>
           this.orderservice.sendInvoiceMail(action.OrderId).pipe(
               map((result:any)=>{
-                console.log(result);
-                return new fromProductActions.GetState() ;
+                console.log("Result after sending mail:" +result);
+                return new fromProductActions.SendEmailSuccess(result) ;
               }),
           ),
         ),

@@ -48,9 +48,14 @@ export class DashboardComponent implements OnInit {
   categoryselected:boolean=false;
   commondata:any;
   isLoggedIn:boolean;
+  hoverIndex:number;
+  returnUrl:string;
+  annonymousUser=0;
+  text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
   
 
   ngOnInit(): void {
+    sessionStorage.setItem("CartLength",String(0));
     //this.RefreshProducts(); 
    // this.store.dispatch(new fromActions.CheckLogInStatus());
     this.loadProduct();
@@ -81,7 +86,6 @@ export class DashboardComponent implements OnInit {
       
       this.isLoggedIn = result;
         if(this.isLoggedIn==false){
-          console.log("not logged in")
           this.store.dispatch(new fromActions.GetAllProductsGuest());
           this.store.pipe(select(selector.ProductsGuest)).subscribe((result: any) => {
             if (result) {
@@ -102,27 +106,8 @@ export class DashboardComponent implements OnInit {
         }  
       
     })
-
-   
-
   }
   
-
-  // refreshProducts(){
-  //   this.service.getAll(this.PageNumber,this.PageSize).subscribe(res=>{
-  //     if(res["message"]=="nodata"){
-  //       this.PageNumber=this.PageNumber-1;
-  //       this.notification.Delete("No More Products")
-  //     }
-  //     else{
-  //       this.temp=res;
-  //       this.Products.push(...this.temp);
-  //       console.log(this.Products)
-  //     }
-      
-  //   })
-  // }
-
   noCategory(){
     this.categoryselected=false;
     this.products=[];
@@ -153,8 +138,13 @@ export class DashboardComponent implements OnInit {
       this.home.getCount();
     }
     else{
-      this.login();
-      this.notification.Delete("Please log in or register  before add this product to your cart");
+      var len=Number(sessionStorage.getItem("CartLength"));
+      console.log(len)
+      sessionStorage.setItem("cart"+(len+1),data);
+      //this.login(this.returnUrl);
+      sessionStorage.setItem("CartLength",String(len+1));
+      this.notification.update("Item added to cart")
+      //this.notification.Delete("Please log in or register  before add this product to your cart");
     }
    
   }
@@ -180,7 +170,9 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/home/buy/',Id]);
     }
     else{
-      this.login()
+      this.returnUrl='/home/buy/'+Id;
+      console.log(this.returnUrl)
+      this.login(this.returnUrl)
       this.notification.Delete("Please log in or register  before buy this product")
     }
   }
@@ -224,19 +216,27 @@ export class DashboardComponent implements OnInit {
     if(this.isLoggedIn==true){
       return true;
     }
+
     return false;
   
   }
 
-  login(){
+  login(returnUrl:string){
+
     const dialogconfig=new MatDialogConfig();
     dialogconfig.disableClose=false;
     dialogconfig.autoFocus=true;
     dialogconfig.width="40%";
+    dialogconfig.data=returnUrl;
     this.dialog.open(LoginComponent,dialogconfig);
 
   }
 
+  hover(id)
+  {
+    //console.log("on hover :"+id)
+    this.hoverIndex=id;
+  }
 
 
 

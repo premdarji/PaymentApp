@@ -18,8 +18,8 @@
                     <h4 class="card-title">
                       <b>{{product.name}}</b>
                     </h4>
-                    <h5>{{product.price}}</h5>
-                    <p class="card-text">{{product.description}}</p>
+                    <h5>{{product.price | currency :"INR"}}</h5>
+                    <p class="card-text">{{product.description | slice: 0:80}}</p>
                     
                     <div *ngIf="product.stock>0">
                       <button class="btn-sm btn btn-outline-danger" (click)="removeFromCart(product.cartId,i)"><mat-icon>remove_circle</mat-icon></button>

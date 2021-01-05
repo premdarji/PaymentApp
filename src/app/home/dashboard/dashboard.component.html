@@ -1,55 +1,15 @@
 <div class="container-fluid" >
 
-  <!-- <div class="row"> -->
-<!-- 
-      <div class="col-lg-3" style="background-color: navajowhite;">
 
-        <h1 class="my-4">My Shop</h1>
-  
-        <div>
-          <mat-form-field appearance="fill">
-            <mat-label><strong>Select Category</strong> </mat-label>
-            <mat-select [(value)]="selected" (onChange)="GetProductsByCategory()">
-              <mat-option (click)="NoCategory()" ><strong>None</strong></mat-option>
-              <mat-option value="2" (click)="GetProductsByCategory()"><strong>Laptops</strong> </mat-option>
-              <mat-option value="3" (click)="GetProductsByCategory()"><strong>Furniture</strong> </mat-option>
-              <mat-option value="4" (click)="GetProductsByCategory()"><strong>Clothing</strong> </mat-option>
-              <mat-option value="5" (click)="GetProductsByCategory()"><strong>Footwear</strong> </mat-option>
-              <mat-option value="6" (click)="GetProductsByCategory()"><strong>Mobiles</strong> </mat-option>
-              
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div>
-  
-            <mat-form-field>
-              <input matInput placeholder="Search"   type="text" name="search" [(ngModel)]="filter">
-              <button matSuffix class="btn btn-outline-danger" (click)="Clear()"><mat-icon>clear</mat-icon></button>
-            </mat-form-field>
-   
-        </div>
-
-        <div>
-          <h4>Sort By</h4>
-          <div class="list-group" >
-            <button  class="list-group-item" style="background-color: navajowhite;" ><strong>Price--Low to High</strong><input type="radio" (click)="sortLH('price')"  name="sort"></button>
-            <button  class="list-group-item" style="background-color: navajowhite;" ><strong>Price--High to low</strong><input type="radio" (click)="sortHL('price')" name="sort"></button>            
-          </div>
-        </div>
-
-      </div> -->
-      <!-- /.col-lg-3 -->
-
-      <div class="col-md-11 mx-auto " style=" margin-right: 0px; padding-right: 0px;">
+      <div class="col-md-12 mx-auto " style=" margin-right: 0px; padding-right: 0px;">
        
 
-        <div class="col-md-9 mx-auto mt-5 ">
-          <mat-form-field class="col-md-8">
+        <div class="col-md-12 mx-auto mt-5 ">
+          <mat-form-field class="col-md-6 ml-4">
             <input matInput placeholder="{{commondata.search}}"  autocomplete="off" [(ngModel)]="filter">
             <button matSuffix class="btn btn-outliner" (click)="clear()" aria-expanded="false"><mat-icon>clear</mat-icon></button>
           </mat-form-field>
-          <div class="col-md-3 float-right">
+          <div class="col-md-2 float-right mr-0" >
 
             <button mat-raised-button [matMenuTriggerFor]="sort" class="mr-3">{{commondata.Sortby}} </button>
             <mat-menu #sort="matMenu">
@@ -72,31 +32,46 @@
 
         <div class="row " style="display: flex; justify-content: space-around;">
 
-          <mat-card class="col-md-3 mb-5 mr-2" *ngFor="let product of products   | filter:filter |orderBy: key : reverse   ;let i = index " >
-            <div style="height: 200px;">
+          <mat-card class="col-md-3 mb-5 mr-2 shadow-lg" *ngFor="let product of products   | filter:filter |orderBy: key : reverse   ;let i = index " (mouseenter)="hover(i)" >
+            <div style="height: 200px;" >
               <img class="card-img-top" src="{{product.imageUrl}}" alt="" style="height: 100%;">
             </div>
-            <div class="card-body">
+            <div class="card-body ml-0 mb-0">
               <h4 class="card-title">
-                <b class="btn">{{product.name}}</b>
+                <strong>{{product.name}}</strong>
                <mat-icon style="color: red; cursor: pointer;" *ngIf="!product.isWishListItem" class="float-right" (click)="addToWishlist(product.productId,i)">favorite_border</mat-icon>
                  <mat-icon style="color: red; cursor: pointer;" *ngIf="product.isWishListItem"   class="float-right" (click)="removefromwishlist(product.productId,i)">favorite</mat-icon>
                 
               </h4>
-              <h5>{{product.price}}</h5>
-              <p class="card-text">{{product.description}}</p>
+              <h5>{{product.price | currency : "INR"}}</h5>
+              <!-- <p class="card-text hover" >{{product.description}}</p> -->
+              
             </div>
           
+            <mat-accordion>
+              <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <strong>Description</strong> 
+                  </mat-panel-title>
+                  <mat-panel-description>
+                   {{text | slice : 0:20}}...
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <p>{{text}}</p>
+              </mat-expansion-panel>
+          </mat-accordion>
          
             
-            <div style="display: flex;justify-content: space-between;" >
-              <button mat-raised-button color="primary" (click)="addtoCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon>{{commondata.Cart}}</button>
+            <div style="display: flex;justify-content: left;"  class="mt-1">
+              <button mat-raised-button color="primary" class="mr-3" (click)="addtoCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon>{{commondata.Cart}}</button>
               <button mat-raised-button color="warn" (click)="buyNow(product.productId)" *ngIf="product.quantity>0">{{commondata.Buy}}</button>
             
                 <img src="assets\Images\images.png" width="30%" height="35px" *ngIf="product.quantity==0">
               
             </div>
 
+         
 
           </mat-card> 
 

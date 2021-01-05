@@ -50,6 +50,7 @@ export class HomeComponent  implements OnInit  {
     user:any;
 
   ngOnInit(): void {
+ 
     this.checkLogInStatus()
     this.store.dispatch(new fromActions.GetCommonFields("en"));
   
@@ -57,7 +58,7 @@ export class HomeComponent  implements OnInit  {
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
-      console.log(this.commondata)
+      //console.log(this.commondata)
       }
     })
    
@@ -100,7 +101,8 @@ export class HomeComponent  implements OnInit  {
 
   logout(){
     localStorage.clear();
-    this.router.navigate(['/home']);
+    this.checkLogInStatus();
+    this.router.navigate(['/home/dashboard']);
   }
 
   
@@ -119,23 +121,24 @@ export class HomeComponent  implements OnInit  {
 
 
   cart(){
-    if(this.checkLogInStatus()){
-        this.getCount();
-        if(this.count==0){
-          this.notification.Delete("Cart Is Empty");
-        }
-        else{
-          this.router.navigate(['home/cart']);
-        }
-    }
-    else{
-      const dialogconfig=new MatDialogConfig();
-      dialogconfig.disableClose=false;
-      dialogconfig.autoFocus=true;
-      dialogconfig.width="40%";
-      this.dialog.open(LoginComponent,dialogconfig);
-      this.notification.Delete("Please log in or register then only you can open your cart");
-    }
+    this.router.navigate(['home/cart']);
+    // if(this.checkLogInStatus()){
+    //     this.getCount();
+    //     if(this.count==0){
+    //       this.notification.Delete("Cart Is Empty");
+    //     }
+    //     else{
+    //       this.router.navigate(['home/cart']);
+    //     }
+    // }
+    // else{
+    //   const dialogconfig=new MatDialogConfig();
+    //   dialogconfig.disableClose=false;
+    //   dialogconfig.autoFocus=true;
+    //   dialogconfig.width="40%";
+    //   this.dialog.open(LoginComponent,dialogconfig);
+    //   this.notification.Delete("Please log in or register then only you can open your cart");
+    // }
     
   }
 

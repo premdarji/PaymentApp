@@ -24,6 +24,7 @@ export interface ProductState{
     orderId:number;
     productsGuest:any[];
     isLooggedIn:boolean;
+    mailSent:boolean;
 
 }
 
@@ -40,7 +41,8 @@ export const initialState :ProductState={
     Categories:[],
     orderId:0,
     productsGuest:[],
-    isLooggedIn:false
+    isLooggedIn:false,
+    mailSent:false,
 
 }
 
@@ -108,28 +110,28 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
         
 
         //cases of wishlist    
-        case ProductActionTypes.AddToWishlist:
+         case ProductActionTypes.AddToWishlist:
 
             return{...state,products:action.product};
             
         
-        case ProductActionTypes.RemoveFromWishlist:
+         case ProductActionTypes.RemoveFromWishlist:
             return{...state,products:action.product};
 
         //cases for order
-        case ProductActionTypes.GetOrderList:
+         case ProductActionTypes.GetOrderList:
             return {...state};
 
-        case ProductActionTypes.GetOrderListSuccess:
+         case ProductActionTypes.GetOrderListSuccess:
             return {...state,orderList:action.orders};
 
-        case ProductActionTypes.GetOrderById:
+         case ProductActionTypes.GetOrderById:
             return {...state,OrderItemById:null};
 
-        case ProductActionTypes.GetOrderByIdSuccess:
+         case ProductActionTypes.GetOrderByIdSuccess:
             return { ...state,OrderItemById:action.OrderDetail};
         
-        case ProductActionTypes.CancelOrder:
+         case ProductActionTypes.CancelOrder:
             return { ...state};
         
         case ProductActionTypes.CreateOrder:
@@ -146,6 +148,9 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
 
         case ProductActionTypes.SendEmail:
             return{...state};    
+
+        case ProductActionTypes.SendEmailSuccess:
+            return{...state, mailSent:action.status};   
 
         //cases of translation
         case ProductActionTypes.GetCommonFields:

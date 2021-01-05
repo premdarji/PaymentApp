@@ -1,7 +1,7 @@
 import { tokenName } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ForgotpasswordComponent } from '../forgotpassword/forgotpassword.component';
 import { UserService } from '../shared/User';
@@ -25,7 +25,8 @@ export class LoginComponent implements OnInit {
     private router:Router,
     private store:Store<ProductState>,
     private authetication:AuthguardService,
-    private dialogref:MatDialogRef<LoginComponent>) { }
+    private dialogref:MatDialogRef<LoginComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,) { }
 
   incorrect:boolean=false;
   selected="1";
@@ -48,6 +49,8 @@ export class LoginComponent implements OnInit {
     //   }
       
     // })
+
+    console.log("Return url is :"+this.data)
     
   }
 
@@ -69,7 +72,12 @@ export class LoginComponent implements OnInit {
       this.store.pipe(select(selector.IsLoggedIn)).subscribe(result=>{
         if(result==true){
           this.dialogref.close();
-          this.router.navigate(['/home']);
+          if(this.data!=null){
+            this.router.navigate([this.data]);
+          }
+          else{
+            this.router.navigate(['/home']);
+          }
           this.LoginForm.reset();
           this.initializeForm();
         }

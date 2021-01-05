@@ -77,6 +77,7 @@ GetOrderByIdFailure="[OrderFailure] GetFailure",
 CancelOrder="[Cancel] Order",
 
 SendEmail="[Order] Email",
+SendEmailSuccess="[Order] EmailSuccess",
 
 
 //methods related to translation
@@ -270,6 +271,11 @@ export class SendEmail implements Action{
     constructor(public OrderId:number){};
 }
 
+export class SendEmailSuccess implements Action{
+    readonly type=ProductActionTypes.SendEmailSuccess;
+    constructor(public status:boolean){};
+}
+
 //methods of translation
 export class GetCommonFields implements Action{
     readonly type=ProductActionTypes.GetCommonFields;
@@ -376,6 +382,7 @@ LogInUserSuccess|
 CheckLogInStatus|
 CheckLogInStatusSuccess|
 CheckLogInStatusFailure|
+SendEmailSuccess|
 GetState;
     
 

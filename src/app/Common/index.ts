@@ -68,6 +68,11 @@ export const OrderById=createSelector(
   (state:fromProduct.ProductState)=>state.OrderItemById
 )
 
+export const MailSent=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.mailSent
+)
+
 //selectors related to translation
 export const CommonData=createSelector(
   getProductFeatureState,

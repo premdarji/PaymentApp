@@ -163,11 +163,11 @@ export class BuyComponent implements OnInit {
         this.store.dispatch(new fromActions.CreateOrderDetails(Details));
   
         }
+       
         this.sendInvoice();
-
       })
       
-      
+     
     });
     options.modal.ondismiss = (() => {
       // handle the case when user closes the form while transaction is in progress
@@ -181,73 +181,31 @@ export class BuyComponent implements OnInit {
 
 
 
-
-
-  
-
-  // generateInvoicePdf(){
-
-  //   var data = document.getElementById('contentToConvert'); 
-  //   html2canvas(data).then(canvas => {  
-
-  //     var imgWidth = 200;   
-  //     var pageHeight = 1600;    
-  //     var imgHeight = canvas.height * imgWidth / canvas.width;  
-  //     var heightLeft = imgHeight;  
-  
-  //     const contentDataURL = canvas.toDataURL('image/png')  
-     
-  //     let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
-  //     var position = 0;  
-  //     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
-  //     pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
-    
-
-  //     let Details={
-  //       ProductId:this.ProductId,
-  //       Amount:this.final,
-  //       Quantity:Number(this.qty),
-  //       OrderId:this.orderId
-  //     }
-
-  //     this.store.dispatch(new fromActions.CreateOrderDetails(Details));
-
-  //     this.store.dispatch(new fromActions.SendEmail(this.orderId))
-
-  //     // let Details={
-  //     //   ProductId:this.ProductId,
-  //     //   Amount:this.final,
-  //     //   Quantity:Number(this.qty),
-  //     //   OrderId:this.orderId
-  //     // }
-  //     // this.order.PostDetailOrder(Details).subscribe(res=>{
-
-        
-  //     //   this.zone.run(()=>{
-  //     //     this.router.navigate(['/home/order']);
-  //     //   })
-  //     // })
-
-  //     this.zone.run(()=>{
-  //          this.router.navigate(['/home/order']);
-  //        })
-
-
-    
-
-  //   });  
-
-    
-            
-          
-
-  // }
-
   sendInvoice(){
-    this.store.dispatch(new fromActions.SendEmail(this.orderId));
     this.zone.run(()=>{
-      this.router.navigate(['/home/order']);
+      this.notification.success("Please wait a moment we are processing your order.");
     })
+   
+    this.store.dispatch(new fromActions.SendEmail(this.orderId));
+    //this.store.dispatch(new fromActions.GetOrderList());
+  
+    this.store.pipe(select(selector.MailSent)).subscribe(res=>{
+      console.log(res)
+      if(res==true){
+        this.zone.run(()=>{
+          this.router.navigate(['/home/order']);
+        })
+       
+      }
+    })
+    
+   
+    // setTimeout(() => {
+      
+    // }, 2000);
+      
+     
+    
   }
 
 }

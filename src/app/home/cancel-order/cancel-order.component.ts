@@ -68,6 +68,7 @@ export class CancelOrderComponent implements OnInit {
         Reason:this.reason
       }
       this.store.dispatch(new fromActions.CancelOrder(Order));
+      this.notification.success("Please wait we are proccesing your request. ")
       this.dialogref.close();
 
     }

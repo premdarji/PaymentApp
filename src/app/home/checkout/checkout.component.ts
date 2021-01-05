@@ -60,6 +60,41 @@ export class CheckoutComponent implements OnInit {
 
     ngOnInit(): void {
 
+       
+    var length=sessionStorage.getItem("CartLength")
+    console.log(length)
+    let i=0;
+    
+    while(i<Number(length)){
+      i+=1;
+      var itemid=sessionStorage.getItem("cart"+i)
+      console.log(itemid);
+      let cart={
+        productId:'',
+        name:'',
+        imageUrl:'',
+        price:0,
+        quantity:1,
+        stock:0,
+        description:''
+      }
+      this.productservice.getProductById(itemid).subscribe(res=>{
+        this.temp=res;
+        cart.productId=this.temp.productId;
+        cart.name=this.temp.name;
+        cart.price=this.temp.price;
+        cart.quantity=1;
+        cart.stock=this.temp.quantity;
+        cart.description=this.temp.description;
+        cart.imageUrl=this.temp.imageUrl;
+        this.cartItems.push(cart)
+      })
+    }
+    this.cartTotal();
+    
+
+
+
       
       this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
         if (result) {
@@ -211,6 +246,7 @@ export class CheckoutComponent implements OnInit {
           Amount:this.final
         }
       
+        debugger
 
         this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
         this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
@@ -232,20 +268,11 @@ export class CheckoutComponent implements OnInit {
               Detail.Quantity=element.quantity,
               Detail.OrderId=this.orderId;
               this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
-            // this.deleteFromCart(element.cartId);
-              if(lastIndex-1==this.cartItems.indexOf(element)){
-              // this.sendInvoiceDetails();
-              }
+              this.deleteFromCart(element.cartId);
+            
               
             });
-      
-      
           
-            this.zone.run(()=>{
-              this.router.navigate(['/home/order']);
-            })
-          
-            
         
           }
           this.sendInvoiceDetails()
@@ -263,70 +290,29 @@ export class CheckoutComponent implements OnInit {
 
 
 
-
-
-  // generateInvoicePdf(){
-
-  //   var data = document.getElementById('contentToConvert');  
-
-  //   html2canvas(data).then(canvas => {  
-  //     // Few necessary setting options  
-  //     var imgWidth = 200;   
-  //     var pageHeight = 1600;    
-  //     var imgHeight = canvas.height * imgWidth / canvas.width;  
-  //     var heightLeft = imgHeight;  
-  
-  //     const contentDataURL = canvas.toDataURL('image/png')  
-  
-  //     let pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
-   
-  //     var position = 0;  
-  //     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
-  
-  //     pdf.save('Invoice_'+this.orderId+'.pdf'); // Generated PDF   
-
-
-
-
-  //     let Detail={
-  //       ProductId:'',
-  //       Amount:0,
-  //       Quantity:'',
-  //       OrderId:''
-  //     }
-
-  //     this.cartItems.forEach(element => {
-  //       debugger
-  //       Detail.ProductId=element.productId,
-  //       Detail.Amount=element.quantity*element.price,
-  //       Detail.Quantity=element.quantity,
-  //       Detail.OrderId=this.orderId;
-  //       console.log(Detail)
-  //       this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
-  //       this.deleteFromCart(element.cartId);
-  //     });
-
-  //     this.store.dispatch(new fromActions.SendEmail(this.orderId))
-  //     this.zone.run(()=>{
-  //       this.router.navigate(['/home/order']);
-  //     })
-  //     // this.order.SendInvoiceMail(this.orderId).subscribe(res=>{
-       
-       
-  //     // })
-    
-    
-
-  //   });     
-
-  // }
-
   deleteFromCart(cartId){
     this.store.dispatch(new fromActions.RemoveFromCart(cartId));
   }
 
   sendInvoiceDetails(){
-    this.store.dispatch(new fromActions.SendEmail(this.orderId))
+
+    this.zone.run(()=>{
+      this.notification.success("Please wait a moment we are processing your order.");
+    })
+   
+    this.store.dispatch(new fromActions.SendEmail(this.orderId));
+    //this.store.dispatch(new fromActions.GetOrderList());
+  
+    this.store.pipe(select(selector.MailSent)).subscribe(res=>{
+      console.log(res)
+      if(res==true){
+        this.zone.run(()=>{
+          this.router.navigate(['/home/order']);
+        })
+       
+      }
+    })
+   
   }
 
 }
