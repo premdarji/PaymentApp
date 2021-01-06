@@ -246,7 +246,7 @@ export class CheckoutComponent implements OnInit {
           Amount:this.final
         }
       
-        debugger
+       // debugger
 
         this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
         this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
@@ -262,7 +262,7 @@ export class CheckoutComponent implements OnInit {
             }
             let lastIndex=this.cartItems.length;
             this.cartItems.forEach(element => {
-              debugger
+              //debugger
               Detail.ProductId=element.productId,
               Detail.Amount=element.quantity*element.price,
               Detail.Quantity=element.quantity,

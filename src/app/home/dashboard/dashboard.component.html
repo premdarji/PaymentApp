@@ -34,7 +34,8 @@
 
           <mat-card class="col-md-3 mb-5 mr-2 shadow-lg" *ngFor="let product of products   | filter:filter |orderBy: key : reverse   ;let i = index " (mouseenter)="hover(i)" >
             <div style="height: 200px;" >
-              <img class="card-img-top" src="{{product.imageUrl}}" alt="" style="height: 100%;">
+              <img class="card-img-top" src="{{product.imageUrl}}" alt="" style="height: 100%; ">
+              <img style="z-index: 1;position: static; margin-left: 40%;"  src="assets\Images\69984235-sold-out-rubber-business-stamp.jpg" width="30%" height="40%" *ngIf="product.quantity==0">
             </div>
             <div class="card-body ml-0 mb-0">
               <h4 class="card-title">
@@ -67,7 +68,7 @@
               <button mat-raised-button color="primary" class="mr-3" (click)="addtoCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon>{{commondata.Cart}}</button>
               <button mat-raised-button color="warn" (click)="buyNow(product.productId)" *ngIf="product.quantity>0">{{commondata.Buy}}</button>
             
-                <img src="assets\Images\images.png" width="30%" height="35px" *ngIf="product.quantity==0">
+               
               
             </div>
 

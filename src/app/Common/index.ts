@@ -41,6 +41,11 @@ export const ProductsGuest =createSelector(
   (state:fromProduct.ProductState)=>state.productsGuest
 )
 
+export const Loading =createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.loading
+)
+
 //selectors related to cart
 export const GetCartItems=createSelector(
   getProductFeatureState,

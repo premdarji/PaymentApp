@@ -62,7 +62,7 @@ export class HomeComponent  implements OnInit  {
       }
     })
    
-   // this.getCount();
+   this.getCount();
     
     //this.selectedclass=this.service.getID()
  
@@ -107,10 +107,19 @@ export class HomeComponent  implements OnInit  {
 
   
   getCount(){
-    this.product.getCount().subscribe(res=>{
-      this.count=res;
-   
-    })
+    if(this.checkLogInStatus()){
+      this.store.dispatch(new fromActions.GetCartCount());
+      this.store.pipe(select(selector.CartCount)).subscribe(res=>{
+        this.count=res;
+      })
+      // this.product.getCount().subscribe(res=>{
+      //   this.count=res;
+      // })
+    }
+    else{
+      this.count=sessionStorage.getItem("CartLength");
+    }
+  
   }
 
   orders(){

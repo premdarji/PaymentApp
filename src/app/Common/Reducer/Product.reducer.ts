@@ -25,6 +25,7 @@ export interface ProductState{
     productsGuest:any[];
     isLooggedIn:boolean;
     mailSent:boolean;
+    loading:boolean
 
 }
 
@@ -43,12 +44,14 @@ export const initialState :ProductState={
     productsGuest:[],
     isLooggedIn:false,
     mailSent:false,
+    loading:true
+    
 
 }
 
 
 export function reducer(state = initialState, action:ProductActions ): ProductState {
-   
+  // debugger
     switch (action.type) {
   
         //cases of product
@@ -70,7 +73,7 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
             return {...state,product:null};
         
         case ProductActionTypes.GetProductByIdSuccess:
-          
+            
             return{...state,product:action.product};
         
         case ProductActionTypes.GetAllProductsGuest:

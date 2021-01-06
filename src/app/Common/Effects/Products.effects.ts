@@ -7,6 +7,7 @@ import { map, mergeMap, catchError, tap, concatMap, switchMap } from "rxjs/opera
 import {ProductService} from 'src/app/shared/product.service';
 
 import * as fromProductActions from "../Actions/Product.actions";
+import {ProductActions} from "../Actions/Product.actions";
 import { of } from "rxjs";
 import { Router } from "@angular/router";
 import { Product } from 'src/app/models/Product.model';
@@ -45,7 +46,7 @@ export class ProductEffects {
    
         ofType(fromProductActions.ProductActionTypes.GetProductList),
       
-        mergeMap(action  =>
+        mergeMap((action:fromProductActions.GetProductList)  =>
           this.productService.getAll(action.pageNumber,action.pageSize).pipe(
               map((product:Product[])=>{
                // debugger;
@@ -68,9 +69,10 @@ export class ProductEffects {
     GetProductById$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetProductById),
-        switchMap((action)=>
+        concatMap((action:fromProductActions.GetProductById)=>
           this.productService.getProductById(action.productId).pipe(
               map((result:Product)=>{
+                console.log(result)
                 return new fromProductActions.GetProductByIdSuccess(result);
               }),
           ),
@@ -110,7 +112,7 @@ export class ProductEffects {
     DeleteProduct$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.DeleteProduct),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.DeleteProduct)=>
           this.productService.deleteProduct(action.productId).pipe(
               map((result:any[])=>{
               
@@ -159,7 +161,7 @@ export class ProductEffects {
     AddToCart$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.AddToCart),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.AddToCart)=>
           this.productService.addtoCart(action.productId).pipe(
               map((result)=>{
                 if(result["message"]=="exist"){
@@ -179,7 +181,7 @@ export class ProductEffects {
     UpdateCart$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.UpdateCart),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.UpdateCart)=>
           this.productService.updateCart(action.cartId,action.qty).pipe(
               map((result)=>{
               
@@ -194,7 +196,7 @@ export class ProductEffects {
     RemoveFromCart$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.RemoveFromCart),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.RemoveFromCart)=>
           this.productService.removeFormCart(action.cartId).pipe(
               map((result)=>{
               
@@ -228,7 +230,7 @@ export class ProductEffects {
     AddtoWishlist$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.AddToWishlist),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.AddToWishlist)=>
           this.wishlistservice.addToWishlist(action.productId).pipe(
               map((result)=>{
                   return new fromProductActions.GetState();
@@ -242,7 +244,7 @@ export class ProductEffects {
     RemoveFromWishlist$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.RemoveFromWishlist),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.RemoveFromWishlist)=>
           this.wishlistservice.removeFromWishlist(action.productId).pipe(
               map((result)=>{
                   return new fromProductActions.GetState();
@@ -261,7 +263,7 @@ export class ProductEffects {
     GetCommonFields$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetCommonFields),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.GetCommonFields)=>
           this.languageservice.getData(action.data).pipe(
               map((result:any)=>{
             
@@ -276,7 +278,7 @@ export class ProductEffects {
     GetOrderById$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.GetOrderById),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.GetOrderById)=>
           this.orderservice.getOrderDetailById(action.OrderId).pipe(
               map((result:any)=>{
                 return new fromProductActions.GetOrderByIdSuccess(result);
@@ -289,7 +291,7 @@ export class ProductEffects {
     CancelOrder$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.CancelOrder),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.CancelOrder)=>
           this.orderservice.cancelOrder(action.Order).pipe(
               map((result:any)=>{
                 if(result==true){
@@ -320,7 +322,7 @@ export class ProductEffects {
     CreateOrder$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.CreateOrder),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.CreateOrder)=>
           this.orderservice.createOrder(action.Order).pipe(
               map((result:any)=>{
                 console.log(result['id']);
@@ -334,7 +336,7 @@ export class ProductEffects {
     PostOrderDetails$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.CreateOrderDetails),
-        mergeMap((action)=>
+        mergeMap((action:fromProductActions.CreateOrderDetails)=>
           this.orderservice.postDetailOrder(action.OrderDetails).pipe(
               map((result:any)=>{
                 console.log(result);
@@ -349,7 +351,7 @@ export class ProductEffects {
     SendEmail$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.SendEmail),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.SendEmail)=>
           this.orderservice.sendInvoiceMail(action.OrderId).pipe(
               map((result:any)=>{
                 console.log("Result after sending mail:" +result);
@@ -378,7 +380,7 @@ export class ProductEffects {
     DeleteCategory$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.DeleteCategory),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.DeleteCategory)=>
           this.productService.deleteCategory(action.CategoryId).pipe(
               map((result)=>{
                 this.notification.Delete("category removed");
@@ -423,7 +425,7 @@ export class ProductEffects {
     LogInUser$=createEffect(()=>
       this.actions$.pipe(
         ofType(fromProductActions.ProductActionTypes.LogInUser),
-        switchMap((action)=>
+        switchMap((action:fromProductActions.LogInUser)=>
           this.userService.login(action.UserData).pipe(
               map((result)=>{
                 if(result['message']=='invalid credentials'){
@@ -443,7 +445,7 @@ export class ProductEffects {
         switchMap((action)=>
           this.userService.checkLogInStatus().pipe(
               map((result)=>{
-                console.log(result);
+               // console.log(result);
                 if(result==true){
                   return new fromProductActions.CheckLogInStatusSuccess();
                 }

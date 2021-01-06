@@ -55,7 +55,9 @@ export class DashboardComponent implements OnInit {
   
 
   ngOnInit(): void {
-    sessionStorage.setItem("CartLength",String(0));
+
+  
+    
     //this.RefreshProducts(); 
    // this.store.dispatch(new fromActions.CheckLogInStatus());
     this.loadProduct();
@@ -135,16 +137,30 @@ export class DashboardComponent implements OnInit {
 
     if(this.checkLoginStatus()){
       this.store.dispatch(new fromActions.AddToCart(data));
-      this.home.getCount();
+      this.store.dispatch(new fromActions.GetCartCount())
     }
     else{
-      var len=Number(sessionStorage.getItem("CartLength"));
-      console.log(len)
-      sessionStorage.setItem("cart"+(len+1),data);
-      //this.login(this.returnUrl);
-      sessionStorage.setItem("CartLength",String(len+1));
-      this.notification.update("Item added to cart")
-      //this.notification.Delete("Please log in or register  before add this product to your cart");
+      var items=[];
+      items= JSON.parse(sessionStorage.getItem("cart"))
+      console.log(items)
+      if(items==null){
+        items=[];
+        items.push(data)
+        sessionStorage.setItem("cart",JSON.stringify(items));
+      }
+      else{
+        if(!items.includes(data)){
+          this.notification.update("Item added to cart")
+          items.push(data);
+          sessionStorage.setItem("cart",JSON.stringify(items));
+         
+        }
+        else{
+          this.notification.Delete("Item already added");
+        }
+
+      }
+     
     }
    
   }
