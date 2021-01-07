@@ -81,12 +81,16 @@ export class ProductService {
 
   }
 
-  removeFormCart(id){
+  deleteFormCart(id){
     return this.http.delete(this.APIURL+"/Cart/Delete/"+id);
   }
   
-  updateCart(id,qty){
-    return this.http.put(this.APIURL+"/Cart/Update/"+id+"/"+qty,null);
+  updateAddCart(id){
+    return this.http.put(this.APIURL+"/Cart/AddToCart",id);
+  }
+
+  updateRemoveCart(id){
+    return this.http.put(this.APIURL+"/Cart/Remove",id);
   }
 
 

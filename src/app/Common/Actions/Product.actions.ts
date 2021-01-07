@@ -17,6 +17,9 @@ GetProductById="[ProductById] Get",
 GetProductByIdSuccess="[ProductSuccess] GetSuccess",
 GetProductByIdFailure="[ProductFailure] GetFailure",
 
+GetProductsByCategory="[ProductByCategory] Get",
+GetProductsByCategorySuccess="[ProductByCategory] GetSuccess",
+
 GetAllProductsGuest="[Product] Get",
 GetAllProductsGuestSuccess="[Product] Success",
 
@@ -49,8 +52,9 @@ GetCartList="[CartList] GetCart",
 GetCartListSuccess="[CartListSuccess] GetSuccess",
 GetCartListFailure="[CartListFailure] GetFailure",
 
-UpdateCart="[Update] Cart",
-RemoveFromCart="[Cart] Remove",
+UpdateAddCart="[Update] AddCart",
+UpdateRemoveCart="[Update] RemoveCart",
+DeleteFromCart="[Cart] Delete",
 
 GetCartCount="[CartCount] Get",
 GetCartCountSuccess="[CartCount] GetSuccess",
@@ -65,7 +69,9 @@ GetState="[State] GetState",
 //methods related to order
 CreateOrder="[Order] Create",
 CreateOrderSuccess="[Order] Success",
+
 CreateOrderDetails="[Order] Details",
+CreateOrderDetailsSuccess="[Order] DetailsSuccess",
 
 GetOrderList="[OrderList] Get",
 GetOrderListSuccess="[OrderListSuccess] GetSuccess",
@@ -127,6 +133,16 @@ export class GetProductByIdSuccess implements Action{
     constructor(public product:Product){};
 }
 
+export class GetProductsByCategory implements Action{
+    readonly type=ProductActionTypes.GetProductsByCategory;
+    constructor(public categoryId:number){};
+}
+
+export class GetProductsByCategorySuccess implements Action{
+    readonly type=ProductActionTypes.GetProductsByCategorySuccess;
+    constructor(public products:Product[]){};
+}
+
 export class GetAllProductsGuest implements Action{
     readonly type =ProductActionTypes.GetAllProductsGuest;
     constructor(){};
@@ -183,14 +199,18 @@ export class AddToCartFailure implements Action{
 }
 
 
-export class UpdateCart implements Action{
-    readonly type=ProductActionTypes.UpdateCart;
-    constructor(public cart:any[],public cartId:number,public qty:number){}
+export class UpdateAddCart implements Action{
+    readonly type=ProductActionTypes.UpdateAddCart;
+    constructor(public cartId:number){}
 }
 
+export class UpdateRemoveCart implements Action{
+    readonly type=ProductActionTypes.UpdateRemoveCart;
+    constructor(public cartId:number){}
+}
 
-export class RemoveFromCart implements Action {
-    readonly type=ProductActionTypes.RemoveFromCart;
+export class DeleteFromCart implements Action {
+    readonly type=ProductActionTypes.DeleteFromCart;
     constructor(public cartId:number){}
 }
 
@@ -263,6 +283,11 @@ export class CreateOrderSuccess implements Action{
 export class CreateOrderDetails implements Action{
     readonly type =ProductActionTypes.CreateOrderDetails;
     constructor(public OrderDetails:any){};
+}
+
+export class CreateOrderDetailsSuccess implements Action{
+    readonly type=ProductActionTypes.CreateOrderDetailsSuccess;
+    constructor(public payload:boolean){};
 }
 
 
@@ -344,16 +369,19 @@ export type ProductActions=
 GetProductList|
 GetProductListSuccess|
 GetProductListFailure|
+GetProductsByCategory|
+GetProductsByCategorySuccess|
 GetCartList|
 GetCartListSuccess|
 GetCartListFailure|
 AddToCart|
-RemoveFromCart|
+UpdateAddCart|
+UpdateRemoveCart|
+DeleteFromCart|
 AddToWishlist|
 RemoveFromWishlist|
 GetProductById|
 GetProductByIdSuccess|
-UpdateCart|
 GetOrderList|
 GetOrderListSuccess|
 GetCartCount|
@@ -370,6 +398,7 @@ AddCategory|
 UpdateCategory|
 CreateOrder|
 CreateOrderDetails|
+CreateOrderDetailsSuccess|
 CreateOrderSuccess|
 SendEmail|
 GetAllProductsGuest|

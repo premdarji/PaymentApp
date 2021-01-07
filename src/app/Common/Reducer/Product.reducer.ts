@@ -26,6 +26,7 @@ export interface ProductState{
     isLooggedIn:boolean;
     mailSent:boolean;
     loading:boolean
+    deleteCart:boolean;
 
 }
 
@@ -44,7 +45,8 @@ export const initialState :ProductState={
     productsGuest:[],
     isLooggedIn:false,
     mailSent:false,
-    loading:true
+    loading:true,
+    deleteCart:false
     
 
 }
@@ -56,7 +58,7 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
   
         //cases of product
         case ProductActionTypes.GetProductList:
-            return { ...state, };
+            return { ...state};
             
         case ProductActionTypes.GetProductListSuccess:
             //state.temp=action.payload;
@@ -76,6 +78,12 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
             
             return{...state,product:action.product};
         
+        case ProductActionTypes.GetProductsByCategory:
+            return {...state,products:null};
+
+        case ProductActionTypes.GetProductsByCategorySuccess:
+            return {...state,products:action.products};
+
         case ProductActionTypes.GetAllProductsGuest:
             return { ...state};
         case ProductActionTypes.GetAllProductsGuestSuccess:
@@ -98,13 +106,14 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
             return {...state};
         case ProductActionTypes.AddToCart:
             return{...state};
-        case ProductActionTypes.UpdateCart:
-            //state.cartItems=[];
+        case ProductActionTypes.UpdateAddCart:
             return{...state,cartItems:null};
         
-        case ProductActionTypes.RemoveFromCart:
-                    
+        case ProductActionTypes.UpdateRemoveCart:
             return {...state};
+
+        case ProductActionTypes.DeleteFromCart:  
+            return {...state,deleteCart:false};
         case ProductActionTypes.GetCartCount:
             return {...state};    
         
@@ -146,6 +155,9 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
         case ProductActionTypes.CreateOrderDetails:
             return {...state};
            
+        case ProductActionTypes.CreateOrderDetailsSuccess:
+            return {...state};
+
         case ProductActionTypes.GetState:
             return{...state};
 

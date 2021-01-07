@@ -36,39 +36,50 @@ export class DashboardComponent implements OnInit {
     private lang:LanguageService,
     private dialog:MatDialog
   ) { }
-  //private store: Store<AppState>
-
+  
   products:Product[]=[];
   filter:any;
   selected="";
   wishlist:any[]=[];
-  temp:any;
   pageNumber=1;
   pageSize=6;
   categoryselected:boolean=false;
   commondata:any;
-  isLoggedIn:boolean;
-  hoverIndex:number;
   returnUrl:string;
   annonymousUser=0;
+  key: string = 'price'; //set default
+  reverse: boolean = false;
   text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
   
 
   ngOnInit(): void {
 
-  
-    
-    //this.RefreshProducts(); 
-   // this.store.dispatch(new fromActions.CheckLogInStatus());
-    this.loadProduct();
-   // this.getProducts();
-
+    //subscriber for commondata
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
       
       }
     })
+
+    //subscriber for productlist for logged in user
+    this.store.pipe(select(selector.GetProductList)).subscribe((result: any) => {
+      if (result) {
+      this.products = result;
+      }
+    })
+
+    //subscriber for productlist for guest user
+    this.store.pipe(select(selector.ProductsGuest)).subscribe((result: any) => {
+      if (result) {
+      this.products = result;
+      }
+    })
+
+
+
+    this.loadProduct();
+    
 
     
   }
@@ -82,48 +93,37 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+
   loadProduct(){
 
-    this.store.pipe(select(selector.IsLoggedIn)).subscribe((result: any) => {
-      
-      this.isLoggedIn = result;
-        if(this.isLoggedIn==false){
+    this.store.pipe(select(selector.IsLoggedIn)).subscribe((result:boolean) => {
+        if(result==false){
           this.store.dispatch(new fromActions.GetAllProductsGuest());
-          this.store.pipe(select(selector.ProductsGuest)).subscribe((result: any) => {
-            if (result) {
-            this.products = result;
-            }
-          })
-    
         }
         else{
-          this.getProducts();
-          this.store.pipe(select(selector.CheckLimit)).subscribe((result: any) => {
+          this.store.pipe(select(selector.CheckLimit)).subscribe((result:boolean) => {
             if (result==false) {
-            this.store.dispatch(new fromActions.GetProductList(this.pageNumber,this.pageSize));
+              this.store.dispatch(new fromActions.GetProductList(this.pageNumber,this.pageSize));
               this.getProducts();
             }
           })
-    
         }  
-      
     })
   }
   
+
   noCategory(){
     this.categoryselected=false;
     this.products=[];
     this.pageNumber=1;
+    this.store.dispatch(new fromActions.GetProductList(this.pageNumber,this.pageSize));
     this.getProducts();
   }
 
   clear(){
-    console.log("clear")
     this.filter='';
   }
 
-  key: string = 'price'; //set default
-  reverse: boolean = false;
   sortLH(key){
     this.key = key;
     this.reverse = false;
@@ -134,7 +134,6 @@ export class DashboardComponent implements OnInit {
   }
 
   addtoCart(data){
-
     if(this.checkLoginStatus()){
       this.store.dispatch(new fromActions.AddToCart(data));
       this.store.dispatch(new fromActions.GetCartCount())
@@ -147,6 +146,7 @@ export class DashboardComponent implements OnInit {
         items=[];
         items.push(data)
         sessionStorage.setItem("cart",JSON.stringify(items));
+        this.notification.update("Item added to cart")
       }
       else{
         if(!items.includes(data)){
@@ -158,28 +158,20 @@ export class DashboardComponent implements OnInit {
         else{
           this.notification.Delete("Item already added");
         }
-
       }
-     
     }
-   
   }
 
   getProductsByCategory(data){
     this.categoryselected=true;
-    console.log(this.selected)
-    this.service.getProductsByCategory(data).subscribe(res=>{
-      this.products=[];
-      this.temp=res;
-      this.products.push(...this.temp)
-     
-    })
+    this.store.dispatch(new fromActions.GetProductsByCategory(data));
   }
+
 
   detail(Id){
     this.router.navigate(['/home/detail/',Id]);
-
   }
+
 
   buyNow(Id){
     if(this.checkLoginStatus()){
@@ -187,7 +179,6 @@ export class DashboardComponent implements OnInit {
     }
     else{
       this.returnUrl='/home/buy/'+Id;
-      console.log(this.returnUrl)
       this.login(this.returnUrl)
       this.notification.Delete("Please log in or register  before buy this product")
     }
@@ -198,14 +189,11 @@ export class DashboardComponent implements OnInit {
       this.products[index].isWishListItem = false;
       this.notification.Delete("Removed from wishlist");
       this.store.dispatch(new fromActions.RemoveFromWishlist(this.products,data));
-
     }
     else{
 
     }
-
-   
-   
+ 
   }
 
   addToWishlist(data,index){
@@ -225,11 +213,12 @@ export class DashboardComponent implements OnInit {
   }
 
   checkLoginStatus():boolean{
+    let isLoggedIn;
     this.store.dispatch(new fromActions.CheckLogInStatus());
-    this.store.select(selector.IsLoggedIn).subscribe(res=>{
-     this.isLoggedIn=res
+    this.store.select(selector.IsLoggedIn).subscribe((res:boolean)=>{
+      isLoggedIn=res;
     })
-    if(this.isLoggedIn==true){
+    if(isLoggedIn==true){
       return true;
     }
 
@@ -248,14 +237,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  hover(id)
-  {
-    //console.log("on hover :"+id)
-    this.hoverIndex=id;
-  }
-
-
-
+ 
 
 
   

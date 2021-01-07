@@ -15,6 +15,8 @@ import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
 import { element } from 'protractor';
 import { LoginComponent } from 'src/app/login/login.component';
+import { Cart } from 'src/app/models/cart.model';
+import { Product } from 'src/app/models/Product.model';
 
 @Component({
   selector: 'app-cart',
@@ -33,8 +35,6 @@ export class CartComponent implements OnInit {
     ) { }
 
   cartItems:any;
-
-  temp:any[];
   showComponent=false;
   total:number=0;
   ids=[];
@@ -50,87 +50,14 @@ export class CartComponent implements OnInit {
   
   ngOnInit(): void {
 
+    //subscribe for common data.
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
       }
     })
 
-
-    if(this.checkLoginStatus()){
-        
-       this.store.dispatch(new fromActions.GetCartCount())
-        this.store.dispatch(new fromActions.GetCartList());
-        this.loadCart();
-      
-    }
-    else{
-  
-      this.loadCartWithoutLogin();
-     
-    }
-    
-  }
-
-
-  loadCartWithoutLogin(){
-    let items=JSON.parse(sessionStorage.getItem("cart"))
-    console.log(items);
-    if(items.length>0){
-      this.showAnnonymous=true;
-
-      let cart={
-        productId:0,
-        name:'',
-        price:0,
-        imageUrl:'',
-        quantity:1,
-        description:'',
-        stock:0
-  
-      }
-  
-  
-      items.forEach(element => {
-        this.store.dispatch(new fromActions.GetProductById(Number(element)))
-  
-        this.store.select(selector.GetProductById).subscribe((res:any)=>{
-          // console.log(res)
-           
-           if(res!=null){
-         
-           cart.productId=res["productId"];
-           cart.name=res["name"];
-           cart.imageUrl=res["imageUrl"];
-           cart.description=String(res["description"]);
-           cart.price=res["price"];
-           cart.stock=res["quantity"];
-          
-           console.log(cart)
-           
-           this.cartItemsAnnonymous.push(cart)
-           this.cartTotal();
-           }
-         
-         })
-  
-    
-  
-      });
-       
-
-
-
-    }
-    else{
-      this.showAnnonymous=false;
-    }
-  }
-
-
-
-
-  loadCart(){
+    //subscribe for cartItems when user is logged in
     this.store.pipe(select(selector.GetCartItems)).subscribe((result: any) => {
       if (result) {
         this.cartItems=result;
@@ -139,19 +66,70 @@ export class CartComponent implements OnInit {
           this.showAnnonymous=false;
         }
        this.cartTotal();
-       this.store.dispatch(new fromActions.GetCartCount());
+       //this.store.dispatch(new fromActions.GetCartCount());
    
       }
     })
+
+    //subscriber for cartitems when user is not logged in
+    this.store.pipe(select(selector.GetProductById)).subscribe((res:Product)=>{
+     
+      let temp:Cart=new Cart();
+
+       if(res!=null){
+   
+       temp.productId=res["productId"];
+       temp.name=res["name"];
+       temp.imageUrl=res["imageUrl"];
+       temp.description=String(res["description"]);
+       temp.price=res["price"];
+       temp.stock=res["quantity"];
+       
+       this.cartItemsAnnonymous.push(temp)
+       this.cartTotal();
+       }
+     
+    })
+
+
+    if(this.checkLoginStatus()){
+       this.store.dispatch(new fromActions.GetCartCount())
+       this.store.dispatch(new fromActions.GetCartList()); 
+    }
+    else{
+      this.loadCartWithoutLogin(); 
+    }
+    
+  }
+
+
+
+  loadCartWithoutLogin(){
+    this.cartItemsAnnonymous=[];
+    let items=JSON.parse(sessionStorage.getItem("cart"))
+    if(items!=null){
+      if(items.length>0){   
+        this.showAnnonymous=true;
+        items.forEach(element => {
+          this.store.dispatch(new fromActions.GetProductById(Number(element)))
+        });
+
+      }
+      else{
+        this.showAnnonymous=false;
+      }
+    }
+    else{
+      this.showAnnonymous=false;
+    }
   }
 
 
   removeFromCart(id,index){
 
     if(this.cartItems[index].quantity>1){
-      this.cartItems[index].quantity=this.cartItems[index].quantity-1;
-      this.total-=this.cartItems[index].price;
-      this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));    
+      this.store.dispatch(new fromActions.UpdateRemoveCart(id));    
+      this.notification.Delete("removed from cart");
     }
     else{
       
@@ -164,11 +142,8 @@ export class CartComponent implements OnInit {
     
          dialogRef.afterClosed().subscribe(dialogResult => {
              if(dialogResult==true){
-               this.total-=this.cartItems[index].price;
-               this.store.dispatch(new fromActions.GetCartCount())
-               this.store.dispatch(new fromActions.RemoveFromCart(id));
-               this.loadCart();
-               this.notification.Delete("Item is removed from cart"); 
+                this.store.dispatch(new fromActions.DeleteFromCart(id));
+                this.notification.Delete("Item is removed from cart"); 
              }
          });
     }
@@ -180,9 +155,8 @@ export class CartComponent implements OnInit {
   addToCart(id,index){
 
     if(this.cartItems[index].stock>this.cartItems[index].quantity){
-      this.cartItems[index].quantity=this.cartItems[index].quantity+1;
-      this.total+=this.cartItems[index].price;
-      this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));
+      this.store.dispatch(new fromActions.UpdateAddCart(id));
+      this.notification.update("added to cart");
     }
     else{
       this.notification.Delete("out of stock")
@@ -193,16 +167,12 @@ export class CartComponent implements OnInit {
   cartTotal(){
     this.total=0;
     if(this.checkLoginStatus()){
-     
       this.cartItems.forEach(element => {
-    
         this.total += (element.quantity*element.price)
       }); 
     }
     else{
-   
      this.cartItemsAnnonymous.forEach(element => {
-      
        this.total+=(element.quantity*element.price)
      });
   
@@ -226,7 +196,6 @@ export class CartComponent implements OnInit {
         else{
           this.router.navigate(["home/checkout"])
         }
-
       }
     })
     
@@ -234,9 +203,8 @@ export class CartComponent implements OnInit {
 
 
   delete(id){
-    this.store.dispatch(new fromActions.RemoveFromCart(id));
-    this.notification.Delete("Item removed form cart");
-   
+    this.store.dispatch(new fromActions.DeleteFromCart(id));
+    this.notification.Delete("Item removed form cart"); 
   }
 
   login(returnUrl:string){
@@ -264,15 +232,12 @@ export class CartComponent implements OnInit {
   }
 
   removeAnnonymous(Id,Index){
-    console.log("Product id is:"+Id)
-    console.log(Index)
+
     if(this.cartItemsAnnonymous[Index]['quantity']>1){
       this.cartItemsAnnonymous[Index]['quantity']-=1;
       this.cartTotal();
     }
     else{
-
-
       const message = `Are you sure you want remove this product?`;
         const dialogData = new ConfirmDialogModel("Confirm Action", message);
         const dialogRef=this.dialog.open(ConfirmComponent, {
@@ -289,16 +254,13 @@ export class CartComponent implements OnInit {
               sessionStorage.setItem("cart",JSON.stringify(items))
               this.loadCartWithoutLogin();
            
-             }
+            }
          });
-  
     }
   }
 
 
   addAnnonymous(Id,Index){
-    console.log("Product id is:"+Id)
-    console.log(Index)
     if(this.cartItemsAnnonymous[Index]['quantity']<this.cartItemsAnnonymous[Index]['stock']){
       this.cartItemsAnnonymous[Index]['quantity']+=1;
       this.cartTotal();

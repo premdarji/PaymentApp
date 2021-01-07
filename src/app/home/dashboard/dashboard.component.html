@@ -32,7 +32,7 @@
 
         <div class="row " style="display: flex; justify-content: space-around;">
 
-          <mat-card class="col-md-3 mb-5 mr-2 shadow-lg" *ngFor="let product of products   | filter:filter |orderBy: key : reverse   ;let i = index " (mouseenter)="hover(i)" >
+          <mat-card class="col-md-3 mb-5 mr-2 shadow-lg" *ngFor="let product of products   | filter:filter |orderBy: key : reverse   ;let i = index ">
             <div style="height: 200px;" >
               <img class="card-img-top" src="{{product.imageUrl}}" alt="" style="height: 100%; ">
               <img style="z-index: 1;position: static; margin-left: 40%;"  src="assets\Images\69984235-sold-out-rubber-business-stamp.jpg" width="30%" height="40%" *ngIf="product.quantity==0">

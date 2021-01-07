@@ -55,7 +55,6 @@ export class MyorderComponent implements OnInit {
   }
 
   cancelOrder(id){
-   
     const dialogconfig=new MatDialogConfig();
     dialogconfig.disableClose=false;
     dialogconfig.autoFocus=true;

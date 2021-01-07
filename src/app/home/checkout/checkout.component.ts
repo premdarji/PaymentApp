@@ -19,6 +19,7 @@ import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
 import { generate } from 'rxjs';
 import { element } from 'protractor';
+import { Cart } from 'src/app/models/cart.model';
 
 @Component({
   selector: 'app-checkout',
@@ -28,7 +29,7 @@ import { element } from 'protractor';
 export class CheckoutComponent implements OnInit {
 
     constructor(private productservice:ProductService,
-      private home:HomeComponent,
+  
       public dialog: MatDialog,
       public _formBuilder: FormBuilder,
       private winRef:WindowrefService,
@@ -45,12 +46,20 @@ export class CheckoutComponent implements OnInit {
     temp:any;
     showComponent=false;
     total:number=0;
-
     qty=1;
     Discount=0;
     final=0;
     offerapplied=false;
-    secondFormGroup: FormGroup;
+    //secondFormGroup: FormGroup;
+
+    //form for address
+    secondFormGroup = this._formBuilder.group({
+      Add: ['', Validators.required],
+      City:[''],
+      Dist:[''],
+      Pin:['']
+    });
+
 
     offers=[
       {id:1,offer:"Instant 10% discount",availabe:1},
@@ -60,57 +69,73 @@ export class CheckoutComponent implements OnInit {
 
     ngOnInit(): void {
 
-       
-    var length=sessionStorage.getItem("CartLength")
-    console.log(length)
-    let i=0;
-    
-    while(i<Number(length)){
-      i+=1;
-      var itemid=sessionStorage.getItem("cart"+i)
-      console.log(itemid);
-      let cart={
-        productId:'',
-        name:'',
-        imageUrl:'',
-        price:0,
-        quantity:1,
-        stock:0,
-        description:''
+      //dispatch of cartitems
+      this.store.dispatch(new fromActions.GetCartList());
+
+       //get cartItems from session storage if user add item to cart before login
+      let items=JSON.parse(sessionStorage.getItem("cart"))
+      if(items!=null){
+        if(items.length>0){
+          items.forEach(element => {
+            console.log(element)
+             this.store.dispatch(new fromActions.GetProductById(Number(element)))
+ 
+          });   
+        }
       }
-      this.productservice.getProductById(itemid).subscribe(res=>{
-        this.temp=res;
-        cart.productId=this.temp.productId;
-        cart.name=this.temp.name;
-        cart.price=this.temp.price;
-        cart.quantity=1;
-        cart.stock=this.temp.quantity;
-        cart.description=this.temp.description;
-        cart.imageUrl=this.temp.imageUrl;
-        this.cartItems.push(cart)
-      })
-    }
-    this.cartTotal();
-    
 
+  
 
-
-      
+      //subscribe for commondata
       this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
         if (result) {
         this.commondata = result;
         }
       })
 
-      this.getCartItems();
-      this.home.getCount();
+     //subscribe for cartitems
+      this.store.pipe(select(selector.GetCartItems)).subscribe((result: any) => {
+        if (result) {
+          this.cartItems=[];
+          this.temp=result;
+          this.showComponent = true;
+          this.temp.forEach(element => {
+          if(element.stock>0){
+            if(element.quantity>element.stock){
+              element.quantity=element.stock;
+            }
+            this.cartItems.push(element)
+            //console.log(this.cartItems);
+          }
+          });
+          this.cartTotal();
+        }
+      })
 
-      this.secondFormGroup = this._formBuilder.group({
-        Add: ['', Validators.required],
-        City:[''],
-        Dist:[''],
-        Pin:['']
-      });
+      //subscriber for get items by their id
+    
+      this.store.pipe(select(selector.GetProductById)).subscribe((res:any)=>{             
+        if(res!=null){
+        let temp:Cart=new Cart();
+        console.log("ProductId :"+res["productId"])
+        temp.productId=res["productId"];
+        temp.name=res["name"];
+        temp.imageUrl=res["imageUrl"];
+        temp.description=String(res["description"]);
+        temp.price=res["price"];
+        temp.stock=res["quantity"];
+        
+        this.cartItems.push(temp)
+        console.log(this.cartItems);
+      
+        }
+      
+      })
+
+      this.cartTotal();
+    
+      //this.getCartItems();
+      
     }
  
     getCartItems(){
@@ -128,6 +153,7 @@ export class CheckoutComponent implements OnInit {
               element.quantity=element.stock;
             }
             this.cartItems.push(element)
+            console.log(this.cartItems);
           }
           });
           this.cartTotal();
@@ -138,10 +164,13 @@ export class CheckoutComponent implements OnInit {
 
    removeFromCart(id,index){
         if(this.cartItems[index].quantity>1){
-          this.cartItems[index].quantity=this.cartItems[index].quantity-1;
-          this.total-=this.cartItems[index].price;
-          this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity)); 
-          
+          if(this.cartItems[index].cartId!=null){
+            this.store.dispatch(new fromActions.UpdateRemoveCart(id));
+            this.notification.Delete("Removed from cart");
+          }
+          else{
+            this.cartItems[index].quantity-=1;
+          }
         }
         else{
           
@@ -155,32 +184,35 @@ export class CheckoutComponent implements OnInit {
             dialogRef.afterClosed().subscribe(dialogResult => {
     
                   if(dialogResult==true){
-
-                    this.total-=this.cartItems[index].price;
-                    this.home.getCount();
-                    this.store.dispatch(new fromActions.RemoveFromCart(id));
+                    // if(this.cartItems[index].cartId==null){
+                    //   let items=[];
+                    //   items= JSON.parse(sessionStorage.getItem("cart"));
+                    //   var index=items.indexOf(this.cartItems)
+                    //   items.splice(items.indexOf(index),1);
+                    //   sessionStorage.setItem("cart",JSON.stringify(items))
+                    // }
                 
+                    this.store.dispatch(new fromActions.DeleteFromCart(id));
                     this.notification.Delete("Item is removed from cart"); 
-                  
                   }
             });
           }
-   
     } 
 
     addToCart(id,index){
   
       if(this.cartItems[index].stock>this.cartItems[index].quantity){
-
-        this.cartItems[index].quantity=this.cartItems[index].quantity+1;
-        this.total+=this.cartItems[index].price;
-        this.store.dispatch(new fromActions.UpdateCart(this.cartItems,id,this.cartItems[index].quantity));
-
+        if(this.cartItems[index].cartId!=null){
+          this.store.dispatch(new fromActions.UpdateAddCart(id));
+          this.notification.update("Added to cart");
+        }
+        else{
+          this.cartItems[index].quantity+=1;
+        }
       }
       else{
         this.notification.Delete("Out of Stock")
-      }
-      
+      }  
     }
  
     cartTotal(){
@@ -189,11 +221,7 @@ export class CheckoutComponent implements OnInit {
         this.total += (element.quantity*element.price)
         this.final=this.total;
       });
-
     }
-
-
- 
   
     discount(availabe,index){
       if(index==0 && availabe==1){
@@ -246,34 +274,24 @@ export class CheckoutComponent implements OnInit {
           Amount:this.final
         }
       
-       // debugger
-
         this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
-        this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
+        this.store.select(selector.OrderId).subscribe((result: any) => {
           if (result) {
             this.orderId = result;
-
-
             let Detail={
               ProductId:'',
               Amount:0,
               Quantity:'',
               OrderId:''
-            }
-            let lastIndex=this.cartItems.length;
+            } 
             this.cartItems.forEach(element => {
-              //debugger
               Detail.ProductId=element.productId,
               Detail.Amount=element.quantity*element.price,
               Detail.Quantity=element.quantity,
               Detail.OrderId=this.orderId;
               this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
               this.deleteFromCart(element.cartId);
-            
-              
             });
-          
-        
           }
           this.sendInvoiceDetails()
         })
@@ -291,7 +309,7 @@ export class CheckoutComponent implements OnInit {
 
 
   deleteFromCart(cartId){
-    this.store.dispatch(new fromActions.RemoveFromCart(cartId));
+    this.store.dispatch(new fromActions.DeleteFromCart(cartId));
   }
 
   sendInvoiceDetails(){
@@ -300,19 +318,15 @@ export class CheckoutComponent implements OnInit {
       this.notification.success("Please wait a moment we are processing your order.");
     })
    
-    this.store.dispatch(new fromActions.SendEmail(this.orderId));
-    //this.store.dispatch(new fromActions.GetOrderList());
-  
+    this.store.dispatch(new fromActions.SendEmail(this.orderId));  
     this.store.pipe(select(selector.MailSent)).subscribe(res=>{
       console.log(res)
       if(res==true){
         this.zone.run(()=>{
           this.router.navigate(['/home/order']);
         })
-       
       }
     })
-   
   }
 
 }

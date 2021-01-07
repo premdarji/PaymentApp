@@ -72,8 +72,23 @@ export class ProductEffects {
         concatMap((action:fromProductActions.GetProductById)=>
           this.productService.getProductById(action.productId).pipe(
               map((result:Product)=>{
-                console.log(result)
+               // console.log(result)
                 return new fromProductActions.GetProductByIdSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
+
+    
+    GetProductByCategory$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetProductsByCategory),
+        concatMap((action:fromProductActions.GetProductsByCategory)=>
+          this.productService.getProductsByCategory(action.categoryId).pipe(
+              map((result:Product[])=>{
+                console.log(result)
+                return new fromProductActions.GetProductsByCategorySuccess(result);
               }),
           ),
         ),
@@ -178,29 +193,44 @@ export class ProductEffects {
       )
     );
 
-    UpdateCart$=createEffect(()=>
+    UpdateAddCart$=createEffect(()=>
       this.actions$.pipe(
-        ofType(fromProductActions.ProductActionTypes.UpdateCart),
-        switchMap((action:fromProductActions.UpdateCart)=>
-          this.productService.updateCart(action.cartId,action.qty).pipe(
+        ofType(fromProductActions.ProductActionTypes.UpdateAddCart),
+        switchMap((action:fromProductActions.UpdateAddCart)=>
+          this.productService.updateAddCart(action.cartId).pipe(
               map((result)=>{
               
                 console.log(result);
-                return new fromProductActions.GetState();
+                return new fromProductActions.GetCartList();
               }),
           ),
         ),
       )
     );
 
-    RemoveFromCart$=createEffect(()=>
+
+    UpdateRemoveCart$=createEffect(()=>
       this.actions$.pipe(
-        ofType(fromProductActions.ProductActionTypes.RemoveFromCart),
-        switchMap((action:fromProductActions.RemoveFromCart)=>
-          this.productService.removeFormCart(action.cartId).pipe(
+        ofType(fromProductActions.ProductActionTypes.UpdateRemoveCart),
+        switchMap((action:fromProductActions.UpdateRemoveCart)=>
+          this.productService.updateRemoveCart(action.cartId).pipe(
               map((result)=>{
               
-      
+                console.log(result);
+                return new fromProductActions.GetCartList();
+              }),
+          ),
+        ),
+      )
+    );
+
+    DeleteFromCart$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.DeleteFromCart),
+        switchMap((action:fromProductActions.DeleteFromCart)=>
+          this.productService.deleteFormCart(action.cartId).pipe(
+              map((result)=>{
+              
                 return new fromProductActions.GetCartList();
               }),
           ),
@@ -340,7 +370,7 @@ export class ProductEffects {
           this.orderservice.postDetailOrder(action.OrderDetails).pipe(
               map((result:any)=>{
                 console.log(result);
-                return new fromProductActions.GetState();
+                return new fromProductActions.CreateOrderDetailsSuccess(true);
               }),
           ),
         ),

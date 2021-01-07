@@ -29,9 +29,9 @@ export class HomeComponent  implements OnInit  {
 
 
   constructor(private dialog:MatDialog,
-    private router:Router,
-    private service:UserService,
-    private product:ProductService,
+   private router:Router,
+   private service:UserService,
+   private product:ProductService,
    private notification:NotificationService,
    private store: Store<ProductState>,
    @Inject(DOCUMENT) private document:Document,
@@ -50,24 +50,28 @@ export class HomeComponent  implements OnInit  {
     user:any;
 
   ngOnInit(): void {
+
+    //subscriber for commondata
+    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
+      if (result) {
+      this.commondata = result;
+      }
+    })
+
+    //subscriber for cart count
+    this.store.pipe(select(selector.CartCount)).subscribe(res=>{
+      this.count=res;
+    })
+
  
     this.checkLogInStatus()
     this.store.dispatch(new fromActions.GetCommonFields("en"));
   
 
-    this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
-      if (result) {
-      this.commondata = result;
-      //console.log(this.commondata)
-      }
-    })
-   
-   this.getCount();
+    //this.getCount();
     
     //this.selectedclass=this.service.getID()
  
-
-      
     //this.id=this.service.getID();
 
     var link=this.document.getElementById('theme');
@@ -105,50 +109,13 @@ export class HomeComponent  implements OnInit  {
     this.router.navigate(['/home/dashboard']);
   }
 
-  
-  getCount(){
-    if(this.checkLogInStatus()){
-      this.store.dispatch(new fromActions.GetCartCount());
-      this.store.pipe(select(selector.CartCount)).subscribe(res=>{
-        this.count=res;
-      })
-      // this.product.getCount().subscribe(res=>{
-      //   this.count=res;
-      // })
-    }
-    else{
-      this.count=sessionStorage.getItem("CartLength");
-    }
-  
-  }
-
   orders(){
     this.router.navigate(['/home/order'])
   }
 
  
-
-
   cart(){
-    this.router.navigate(['home/cart']);
-    // if(this.checkLogInStatus()){
-    //     this.getCount();
-    //     if(this.count==0){
-    //       this.notification.Delete("Cart Is Empty");
-    //     }
-    //     else{
-    //       this.router.navigate(['home/cart']);
-    //     }
-    // }
-    // else{
-    //   const dialogconfig=new MatDialogConfig();
-    //   dialogconfig.disableClose=false;
-    //   dialogconfig.autoFocus=true;
-    //   dialogconfig.width="40%";
-    //   this.dialog.open(LoginComponent,dialogconfig);
-    //   this.notification.Delete("Please log in or register then only you can open your cart");
-    // }
-    
+    this.router.navigate(['home/cart']);    
   }
 
   language(data){
@@ -162,12 +129,15 @@ export class HomeComponent  implements OnInit  {
   }
 
   checkLogInStatus():boolean{
+   
     this.store.dispatch(new fromActions.CheckLogInStatus());
     this.store.pipe(select(selector.IsLoggedIn)).subscribe(res=>{
      this.isLoggedIn=res;
     })
     if(this.isLoggedIn==true){
+      this.store.dispatch(new fromActions.GetCartCount());
       return true;
+     
     }
     return false;
   }

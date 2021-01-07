@@ -151,8 +151,6 @@ export class BuyComponent implements OnInit {
       this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
         if (result) {
         this.orderId = result;
-        console.log(this.orderId);
-
         let Details={
           ProductId:this.productId,
           Amount:this.final,
@@ -186,26 +184,15 @@ export class BuyComponent implements OnInit {
       this.notification.success("Please wait a moment we are processing your order.");
     })
    
-    this.store.dispatch(new fromActions.SendEmail(this.orderId));
-    //this.store.dispatch(new fromActions.GetOrderList());
-  
+    this.store.dispatch(new fromActions.SendEmail(this.orderId)); 
     this.store.pipe(select(selector.MailSent)).subscribe(res=>{
-      console.log(res)
       if(res==true){
         this.zone.run(()=>{
           this.router.navigate(['/home/order']);
         })
-       
       }
     })
-    
-   
-    // setTimeout(() => {
-      
-    // }, 2000);
-      
-     
-    
+       
   }
 
 }

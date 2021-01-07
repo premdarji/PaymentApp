@@ -73,6 +73,11 @@ export const OrderById=createSelector(
   (state:fromProduct.ProductState)=>state.OrderItemById
 )
 
+export const DeleteCart=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.deleteCart
+)
+
 export const MailSent=createSelector(
   getProductFeatureState,
   (state:fromProduct.ProductState)=>state.mailSent
