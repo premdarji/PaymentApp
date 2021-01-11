@@ -22,6 +22,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDatepickerModule} from '@angular/material/datepicker';
  
 
 @NgModule({
@@ -48,7 +51,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatPaginatorModule,
     MatGridListModule,
     MatRadioModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatCheckboxModule,
+    MatDatepickerModule
     
   ],
   exports:[
@@ -59,7 +65,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-
     MatMenuModule,
     MatDialogModule,
     MatSnackBarModule,
@@ -73,7 +78,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatPaginatorModule,
     MatGridListModule,
     MatRadioModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatCheckboxModule,
+    MatDatepickerModule
 
   ]
 })

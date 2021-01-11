@@ -110,4 +110,19 @@ export class UserService {
     return Observableof(false)
   }
 
+  getUserById(){
+    let id=this.getID();
+    return this.http.get(this.APIURL+"/User/GetbyId/"+id);
+  }
+
+  updateWallet(amt){
+  
+    let id=this.getID();
+    let Wallet={
+      Id:id,
+      Amt:amt
+    }
+    return this.http.post(this.APIURL+"/User/UpdateWallet",Wallet);
+  }
+
 }

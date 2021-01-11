@@ -104,6 +104,16 @@ export const IsLoggedIn =createSelector(
   (state:fromProduct.ProductState)=>state.isLooggedIn
 )
 
+export const UserDetail =createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.userDetail
+)
+
+export const WalletAmt=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.updateWallet
+)
+
 
 export const reducer=fromProduct.reducer;
 export const actions=ProductActions;

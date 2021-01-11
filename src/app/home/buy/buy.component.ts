@@ -15,6 +15,8 @@ import html2canvas from 'html2canvas';
 
 import * as fromActions from "../../Common/Actions/Product.actions";
 import * as selector from "../../Common/index";
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { MywalletComponent } from '../mywallet/mywallet.component';
 
 
 @Component({
@@ -36,7 +38,8 @@ export class BuyComponent implements OnInit {
     private order:OrderService,
     private zone:NgZone,
     private notification:NotificationService,
-    private store:Store<ProductState>
+    private store:Store<ProductState>,
+    private dialog:MatDialog
     ) { }
 
   productId: any; //Getting Product id from URL
@@ -59,6 +62,9 @@ export class BuyComponent implements OnInit {
     {id:2,offer:"10% discount on SBI cards upto 500rs",availabe:1}
   ]
 
+  walletPay:boolean=false;
+  amt=0;
+
   ngOnInit(): void {
     //translation
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
@@ -66,6 +72,34 @@ export class BuyComponent implements OnInit {
       this.commondata = result;
       }
     })
+
+    this.store.pipe(select(selector.UserDetail)).subscribe(res=>{
+      if(res!=null){
+        this.amt=res["walletAmt"];
+      }
+      console.log(res)
+    })
+
+
+    //subscriber for orderid
+    this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
+      if (result) {
+      this.orderId = result;
+      let Details={
+        ProductId:this.productId,
+        Amount:this.final,
+        Quantity:Number(this.qty),
+        OrderId:this.orderId
+      }
+
+      this.store.dispatch(new fromActions.CreateOrderDetails(Details));
+      this.sendInvoice();
+
+      }
+     
+    })
+
+    ////////
 
     this. productId = this.actRoute.snapshot.params['id'];   
     this.getProductById(this.productId);
@@ -110,7 +144,7 @@ export class BuyComponent implements OnInit {
  
 
 //paywith razorpay gateway method
-  payWithRazor(val) {
+  payWithRazor() {
     const options: any = {
       key: 'rzp_test_L4Raaco7n2tzbD',
       amount: this.final*100, // amount should be in paise format to display Rs 1255 without decimal point
@@ -139,6 +173,7 @@ export class BuyComponent implements OnInit {
       },
       razorpay_payment_method:{}
     };
+
     options.handler = ((response, error) => {
       options.response = response;
     
@@ -148,29 +183,13 @@ export class BuyComponent implements OnInit {
       }
 
       this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
-      this.store.pipe(select(selector.OrderId)).subscribe((result: any) => {
-        if (result) {
-        this.orderId = result;
-        let Details={
-          ProductId:this.productId,
-          Amount:this.final,
-          Quantity:Number(this.qty),
-          OrderId:this.orderId
-        }
-  
-        this.store.dispatch(new fromActions.CreateOrderDetails(Details));
-  
-        }
-       
-        this.sendInvoice();
-      })
-      
      
     });
     options.modal.ondismiss = (() => {
       // handle the case when user closes the form while transaction is in progress
       console.log('Transaction cancelled.');
     });
+
     const rzp = new this.winRef.nativeWindow.Razorpay(options);
     rzp.open();
     
@@ -178,6 +197,7 @@ export class BuyComponent implements OnInit {
   }
 
 
+ 
 
   sendInvoice(){
     this.zone.run(()=>{
@@ -193,6 +213,30 @@ export class BuyComponent implements OnInit {
       }
     })
        
+  }
+
+  payWithWallet(){
+    this.walletPay=true;
+    this.store.dispatch(new fromActions.GetUserDetails());
+   
+    console.log("paywith wallet")
+  }
+
+  topUpWallet(){
+    let dialogconfig=new MatDialogConfig();
+    dialogconfig.autoFocus=true;
+    dialogconfig.disableClose=false;
+    this.dialog.open(MywalletComponent,dialogconfig);
+  }
+
+  paymentConfirmation(){
+    let paymentDetail={
+      PaymentId:"wallet",
+      Amount:this.total
+    }
+    
+    this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
+
   }
 
 }

@@ -78,12 +78,12 @@ export class CartComponent implements OnInit {
 
        if(res!=null){
    
-       temp.productId=res["productId"];
-       temp.name=res["name"];
-       temp.imageUrl=res["imageUrl"];
-       temp.description=String(res["description"]);
-       temp.price=res["price"];
-       temp.stock=res["quantity"];
+       temp.productId=res.productId;
+       temp.name=res.name;
+       temp.imageUrl=res.imageUrl;
+       temp.description=String(res.description);
+       temp.price=res.price;
+       temp.stock=res.quantity;
        
        this.cartItemsAnnonymous.push(temp)
        this.cartTotal();
@@ -126,7 +126,6 @@ export class CartComponent implements OnInit {
 
 
   removeFromCart(id,index){
-
     if(this.cartItems[index].quantity>1){
       this.store.dispatch(new fromActions.UpdateRemoveCart(id));    
       this.notification.Delete("removed from cart");
@@ -147,7 +146,6 @@ export class CartComponent implements OnInit {
              }
          });
     }
-  
   }
 
 

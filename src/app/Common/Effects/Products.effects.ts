@@ -487,11 +487,44 @@ export class ProductEffects {
       )
     );
 
-
-
-
+    GetUserDetail$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetUserDetails),
+        switchMap((action:fromProductActions.GetUserDetails)=>
+          this.userService.getUserById().pipe(
+              map((result)=>{
+              // console.log(result);
+                if(result!=null){
+                  return new fromProductActions.GetUserDetailsSuccess(result);
+                }
+                return new fromProductActions.CheckLogInStatusFailure();
               
+              }),
+          ),
+        ),
+      )
+    );
 
-   
+
+    UpdateWallet$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.UpdateWallet),
+        switchMap((action:fromProductActions.UpdateWallet)=>
+          this.userService.updateWallet(action.wallet).pipe(
+              map((result:number)=>{
+              // console.log(result);
+                if(result>0){
+                  return new fromProductActions.GetUserDetails();
+                 // return new fromProductActions.UpdateWalletSuccess(result);
+                }
+                return new fromProductActions.CheckLogInStatusFailure();
+              
+              }),
+          ),
+        ),
+      )
+    );
+
+
 
 }

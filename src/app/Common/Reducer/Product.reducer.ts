@@ -27,6 +27,8 @@ export interface ProductState{
     mailSent:boolean;
     loading:boolean
     deleteCart:boolean;
+    userDetail:any;
+    updateWallet:number;
 
 }
 
@@ -46,7 +48,9 @@ export const initialState :ProductState={
     isLooggedIn:false,
     mailSent:false,
     loading:true,
-    deleteCart:false
+    deleteCart:false,
+    userDetail:null,
+    updateWallet:0
     
 
 }
@@ -205,7 +209,20 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
 
         case ProductActionTypes.CheckLogInStatusFailure:
             return {...state,isLooggedIn:false};
+
+        case ProductActionTypes.GetUserDetails:
+            return {...state,userDetail:null};
             
+        case ProductActionTypes.GetUserDetailsSuccess:
+            return {...state,userDetail:action.user};
+        
+        case ProductActionTypes.UpdateWallet:
+            return {...state};
+        
+        case ProductActionTypes.UpdateWalletSuccess:
+            return{...state,updateWallet:action.amt};
+
+
         default:
             return {...state};
        

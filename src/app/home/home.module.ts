@@ -22,6 +22,9 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MyorderComponent } from './myorder/myorder.component';
 import { CancelOrderComponent } from './cancel-order/cancel-order.component';
+import { MywalletComponent } from './mywallet/mywallet.component';
+
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 // import { StoreModule } from "@ngrx/store";
@@ -41,6 +44,7 @@ import { CancelOrderComponent } from './cancel-order/cancel-order.component';
   CheckoutComponent,
   MyorderComponent,
   CancelOrderComponent,
+  MywalletComponent,
  
 ],
   imports: [
@@ -56,6 +60,7 @@ import { CancelOrderComponent } from './cancel-order/cancel-order.component';
     NgxPaginationModule,
 
     ScrollingModule,
+    MatNativeDateModule
 
  
     // StoreModule.forFeature('myproduct', fromProduct.reducer),
@@ -63,7 +68,7 @@ import { CancelOrderComponent } from './cancel-order/cancel-order.component';
     // EffectsModule.forFeature([ProductEffects])
     
   ],
-  providers:[RegisterComponent,DatePipe],
+  providers:[RegisterComponent,DatePipe,MatNativeDateModule],
   entryComponents:[CancelOrderComponent]
 
 })

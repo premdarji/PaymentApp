@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ConfirmComponent, ConfirmDialogModel } from 'src/app/confirm/confirm.component';
 import { NotificationService } from 'src/app/shared/notification.service';
@@ -20,6 +20,7 @@ import * as selector from "../../Common/index";
 import { generate } from 'rxjs';
 import { element } from 'protractor';
 import { Cart } from 'src/app/models/cart.model';
+import { MywalletComponent } from '../mywallet/mywallet.component';
 
 @Component({
   selector: 'app-checkout',
@@ -66,6 +67,8 @@ export class CheckoutComponent implements OnInit {
       {id:2,offer:"10% discount on SBI cards upto 500rs",availabe:1}
     ]
     commondata:any;
+    walletPay:boolean=false;
+    amt=0;
 
     ngOnInit(): void {
 
@@ -133,8 +136,37 @@ export class CheckoutComponent implements OnInit {
       })
 
       this.cartTotal();
+
+      //subscriber for order id
+      this.store.select(selector.OrderId).subscribe((result: any) => {
+        if (result) {
+          this.orderId = result;
+          let Detail={
+            ProductId:'',
+            Amount:0,
+            Quantity:'',
+            OrderId:''
+          } 
+          this.cartItems.forEach(element => {
+            Detail.ProductId=element.productId,
+            Detail.Amount=element.quantity*element.price,
+            Detail.Quantity=element.quantity,
+            Detail.OrderId=this.orderId;
+            this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
+            this.deleteFromCart(element.cartId);
+          });
+          this.sendInvoiceDetails()
+        }
+
+      })
     
-      //this.getCartItems();
+      //subscriber for user details
+      this.store.pipe(select(selector.UserDetail)).subscribe(res=>{
+        if(res!=null){
+          this.amt=res["walletAmt"];
+        }
+        console.log(res)
+      })
       
     }
  
@@ -275,26 +307,7 @@ export class CheckoutComponent implements OnInit {
         }
       
         this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
-        this.store.select(selector.OrderId).subscribe((result: any) => {
-          if (result) {
-            this.orderId = result;
-            let Detail={
-              ProductId:'',
-              Amount:0,
-              Quantity:'',
-              OrderId:''
-            } 
-            this.cartItems.forEach(element => {
-              Detail.ProductId=element.productId,
-              Detail.Amount=element.quantity*element.price,
-              Detail.Quantity=element.quantity,
-              Detail.OrderId=this.orderId;
-              this.store.dispatch(new fromActions.CreateOrderDetails(Detail));
-              this.deleteFromCart(element.cartId);
-            });
-          }
-          this.sendInvoiceDetails()
-        })
+      
     
       });
       options.modal.ondismiss = (() => {
@@ -329,4 +342,29 @@ export class CheckoutComponent implements OnInit {
     })
   }
 
+
+
+  payWithWallet(){
+    this.walletPay=true;
+    this.store.dispatch(new fromActions.GetUserDetails());
+   
+    console.log("paywith wallet")
+  }
+
+  topUpWallet(){
+    let dialogconfig=new MatDialogConfig();
+    dialogconfig.autoFocus=true;
+    dialogconfig.disableClose=false;
+    this.dialog.open(MywalletComponent,dialogconfig);
+  }
+
+  paymentConfirmation(){
+    let paymentDetail={
+      PaymentId:"wallet",
+      Amount:this.total
+    }
+    
+    this.store.dispatch(new fromActions.CreateOrder(paymentDetail));
+
+  }
 }

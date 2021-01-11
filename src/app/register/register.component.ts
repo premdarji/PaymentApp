@@ -57,12 +57,10 @@ export class RegisterComponent implements OnInit {
      // this.store.dispatch(new fromActions.GetCommonFields("en"));
     
  
-
-
-
     this.service.getAllCity().subscribe(res=>{
       this.cities=res;
     })
+
     let token=localStorage.getItem("token");
     if(token!=null){
       this.updateform();
@@ -102,7 +100,7 @@ export class RegisterComponent implements OnInit {
           }
           else{
             console.log("submitted");
-            this.router.navigate(['/login']);
+            this.router.navigate(['/home']);
             this.notification.success("User Registered Successfully and activation link sent your registered email");
 
           }

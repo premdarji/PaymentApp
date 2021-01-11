@@ -76,7 +76,7 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
-        <form [formGroup]="secondFormGroup">
+       
             <ng-template matStepLabel>{{commondata.Paymentdetail}}</ng-template>
             <div>
                 <!-- <mat-form-field class="col-md-6">
@@ -92,73 +92,36 @@
                     <b>{{commondata.AmountPayable}}:{{final}}</b><br>
                 
                 </div>
-                <button mat-button matStepperPrevious >{{commondata.Back}}</button>
-                <button mat-button matStepperNext  (click)="payWithRazor()">{{commondata.Next}}</button>
+                <!-- <button mat-button matStepperPrevious >{{commondata.Back}}</button>
+                <button mat-button matStepperNext  (click)="payWithRazor()">{{commondata.Next}}</button> -->
         
             </div>
-        </form>
-
-    </mat-step>
       
 
-    <!-- <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
- 
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-        <button mat-button style="background-color: green;" (click)="OrderDetail()">Confirm</button>
-      </div>
-    </mat-step> -->
-  </mat-vertical-stepper>
 
-  <hr>
-
-
-
-<!-- 
+            <b><strong>Debit from:-</strong></b><br>
+            
+            <button mat-stroked-button color="primary" class="mr-2" (click)="payWithWallet()">Wallet</button>
+            <button mat-stroked-button  color="primary"   (click)="payWithRazor()">Other</button>
   
-  <div style="margin-bottom: 100px;  ">  
-      <mat-card class="col-md-6 mx-auto"  > 
-          <div  id="contentToConvert" >
+       
+          <mat-card class="col-md-4 shadow-lg mt-5" *ngIf="walletPay">
             <mat-toolbar>
               <span class="fill-remaining"></span>
-              <span>My Order App</span>
-              <span class="fill-remaining"></span>
+              <span> Pay with Wallet</span>
+              <span class="fill-remaining"> </span>
             </mat-toolbar>
-              <br>
-              <hr>
-             
-              <b> Order Details:</b> 
-                  <table class="table table-bordered"  style="width: 100%;">  
-                          <tr>  
-                            <th>Name</th>  
-                            <th>Price</th>  
-                            <th>Quantity</th>  
-                            <th>Amount</th>
-                          </tr>  
-                          <tr *ngFor="let item of cartItems">
-                              <td>{{item.name}}</td>
-                              <td>{{item.price}}</td>
-                              <td>{{item.quantity}}</td>
-                              <td>{{item.quantity*item.price}}</td>
-                          </tr>
-                         
-                  </table> 
-                        
-                        <b>Grand Total:-</b><p>{{total | currency : "INR"}}</p>
-                        <hr>
-  
-                        <b> Thanks for the shopping</b>
-  
-  
-          </div> 
-       
-            
-      </mat-card>  
-    </div>   
+            <hr>
+            <b><strong>Balance:</strong></b>
+            <b><strong>{{amt|currency:"INR"}}</strong></b>
+            <hr>
+            <b>{{commondata.Price}}:{{total}}</b><br>
+            <i *ngIf="total>amt"  style="color: red;">Not enough money in your wallet.</i>
+            <button mat-stroked-button color="primary" (click)="paymentConfirmation()" class="mr-2" [disabled]="total>amt">Pay</button>
+            <button mat-stroked-button color="primary" (click)="topUpWallet()" > Topup Wallet</button>
+          </mat-card>
 
+    </mat-step>
 
-
- -->
+  </mat-vertical-stepper>
 

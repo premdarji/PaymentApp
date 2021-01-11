@@ -18,6 +18,7 @@ import {DOCUMENT} from '@angular/common';
 import { LanguageService } from '../shared/language.service';
 import { SignalRserviceService } from '../shared/signal-rservice.service';
 import { LoginComponent } from '../login/login.component';
+import { MywalletComponent } from './mywallet/mywallet.component';
 
 
 @Component({
@@ -55,6 +56,7 @@ export class HomeComponent  implements OnInit  {
     this.store.pipe(select(selector.CommonData)).subscribe((result: any) => {
       if (result) {
       this.commondata = result;
+      console.log(this.commondata)
       }
     })
 
@@ -140,6 +142,16 @@ export class HomeComponent  implements OnInit  {
      
     }
     return false;
+  }
+
+  myWallet(){
+    console.log("wallet")
+    const dialogconfig=new MatDialogConfig();
+    dialogconfig.disableClose=false;
+    dialogconfig.autoFocus=true;
+    //dialogconfig.width="20%";
+    this.dialog.open(MywalletComponent,dialogconfig);
+
   }
 
   login(){

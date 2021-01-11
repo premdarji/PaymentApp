@@ -98,6 +98,12 @@ CheckLogInStatus="[Login] Status",
 CheckLogInStatusSuccess="[Login] StatusSuccess",
 CheckLogInStatusFailure="[Login] StatusFailure",
 
+GetUserDetails="[UserDetails] Get",
+GetUserDetailsSuccess="[UserDetails] GetSuccess",
+
+UpdateWallet="[Update] Wallet",
+UpdateWalletSuccess="[Update] WalletSucces"
+
 
 }
 
@@ -365,6 +371,28 @@ export class CheckLogInStatusFailure implements Action{
     constructor(){};
 }
 
+export class GetUserDetails implements Action{
+    readonly type =ProductActionTypes.GetUserDetails;
+    constructor(){};
+}
+
+export class GetUserDetailsSuccess implements Action{
+    readonly type =ProductActionTypes.GetUserDetailsSuccess;
+    constructor(public user:any){};
+}
+
+export class UpdateWallet implements Action{
+    readonly type=ProductActionTypes.UpdateWallet;
+    constructor(public wallet:any){};
+}
+
+export class UpdateWalletSuccess implements Action{
+    readonly type =ProductActionTypes.UpdateWalletSuccess;
+    constructor(public amt:number){};
+}
+
+
+
 export type ProductActions=
 GetProductList|
 GetProductListSuccess|
@@ -412,6 +440,10 @@ CheckLogInStatus|
 CheckLogInStatusSuccess|
 CheckLogInStatusFailure|
 SendEmailSuccess|
+GetUserDetails|
+GetUserDetailsSuccess|
+UpdateWallet|
+UpdateWalletSuccess|
 GetState;
     
 
