@@ -188,7 +188,7 @@ export class DashboardComponent implements OnInit {
     if(this.checkLoginStatus()){
       this.products[index].isWishListItem = false;
       this.notification.Delete("Removed from wishlist");
-      this.store.dispatch(new fromActions.RemoveFromWishlist(this.products,data));
+      this.store.dispatch(new fromActions.RemoveFromWishlist(data));
     }
     else{
 
@@ -201,7 +201,7 @@ export class DashboardComponent implements OnInit {
       
     this.notification.update("Added to wishlist");
     this.products[index].isWishListItem = true;
-    this.store.dispatch(new fromActions.AddToWishlist(this.products,data));
+    this.store.dispatch(new fromActions.AddToWishlist(data));
 
     }
     else{

@@ -65,8 +65,9 @@
           <span class="sr-only"></span>
         </a>
         <a class="nav-link headerclass" style="cursor: pointer;"    (click)="cart()"><mat-icon matBadge="{{count}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
-        
+        <a class="nav-link headerclass" style="cursor: pointer;"    (click)="wishList()"><mat-icon matBadge="" matBadgeColor="warn">favorite</mat-icon></a>
         <div *ngIf="isLoggedIn">
+
           <button mat-button  style="color:black; font-weight: bolder; margin-bottom: 10%;" [matMenuTriggerFor]="menu" ><mat-icon>account_circle</mat-icon></button>
         </div>
         <div *ngIf="!isLoggedIn">

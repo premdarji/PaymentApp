@@ -17,5 +17,17 @@ export class MainComponent implements OnInit {
     localStorage.clear();
     this.router.navigate(['/home/dashboard']);
   }
+  products(){
+    this.router.navigate(['/admin/dashboard'])
+  }
+
+  category(){
+    this.router.navigate(['/admin/category'])
+  }
+
+  coupon(){
+    this.router.navigate(['/admin/coupon'])
+  }
+
 
 }

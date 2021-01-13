@@ -57,6 +57,7 @@ export class BuyComponent implements OnInit {
   offerapplied=false;
   checking =false;
   commondata:any;
+  userDetail:any;
   offers=[
     {id:1,offer:"Instant 20% discount",availabe:1},
     {id:2,offer:"10% discount on SBI cards upto 500rs",availabe:1}
@@ -64,6 +65,8 @@ export class BuyComponent implements OnInit {
 
   walletPay:boolean=false;
   amt=0;
+  text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+  
 
   ngOnInit(): void {
     //translation
@@ -75,6 +78,7 @@ export class BuyComponent implements OnInit {
 
     this.store.pipe(select(selector.UserDetail)).subscribe(res=>{
       if(res!=null){
+        this.userDetail=res;
         this.amt=res["walletAmt"];
       }
       console.log(res)
@@ -223,9 +227,11 @@ export class BuyComponent implements OnInit {
   }
 
   topUpWallet(){
+    var amt=this.total-this.userDetail['walletAmt'];
     let dialogconfig=new MatDialogConfig();
     dialogconfig.autoFocus=true;
     dialogconfig.disableClose=false;
+    dialogconfig.data=amt;
     this.dialog.open(MywalletComponent,dialogconfig);
   }
 

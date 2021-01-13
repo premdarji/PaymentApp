@@ -114,6 +114,12 @@ export const WalletAmt=createSelector(
   (state:fromProduct.ProductState)=>state.updateWallet
 )
 
+//selectors related to wishlist
+export const WishlistItems=createSelector(
+  getProductFeatureState,
+  (state:fromProduct.ProductState)=>state.wishlist
+)
+
 
 export const reducer=fromProduct.reducer;
 export const actions=ProductActions;

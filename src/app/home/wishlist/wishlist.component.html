@@ -1,0 +1,56 @@
+<div  *ngIf="showComponent" style="margin-bottom: 80px;;">
+        <mat-toolbar class="mt-4 col-md-10 mx-auto">
+            <span class="fill-remaining"></span>
+            <span>Wishlist Items</span>
+            <span class="fill-remaining"></span>
+        </mat-toolbar>
+        <div class="col-md-8 mx-auto" *ngFor="let product of wishlistItems; let i= index" >
+            <mat-card  class="mb-2 mt-2">
+                <div style="display: flex;">
+        
+                    <div class="col-md-3">
+                        <img class="card-img-top" src="{{product.imageUrl}}" alt="" >
+                    </div>
+                    <div class="col-md-7">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td><strong>Name</strong></td>
+                                <td><strong>{{product.name}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Price</strong></td>
+                                <td><strong>{{product.price}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Description</strong></td>
+                                <td><strong>{{product.description}}</strong></td>
+                            </tr>
+                            <tr>
+                                <!-- <td><strong>{{commondata.Total}</strong></td>
+                                <td><strong>{{product.price*product.quantity}}</strong></td> -->
+                            </tr>
+                        </table>
+                    
+                        <button mat-raised-button color="primary" (click)="addToCart(product.productId)"><strong>Add to cart</strong></button>
+                      
+                        <div class="float-right">
+                            <button class="btn-sm btn-outline-danger" (click)="delete(product.productId)"><mat-icon>delete</mat-icon></button>
+                        </div>
+                       
+                    </div>
+                  
+                </div>
+               
+            </mat-card>
+        
+        </div>
+      
+     
+
+</div>
+    
+<div *ngIf="!showComponent">
+    <div class="alert alert-danger col-md-8 mx-auto h-200 mt-10 " role="alert" style="margin-top: 10%; padding-top: 5%; padding-bottom: 5%;">
+        Wishlist is empty ! click on heart icon and add to your wishlistItems. 
+    </div>
+</div>

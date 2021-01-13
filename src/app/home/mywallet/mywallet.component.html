@@ -21,7 +21,7 @@
                 <mat-icon matSuffix></mat-icon>       
             </mat-form-field>
         </div>
-        <b>Recommended</b><br>
+        <b>Fast Topup</b><br>
         <button mat-stroked-button color="primary" class="mr-1" (click)="fillAmount(1000)">1000</button>
         <button mat-stroked-button color="primary" class="mr-1" (click)="fillAmount(2000)">2000</button>
         <button mat-stroked-button color="primary" class="mr-1" (click)="fillAmount(5000)">5000</button>
@@ -29,12 +29,14 @@
    
     <hr>
 
-    <mat-tab-group mat-align-tabs="start">
+    <button mat-stroked-button color="primary" (click)="payWithRazor()">Add Amount</button>
+
+    <!-- <mat-tab-group mat-align-tabs="start">
         <mat-tab label="BHIM UPI">
             <mat-form-field class="col-md-10 mx-auto mt-1">
                 <input matInput placeholder="Ex:- 8978789078@upi" autocomplete="off">
             </mat-form-field>
-            <button mat-raised-button color="primary" (click)="Add()">Add</button>
+            <button mat-raised-button color="primary" (click)="add()">Add</button>
         </mat-tab>
         <mat-tab label="DEBIT CARD">
             <mat-grid-list cols="2" rowHeight="1:1.2">
@@ -73,11 +75,11 @@
               
             </mat-grid-list>
             
-            <button mat-stroked-button color="primary" (click)="AddWithDebitCard()" >Add</button>
+            <button mat-stroked-button color="primary" (click)="payWithRazor()" >Add</button>
 
         </mat-tab>
-        <!-- <mat-tab label="CREDIT CARD">
+        <mat-tab label="CREDIT CARD">
             CREDIT CARD
-        </mat-tab> -->
-    </mat-tab-group>
+        </mat-tab> 
+    </mat-tab-group> -->
 </div>

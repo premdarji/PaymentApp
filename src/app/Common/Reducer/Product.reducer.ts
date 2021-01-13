@@ -29,6 +29,7 @@ export interface ProductState{
     deleteCart:boolean;
     userDetail:any;
     updateWallet:number;
+    wishlist:any;
 
 }
 
@@ -50,7 +51,8 @@ export const initialState :ProductState={
     loading:true,
     deleteCart:false,
     userDetail:null,
-    updateWallet:0
+    updateWallet:0,
+    wishlist:null
     
 
 }
@@ -128,11 +130,17 @@ export function reducer(state = initialState, action:ProductActions ): ProductSt
         //cases of wishlist    
          case ProductActionTypes.AddToWishlist:
 
-            return{...state,products:action.product};
+            return{...state};
             
         
          case ProductActionTypes.RemoveFromWishlist:
-            return{...state,products:action.product};
+            return{...state};
+        
+        case ProductActionTypes.GetWishListItems:
+            return {...state};
+
+        case ProductActionTypes.GetWishListItemsSuccess:
+            return {...state,wishlist:action.wishList};
 
         //cases for order
          case ProductActionTypes.GetOrderList:

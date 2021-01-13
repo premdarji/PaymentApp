@@ -12,9 +12,7 @@ export class WishlistService {
   constructor(private http:HttpClient) { }
 
   addToWishlist(id){
-    const helper = new JwtHelperService();
-    const decodedToken = helper.decodeToken(localStorage.getItem("token"));
-    let userid=decodedToken["UserID"];
+    var userid=this.getId();
     let wishlist={
       wishlistId:0,
       ProductId:id,
@@ -24,14 +22,24 @@ export class WishlistService {
 
   }
   getWishlist(){
-    return this.http.get(this.APIURL+"/Wishlist");
+    var userid=this.getId();
+    return this.http.get(this.APIURL+"/Wishlist/GetAll/"+userid);
   }
 
   removeFromWishlist(id){
+   var userid=this.getId();
+    return this.http.post(this.APIURL+"/Wishlist/Remove/"+id+"/"+userid,null);
+
+  }
+
+  delete(id){
+    return this.http.post(this.APIURL+"/Wishlist/delete",id);
+  }
+
+  getId(){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(localStorage.getItem("token"));
     let userid=decodedToken["UserID"];
-    return this.http.post(this.APIURL+"/Wishlist/Remove/"+id+"/"+userid,null);
-
+    return userid;
   }
 }

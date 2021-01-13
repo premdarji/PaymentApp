@@ -67,7 +67,7 @@ export class CartComponent implements OnInit {
         }
        this.cartTotal();
        //this.store.dispatch(new fromActions.GetCartCount());
-   
+        console.log(this.cartItems)
       }
     })
 

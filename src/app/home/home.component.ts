@@ -120,6 +120,10 @@ export class HomeComponent  implements OnInit  {
     this.router.navigate(['home/cart']);    
   }
 
+  wishList(){
+    this.router.navigate(['home/wishlist'])
+  }
+
   language(data){
 
     if(data=="en"){

@@ -277,12 +277,27 @@ export class ProductEffects {
         switchMap((action:fromProductActions.RemoveFromWishlist)=>
           this.wishlistservice.removeFromWishlist(action.productId).pipe(
               map((result)=>{
-                  return new fromProductActions.GetState();
+                  return new fromProductActions.GetWishListItems();
               }),
           ),
         ),
       )
     );
+
+    GetWishlist$=createEffect(()=>
+      this.actions$.pipe(
+        ofType(fromProductActions.ProductActionTypes.GetWishListItems),
+        switchMap((action:fromProductActions.GetWishListItems)=>
+          this.wishlistservice.getWishlist().pipe(
+              map((result)=>{
+                  return new fromProductActions.GetWishListItemsSuccess(result);
+              }),
+          ),
+        ),
+      )
+    );
+
+
 
    
 

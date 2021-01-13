@@ -42,6 +42,9 @@ DeleteCategory="[Category] Delete",
 AddToWishlist="[Wishlist] Add",
 RemoveFromWishlist="[Wishlist] Remove",
 
+GetWishListItems="[Wishlist] Get",
+GetWishListItemsSuccess="[Wishlist] GetSuccess",
+
 
 //methods related to cart
 AddToCart="[Cart] Add",
@@ -232,14 +235,23 @@ export class GetCartCountSuccess implements Action{
 //methods for wishlist
 export class AddToWishlist implements Action{
     readonly type =ProductActionTypes.AddToWishlist;
-    constructor(public product:Product[] ,public productId:number){}
+    constructor(public productId:number){}
 }
 
 export class RemoveFromWishlist implements Action{
     readonly type=ProductActionTypes.RemoveFromWishlist;
-    constructor(public product:Product[],public productId:number){}
+    constructor(public productId:number){}
 }
 
+export class GetWishListItems implements Action{
+    readonly type=ProductActionTypes.GetWishListItems;
+    constructor(){};
+}
+
+export class GetWishListItemsSuccess implements Action{
+    readonly type =ProductActionTypes.GetWishListItemsSuccess;
+    constructor(public wishList:any){};
+}
 
 
 
@@ -408,6 +420,8 @@ UpdateRemoveCart|
 DeleteFromCart|
 AddToWishlist|
 RemoveFromWishlist|
+GetWishListItems|
+GetWishListItemsSuccess|
 GetProductById|
 GetProductByIdSuccess|
 GetOrderList|

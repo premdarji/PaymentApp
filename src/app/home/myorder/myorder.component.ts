@@ -49,7 +49,7 @@ export class MyorderComponent implements OnInit {
     this.store.pipe(select(selector.OrderList)).subscribe((result: any) => {
       if (result) {
       this.Products = result;
- 
+        console.log(this.Products)
       }
     })
   }

@@ -25,6 +25,7 @@ import { CancelOrderComponent } from './cancel-order/cancel-order.component';
 import { MywalletComponent } from './mywallet/mywallet.component';
 
 import { MatNativeDateModule } from '@angular/material/core';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 
 // import { StoreModule } from "@ngrx/store";
@@ -45,6 +46,7 @@ import { MatNativeDateModule } from '@angular/material/core';
   MyorderComponent,
   CancelOrderComponent,
   MywalletComponent,
+  WishlistComponent,
  
 ],
   imports: [

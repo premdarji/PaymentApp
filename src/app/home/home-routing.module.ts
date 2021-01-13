@@ -10,6 +10,7 @@ import { DetailComponent } from './detail/detail.component';
 import { HomeComponent } from './home.component';
 import { MyorderComponent } from './myorder/myorder.component';
 import { CancelOrderComponent } from './cancel-order/cancel-order.component';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 const routes: Routes = [
   {
@@ -23,7 +24,8 @@ const routes: Routes = [
            {path:'cart',component:CartComponent},
            {path:'checkout',component:CheckoutComponent},
            {path:'order',component:MyorderComponent},
-           {path:"cancel",component:CancelOrderComponent}
+           {path:"cancel",component:CancelOrderComponent},
+           {path:"wishlist",component:WishlistComponent}
   
     ]
   }

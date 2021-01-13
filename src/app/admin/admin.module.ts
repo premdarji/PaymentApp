@@ -11,10 +11,11 @@ import { MainComponent } from './main/main.component';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { CategoryComponent } from './category/category.component';
 import { AddcategoryComponent } from './addcategory/addcategory.component';
+import { CouponsComponent } from './coupons/coupons.component';
 
 
 @NgModule({
-  declarations: [DashboardComponent, ProductComponent, MainComponent, CategoryComponent, AddcategoryComponent],
+  declarations: [DashboardComponent, ProductComponent, MainComponent, CategoryComponent, AddcategoryComponent, CouponsComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
