@@ -13,6 +13,10 @@ import { CategoryComponent } from './category/category.component';
 import { AddcategoryComponent } from './addcategory/addcategory.component';
 import { CouponsComponent } from './coupons/coupons.component';
 
+import { MatNativeDateModule } from '@angular/material/core';
+
+
+
 
 @NgModule({
   declarations: [DashboardComponent, ProductComponent, MainComponent, CategoryComponent, AddcategoryComponent, CouponsComponent],
@@ -21,9 +25,10 @@ import { CouponsComponent } from './coupons/coupons.component';
     AdminRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatNativeDateModule
   ],
   entryComponents:[DashboardComponent],
-  providers:[DashboardComponent]
+  providers:[DashboardComponent,MatNativeDateModule]
 })
 export class AdminModule { }

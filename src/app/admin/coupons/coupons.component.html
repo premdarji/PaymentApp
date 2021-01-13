@@ -1,1 +1,63 @@
-<p>coupons works!</p>
+<div class="container">
+
+    <form [formGroup]="Coupons" autocomplete="off">
+            <mat-grid-list cols="2" rowHeight="1:1">
+                    <mat-grid-tile>
+                        <div class="controles-container">
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="Code">
+                            </mat-form-field>
+            
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="Name">
+                            </mat-form-field>
+            
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="Description">
+                            </mat-form-field>
+            
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="discount">
+                            </mat-form-field>
+                            
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="minAmt">
+                            </mat-form-field>
+                        </div>
+            
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <div class="controles-container">
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="MaxDiscount">
+                            </mat-form-field>
+                            <mat-form-field>
+                                    <mat-label>Custom calendar header</mat-label>
+                                    <input matInput [matDatepicker]="picker1" formControlName="ValidFrom">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field>
+                                    <mat-label>Custom calendar header</mat-label>
+                                    <input matInput [matDatepicker]="picker2" formControlName="ValidTill">
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>   
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="Usage">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="example" formControlName="ImageUrl">
+                            </mat-form-field>
+                            
+                                                        
+                        </div>
+                       
+                    </mat-grid-tile>
+                   
+                </mat-grid-list>
+                <button mat-raised-button color="primary">Add</button>     
+
+    </form>
+      
+</div>

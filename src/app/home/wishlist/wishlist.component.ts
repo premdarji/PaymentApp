@@ -18,8 +18,18 @@ export class WishlistComponent implements OnInit {
 
   wishlistItems:any;
   showComponent:boolean=false;
+  commonData:any;
 
   ngOnInit(): void {
+
+    this.store.pipe(select(selector.CommonData)).subscribe(res=>{
+      if(res!=null){
+        this.commonData=res;
+      }
+    })
+
+
+
     this.store.dispatch(new fromActions.GetWishListItems());
     this.store.pipe(select(selector.WishlistItems)).subscribe(res=>{
       if(res!=null){

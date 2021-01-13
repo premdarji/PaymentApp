@@ -1,7 +1,7 @@
 <div  *ngIf="showComponent" style="margin-bottom: 80px;;">
         <mat-toolbar class="mt-4 col-md-10 mx-auto">
             <span class="fill-remaining"></span>
-            <span>Wishlist Items</span>
+            <span>{{commonData.Wishlist}}</span>
             <span class="fill-remaining"></span>
         </mat-toolbar>
         <div class="col-md-8 mx-auto" *ngFor="let product of wishlistItems; let i= index" >
@@ -14,15 +14,15 @@
                     <div class="col-md-7">
                         <table class="table table-bordered">
                             <tr>
-                                <td><strong>Name</strong></td>
+                                <td><strong>{{commonData.NameOrder}}</strong></td>
                                 <td><strong>{{product.name}}</strong></td>
                             </tr>
                             <tr>
-                                <td><strong>Price</strong></td>
+                                <td><strong>{{commonData.Price}}</strong></td>
                                 <td><strong>{{product.price}}</strong></td>
                             </tr>
                             <tr>
-                                <td><strong>Description</strong></td>
+                                <td><strong>{{commonData.Description}}</strong></td>
                                 <td><strong>{{product.description}}</strong></td>
                             </tr>
                             <tr>
@@ -31,7 +31,7 @@
                             </tr>
                         </table>
                     
-                        <button mat-raised-button color="primary" (click)="addToCart(product.productId)"><strong>Add to cart</strong></button>
+                        <button mat-raised-button color="primary" (click)="addToCart(product.productId)"><mat-icon>add_shopping_cart</mat-icon><strong>{{commonData.Cart}}</strong></button>
                       
                         <div class="float-right">
                             <button class="btn-sm btn-outline-danger" (click)="delete(product.productId)"><mat-icon>delete</mat-icon></button>
